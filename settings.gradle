@@ -7,3 +7,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "OneHabit"
 include ':app'
+include ':OneHabit-data'
+include ':OneHabit-tools'
+include ':OneHabit-error'
+include ':OneHabit-tools-android'
+include ':OneHabit-error-android'
