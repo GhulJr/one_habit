@@ -10,8 +10,18 @@ java {
 }
 
 dependencies {
+    // Koin
     api "io.insert-koin:koin-core:$koin_version"
     testApi "io.insert-koin:koin-test:$koin_version"
     testApi "io.insert-koin:koin-test-junit4:$koin_version"
     testApi "io.insert-koin:koin-test-junit5:$koin_version"
+
+    // RxJava/RxKotlin
+    api "io.reactivex.rxjava3:rxjava:$rxjava3_version"
+    api "io.reactivex.rxjava3:rxkotlin:$rxkotlin3_version"
+
+    // Arrow
+    api "io.arrow-kt:arrow-core:$arrow_version"
+    api "io.arrow-kt:arrow-optics:$arrow_version"
+    kapt "io.arrow-kt:arrow-meta:$arrow_version"
 }
