@@ -9,6 +9,7 @@ java {
 }
 
 dependencies {
-    api project(":OneHabit-error")
-    api project(":OneHabit-tools")
+    implementation project(":OneHabit-data")
+    implementation project(":OneHabit-tools")
+    implementation project(":OneHabit-error")
 }

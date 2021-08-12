@@ -1,9 +1,17 @@
 plugins {
     id 'java-library'
     id 'kotlin'
+    id 'kotlin-kapt'
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    api "io.insert-koin:koin-core:$koin_version"
+    testApi "io.insert-koin:koin-test:$koin_version"
+    testApi "io.insert-koin:koin-test-junit4:$koin_version"
+    testApi "io.insert-koin:koin-test-junit5:$koin_version"
 }
