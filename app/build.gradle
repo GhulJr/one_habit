@@ -18,14 +18,42 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            debuggable true
             minifyEnabled false
+            shrinkResources false
+            versionNameSuffix ".debug"
+            applicationIdSuffix ".debug"
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ["release"]
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
+            versionNameSuffix ""
+            applicationIdSuffix ""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     buildFeatures {
         viewBinding true
+    }
+
+    flavorDimensions "default"
+
+    productFlavors {
+        stag {
+            dimension "default"
+            applicationId "com.ghuljr.onehabit.stag"
+        }
+
+        prod {
+            dimension "default"
+            applicationId "com.ghuljr.onehabit"
+        }
     }
 
     compileOptions {
