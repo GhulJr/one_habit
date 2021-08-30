@@ -25,7 +25,6 @@ android {
             versionNameSuffix ".debug"
             applicationIdSuffix ".debug"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            matchingFallbacks = ["release"]
         }
 
         release {
