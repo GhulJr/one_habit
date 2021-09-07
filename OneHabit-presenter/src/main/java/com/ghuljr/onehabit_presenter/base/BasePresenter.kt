@@ -2,14 +2,13 @@ package com.ghuljr.onehabit_presenter.base
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.SerialDisposable
+import io.reactivex.rxjava3.processors.BehaviorProcessor
 
-abstract class BasePresenter<VIEW, VALUES: InitialValuesHolder>: PresenterContract<VIEW, VALUES> {
+abstract class BasePresenter<VIEW, VALUES>: PresenterContract<VIEW, VALUES> {
 
     protected var view: VIEW? = null
     protected var initialValues: VALUES? = null
     protected var disposable: SerialDisposable = SerialDisposable()
-
-    //TODO: abstract state representing behaviour processor
 
     override fun attach(view: VIEW, initialValues: VALUES?) {
         this.view = view
@@ -28,11 +27,9 @@ abstract class BasePresenter<VIEW, VALUES: InitialValuesHolder>: PresenterContra
     override fun onViewDetached() { disposable.set(CompositeDisposable()) }
 }
 
-interface PresenterContract<VIEW, VALUES : InitialValuesHolder> {
+interface PresenterContract<VIEW, VALUES> {
     fun attach(view: VIEW, initialValues: VALUES?)
     fun detach()
     fun onViewAttached()
     fun onViewDetached()
 }
-
-interface InitialValuesHolder

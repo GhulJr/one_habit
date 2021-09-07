@@ -4,12 +4,11 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.base.BaseView
-import com.ghuljr.onehabit_presenter.base.InitialValuesHolder
 import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.activityRetainedScope
 import org.koin.core.scope.Scope
 
-abstract class BaseActivity<VIEW : BaseView<PRESENTER, VALUES>, PRESENTER: BasePresenter<VIEW, VALUES>, VALUES: InitialValuesHolder>
+abstract class BaseActivity<VIEW : BaseView<PRESENTER, VALUES>, PRESENTER: BasePresenter<VIEW, VALUES>, VALUES>
     : AppCompatActivity(), AndroidScopeComponent {
 
     override val scope: Scope by activityRetainedScope()
