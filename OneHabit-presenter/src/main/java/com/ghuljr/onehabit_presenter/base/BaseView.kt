@@ -1,6 +1,6 @@
 package com.ghuljr.onehabit_presenter.base
 
-interface BaseView<PRESENTER> {
+interface BaseView<PRESENTER, VALUES: InitialValuesHolder> {
     fun getPresenter(): PRESENTER
-    fun getInitialValues(): InitialValuesHolder
+    fun getInitialValues(): VALUES
 }
