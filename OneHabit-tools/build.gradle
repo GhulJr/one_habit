@@ -24,4 +24,8 @@ dependencies {
     api "io.arrow-kt:arrow-core:$arrow_version"
     api "io.arrow-kt:arrow-optics:$arrow_version"
     kapt "io.arrow-kt:arrow-meta:$arrow_version"
+
+    // Jackson converter
+    api "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    api "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
 }
