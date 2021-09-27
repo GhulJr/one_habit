@@ -3,7 +3,8 @@ package com.ghuljr.onehabit_data.cache.memory
 import arrow.core.Either
 import com.ghuljr.onehabit_data.cache.storage.TokenManager
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
+import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error.LoggedOutEvent
 import com.ghuljr.onehabit_tools.extension.switchMapSingleRight
 import com.ghuljr.onehabit_tools.extension.toEither
 import io.reactivex.rxjava3.core.Flowable
@@ -21,8 +22,8 @@ class ClassCacheHolder<K, V>(private val tokenManager: TokenManager,
 
     private val cache = ConcurrentHashMap<ClassCacheKey<K>, V>()
 
-    operator fun get(customKey: K? = null): Flowable<Either<BaseError, V>> = tokenManager.userIdFlowable
-        .toEither { LoggedOutError as BaseError }
+    operator fun get(customKey: K? = null): Flowable<Either<BaseEvent, V>> = tokenManager.userIdFlowable
+        .toEither { LoggedOutEvent as BaseEvent }
         .switchMapSingleRight { userId ->
             Single.fromCallable { this.cache }
                 .subscribeOn(singleThreadScheduler)
