@@ -17,6 +17,10 @@ class TokenManager(preferences: Preferences, computationScheduler: ComputationSc
         .replay(1)
         .refCount()
 
+    val userIdFlowable: Flowable<Option<String>> = tokenHolder.get()
+        .replay(1)
+        .refCount()
+
     fun setToken(tokenOption: Option<String>): Boolean = tokenHolder.set(tokenOption)
 
     companion object {
