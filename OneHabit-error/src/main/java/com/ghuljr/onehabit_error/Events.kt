@@ -4,6 +4,6 @@ sealed class BaseEvent
 
 object LoadingEvent : BaseEvent()
 object LoggedOutEvent: BaseEvent()
-object NoDataEvent: BaseEvent()
 
 sealed class BaseError : BaseEvent()
+object NoDataError: BaseError()

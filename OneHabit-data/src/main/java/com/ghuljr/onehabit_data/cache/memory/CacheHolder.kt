@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.none
 import arrow.core.toOption
 import com.ghuljr.onehabit_error.BaseEvent
-import com.ghuljr.onehabit_error.NoDataEvent
+import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
@@ -18,10 +18,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 //TODO: Write tests for this!!!
-
-//TODO: create network/storage synchroniser, as well as base state representation (expiration time!)
 abstract class CacheHolder<K, V>(
-    protected val key: ClassKey<K>,
     protected val computationScheduler: ComputationScheduler,
     protected val networkScheduler: Scheduler,
     protected val initValueOption: Option<V> = none(),
@@ -40,14 +37,20 @@ abstract class CacheHolder<K, V>(
         )
     }
 
-    //TODO: clear the data, if its not updated on time
-    //TODO: set initial update time based on last saved time and current time?
     val stateCacheFlowable: Flowable<Either<BaseEvent, V>> = stateProcessor
         .compose { flowable ->
             flowable.switchMap {
-                Flowable.merge(
+                Flowable.ambArray(
                     refreshProcessor,
-                    Flowable.interval(refreshInterval, refreshIntervalUnit, computationScheduler).toUnit()
+                    Flowable.interval(
+                        computeDelay(
+                            computationScheduler,
+                            it.dueToInMillis,
+                        ),
+                        TimeUnit.MILLISECONDS,
+                        computationScheduler
+                    )
+                        .toUnit()
                 )
                     .subscribeOn(computationScheduler)
                     .switchMapSingle {
@@ -55,44 +58,35 @@ abstract class CacheHolder<K, V>(
                             .subscribeOn(networkScheduler)
                             .flatMapRightWithEither {
                                 updateSingle(it.toOption())
-                                    .map { it.toRight(NoDataEvent as BaseEvent) }
+                                    .map { it.toRight(NoDataError as BaseEvent) }
                                     .observeOn(computationScheduler)
                             }
                     }
-                    .startWithItem(it.value.toRight(NoDataEvent))
+                    .startWithItem(it.value.toRight(NoDataError))
             }
         }
         .subscribeOn(computationScheduler)
         .distinctUntilChanged()
         .replay(1).refCount()
 
+    init {
+        require(refreshInterval > 0L)
+    }
+
     abstract fun fetchDataSingle(): Single<Either<BaseEvent, V>>
 
     private fun updateSingle(valueOption: Option<V>): Single<Option<V>> = Single.fromCallable {
         stateProcessor.onNext(
-            CacheWithTime(valueOption, singleThreadScheduler.now(TimeUnit.MILLISECONDS))
+            CacheWithTime(valueOption, singleThreadScheduler.now(TimeUnit.MILLISECONDS) + refreshIntervalUnit.toMillis(refreshInterval))
         )
     }
         .map { valueOption }
         .subscribeOn(singleThreadScheduler)
 
-    private fun computeDelay(scheduler: Scheduler, downloadedTime: Long, timoeut: Long) =
-        maxOf(timoeut - Math.abs(scheduler.now(TimeUnit.MILLISECONDS) - downloadedTime), 0)
+    private fun computeDelay(scheduler: Scheduler, timoeut: Long) =
+        maxOf(timoeut - Math.abs(scheduler.now(TimeUnit.MILLISECONDS)), 0)
 
-    /*  private val stateProcessor by lazy { BehaviorProcessor.createDefault(initValueOption) }
-
-      protected abstract val dataSourceFlowable: Flowable<Either<BaseEvent, V>>
-
-      val cacheFlowable: Flowable<Either<BaseEvent, V>>> = Flowable.defer { dataSourceFlowable }
-      .switchMapRightWithEither { cessor.toEither { NoDataEvent as BaseEvent } }
-      .subscribeOn(computationScheduler)
-      .replay(1)
-      .refCount()
-
-      //TODO: test carefully if this subscription won't change the parent's observable subscribe scheduler
-      */
-
-    private data class CacheWithTime<V>(val value: Option<V>, val timeInMillis: Long)
+    private data class CacheWithTime<V>(val value: Option<V>, val dueToInMillis: Long)
 }
 
 
