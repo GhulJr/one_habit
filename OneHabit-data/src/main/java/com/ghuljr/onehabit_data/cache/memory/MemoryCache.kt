@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 
-class ClassHolder<K, V>(private val tokenManager: TokenManager,
+class MemoryCache<K, V>(private val tokenManager: TokenManager,
                         private val computationScheduler: ComputationScheduler,
                         private val provider: (ClassKey<K>) -> V) {
 
@@ -34,7 +34,7 @@ class ClassHolder<K, V>(private val tokenManager: TokenManager,
         .observeOn(computationScheduler)
 
     inner class Provider(private val tokenManager: TokenManager, private val computationScheduler: ComputationScheduler) {
-        fun create(provider: (ClassKey<K>) -> V): ClassHolder<K, V> = ClassHolder(tokenManager, computationScheduler, provider)
+        fun create(provider: (ClassKey<K>) -> V): MemoryCache<K, V> = MemoryCache(tokenManager, computationScheduler, provider)
     }
 }
 
