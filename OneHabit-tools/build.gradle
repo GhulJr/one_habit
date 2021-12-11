@@ -5,16 +5,20 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {
+    // Test
+    testApi "io.mockk:mockk:$mockk_version"
+    testApi "junit:junit:$junit_version"
+
+
     // Koin
     api "io.insert-koin:koin-core:$koin_version"
     testApi "io.insert-koin:koin-test:$koin_version"
     testApi "io.insert-koin:koin-test-junit4:$koin_version"
-    testApi "io.insert-koin:koin-test-junit5:$koin_version"
 
     // RxJava/RxKotlin
     api "io.reactivex.rxjava3:rxjava:$rxjava3_version"

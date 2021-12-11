@@ -32,6 +32,8 @@ allprojects {
         picasso_version = "2.71828"
         arrow_version = "1.0.1"
         objectbox_version = "3.0.1"
+        junit_version = "4.13.2"
+        mockk_version = "1.12.1"
     }
 }
 
