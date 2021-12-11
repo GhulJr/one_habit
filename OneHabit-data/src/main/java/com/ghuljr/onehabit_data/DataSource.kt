@@ -10,7 +10,6 @@ import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
 import io.reactivex.rxjava3.processors.PublishProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.Executors
@@ -75,7 +74,7 @@ class DataSource<V>(
     private fun updateSingle(
         valueOption: Option<V>,
 
-    ): Single<Option<V>> = Single.fromCallable {
+        ): Single<Option<V>> = Single.fromCallable {
         invalidateAndUpdate(
             CacheWithTime(
                 valueOption,
