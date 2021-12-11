@@ -1,9 +1,9 @@
 package com.ghuljr.onehabit_error
 
-sealed class BaseEvent
+interface BaseEvent
 
-object LoadingEvent : BaseEvent()
-object LoggedOutEvent: BaseEvent()
+object LoadingEvent : BaseEvent
+object LoggedOutEvent: BaseEvent
 
-sealed class BaseError : BaseEvent()
-object NoDataError: BaseError()
+interface BaseError : BaseEvent
+object NoDataError: BaseError

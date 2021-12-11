@@ -19,13 +19,13 @@ import java.util.concurrent.TimeUnit
 class DataSource<V>(
     protected val computationScheduler: Scheduler,
     protected val networkScheduler: Scheduler,
+    private val singleThreadScheduler: Scheduler = Schedulers.from(Executors.newSingleThreadExecutor()),
     protected val refreshInterval: Long = 5L,
     protected val refreshIntervalUnit: TimeUnit = TimeUnit.MINUTES,
     protected val cachedDataFlowable: Flowable<CacheWithTime<V>>,
     protected val fetch: () -> Single<Either<BaseEvent, V>>,
     protected val invalidateAndUpdate: (CacheWithTime<V>) -> Unit
 ) {
-    private val singleThreadScheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 
     private val refreshProcessor = PublishProcessor.create<Unit>()
 
@@ -43,6 +43,7 @@ class DataSource<V>(
                         TimeUnit.MILLISECONDS,
                         computationScheduler
                     )
+                        .take(1)
                         .toUnit()
                 )
                     .subscribeOn(computationScheduler)
