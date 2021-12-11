@@ -34,29 +34,22 @@ class DataSource<V>(
     val dataFlowable: Flowable<Either<BaseEvent, V>> = cachedDataFlowable
         .compose { flowable ->
             flowable.switchMap { cacheWithTime ->
-                val dueToInMillis =
-                    cacheWithTime.value.fold({ 0L }, { cacheWithTime.dueToInMillis })
-                Flowable.ambArray(
+                Flowable.merge(
                     refreshProcessor,
                     Flowable.interval(
-                        computeDelay(computationScheduler, dueToInMillis),
+                        computeDelay(computationScheduler, cacheWithTime.dueToInMillis),
                         TimeUnit.MILLISECONDS,
                         computationScheduler
                     )
                         .take(1)
                         .toUnit()
                 )
-                    .subscribeOn(computationScheduler)
+                    .debounce(500L, TimeUnit.MILLISECONDS, computationScheduler)
                     .switchMapSingle {
                         fetch()
                             .subscribeOn(networkScheduler)
                             .flatMapRightWithEither {
-                                updateSingle(
-                                    it.toOption(),
-                                    computationScheduler,
-                                    refreshInterval,
-                                    refreshIntervalUnit
-                                )
+                                updateSingle(it.toOption())
                                     .map { it.toRight(NoDataError as BaseEvent) }
                             }
                     }
@@ -81,14 +74,12 @@ class DataSource<V>(
 
     private fun updateSingle(
         valueOption: Option<V>,
-        scheduler: Scheduler,
-        refreshInterval: Long,
-        refreshIntervalUnit: TimeUnit
+
     ): Single<Option<V>> = Single.fromCallable {
         invalidateAndUpdate(
             CacheWithTime(
                 valueOption,
-                scheduler.now(TimeUnit.MILLISECONDS) + refreshIntervalUnit.toMillis(refreshInterval)
+                computationScheduler.now(TimeUnit.MILLISECONDS) + refreshIntervalUnit.toMillis(refreshInterval)
             )
         )
     }
