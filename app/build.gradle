@@ -73,6 +73,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
 
+    // Dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
     implementation project(":OneHabit-presenter")
     implementation project(":OneHabit-error-android")
     implementation project(":OneHabit-tools-android")

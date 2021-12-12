@@ -1,31 +1,28 @@
 package com.ghuljr.onehabit.ui.base
 
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AppCompatActivity
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.base.BaseView
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.activityRetainedScope
-import org.koin.core.scope.Scope
+import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
-abstract class BaseActivity<VIEW : BaseView<PRESENTER, VALUES>, PRESENTER: BasePresenter<VIEW, VALUES>, VALUES>
-    : AppCompatActivity(), AndroidScopeComponent {
+abstract class BaseActivity<VIEW : BaseView<PRESENTER>, PRESENTER: BasePresenter<VIEW>>
+    : DaggerAppCompatActivity() {
 
-    override val scope: Scope by activityRetainedScope()
+    @Inject
+    lateinit var presenter: PRESENTER
 
     @CallSuper
     override fun onStart() {
         super.onStart()
-        getPresenter().attach(getBaseView(), getInitialValues())
+        presenter.attach(getPresenterView())
     }
 
     @CallSuper
     override fun onStop() {
-        getPresenter().detach()
+        presenter.detach()
         super.onStop()
     }
 
-    abstract fun getBaseView(): VIEW
-    abstract fun getPresenter(): PRESENTER
-    abstract fun getInitialValues(): VALUES
+    abstract fun getPresenterView(): VIEW
 }

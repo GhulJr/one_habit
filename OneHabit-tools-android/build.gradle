@@ -49,9 +49,9 @@ dependencies {
     api "androidx.recyclerview:recyclerview:1.2.1"
     api "androidx.recyclerview:recyclerview-selection:1.1.0"
 
-    // Koin
-    api "io.insert-koin:koin-android:$koin_version"
-    api "io.insert-koin:koin-androidx-workmanager:$koin_version"
+    // Dagger
+    api "com.google.dagger:dagger-android:$dagger_version"
+    api "com.google.dagger:dagger-android-support:$dagger_version"
 
     // RxAndroid
     api "io.reactivex.rxjava3:rxandroid:$rxandroid3_version"
