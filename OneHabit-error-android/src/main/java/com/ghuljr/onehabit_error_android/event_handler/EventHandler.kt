@@ -1,10 +1,14 @@
 package com.ghuljr.onehabit_error_android.event_handler
 
-class EventHandler {
-    /*TODO requirements:
-        - contain list of error managers
-        - error managers are selected based on specified error
-        - list should allow only one type of manager
-        - this class is only responsible for transfering event to the proper manager
-    */
+import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error_android.event_manager.BaseEventManager
+
+class EventHandler<EVENT: BaseEvent>(private val eventManagers: List<BaseEventManager<EVENT>>) {
+
+    //TODO: make sure only one error handler can handles error
+    operator fun invoke(event: EVENT?) {
+        eventManagers.forEach {
+            it.handleEvent(event)
+        }
+    }
 }
