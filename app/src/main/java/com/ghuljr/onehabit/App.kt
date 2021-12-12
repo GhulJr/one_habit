@@ -1,27 +1,18 @@
 package com.ghuljr.onehabit
 
-import android.app.Application
 import androidx.annotation.CallSuper
-import com.ghuljr.onehabit_presenter.dependency_injection.dataModule
-import com.ghuljr.onehabit_presenter.dependency_injection.presenterModule
-import com.ghuljr.onehabit_tools_android.firebaseModule
+import com.ghuljr.onehabit.di.DaggerAppComponent
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 
-class App : Application() {
+class App : DaggerApplication() {
 
     @CallSuper
     override fun onCreate() {
         super.onCreate()
-
-        startKoin {
-            androidLogger()
-            androidContext(this@App)
-            modules(presenterModule, dataModule, firebaseModule)
-        }
-
         FirebaseConfigHelper.init(this)
     }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = DaggerAppComponent.create()
 }

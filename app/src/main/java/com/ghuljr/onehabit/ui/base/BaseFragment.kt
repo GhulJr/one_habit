@@ -1,31 +1,28 @@
 package com.ghuljr.onehabit.ui.base
 
 import androidx.annotation.CallSuper
-import androidx.fragment.app.Fragment
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.base.BaseView
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.fragmentScope
-import org.koin.core.scope.Scope
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-abstract class BaseFragment<VIEW : BaseView<PRESENTER, VALUES>, PRESENTER: BasePresenter<VIEW, VALUES>, VALUES>
-    : Fragment(), AndroidScopeComponent  {
-
-    override val scope: Scope by fragmentScope()
+abstract class BaseFragment<VIEW : BaseView<PRESENTER>, PRESENTER: BasePresenter<VIEW>>
+    : DaggerFragment() {
+    
+    @Inject
+    lateinit var presenter: PRESENTER
 
     @CallSuper
     override fun onStart() {
         super.onStart()
-        getPresenter().attach(getBaseView(), getInitialValues())
+        presenter.attach(getPresenterView())
     }
 
     @CallSuper
     override fun onStop() {
-        getPresenter().detach()
+        presenter.detach()
         super.onStop()
     }
 
-    abstract fun getBaseView(): VIEW
-    abstract fun getPresenter(): PRESENTER
-    abstract fun getInitialValues(): VALUES
+    abstract fun getPresenterView(): VIEW
 }
