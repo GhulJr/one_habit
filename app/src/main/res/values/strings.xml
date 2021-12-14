@@ -1,4 +1,10 @@
 <resources>
+    <!-- General -->
+    <string name="or">Or</string>
     <string name="app_name">OneHabit</string>
+
+    <!-- Login/register -->
     <string name="Google">Google</string>
+    <string name="sign_in">Sign in</string>
+    <string name="register">Register</string>
 </resources>
