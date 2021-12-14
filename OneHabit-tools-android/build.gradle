@@ -78,10 +78,12 @@ dependencies {
     api "androidx.work:work-rxjava3:$work_version"
 
     // Firebase
-    api platform('com.google.firebase:firebase-bom:28.3.1')
+    api platform('com.google.firebase:firebase-bom:29.0.2')
     releaseApi 'com.google.firebase:firebase-crashlytics-ktx'
     api 'com.google.firebase:firebase-analytics-ktx'
     api 'com.google.firebase:firebase-database-ktx'
+    api 'com.google.firebase:firebase-auth'
+    api 'com.google.android.gms:play-services-auth:20.0.0'
 
     // Picasso
     api "com.squareup.picasso:picasso:$picasso_version"
