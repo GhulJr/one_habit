@@ -19,13 +19,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        style="@style/OneHabit.TextAppearance.Primary.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="-25dp"
         android:gravity="center"
         android:text="@string/app_name"
+        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo" />
@@ -49,39 +49,15 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_in" />
 
-
-        <!--TODO: make it a widget, like header separator-->
-        <LinearLayout
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/primary_black" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/OneHabit.TextAppearance.Primary.Header"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/default_margin_small"
-                android:layout_marginBottom="@dimen/default_margin_small"
-                android:layout_weight="0.4"
-                android:gravity="center"
-                android:text="@string/or" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/primary_black" />
-
-        </LinearLayout>
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="@string/or"
+            app:textPadding="@dimen/default_margin"
+            app:strokeWidth="@dimen/default_stroke_width"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register"

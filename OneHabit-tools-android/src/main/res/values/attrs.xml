@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OneHabit.Widget.TextDivider">
+        <attr name="android:text" format="string"/>
+        <attr name="animate" format="boolean" />
+        <attr name="strokeWidth" format="dimension"/>
+        <attr name="textPadding" format="dimension"/>
+    </declare-styleable>
+</resources>
