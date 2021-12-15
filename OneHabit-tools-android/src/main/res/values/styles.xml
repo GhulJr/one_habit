@@ -30,6 +30,16 @@
         <item name="cornerRadius">@dimen/default_corner_radius</item>
     </style>
 
+    <style name="OneHabit.TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="fontFamily">@font/mplus_rounded_regular</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Large" parent="OneHabit.TextAppearance.Primary">
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+    </style>
+
     <style name="OneHabit.TextAppearance.Primary.Header" parent="TextAppearance.MaterialComponents.Headline3">
         <item name="android:textSize">@dimen/default_text_size_large</item>
         <item name="android:textColor">@color/primary_black</item>

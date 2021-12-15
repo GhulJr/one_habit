@@ -57,7 +57,7 @@
             android:layout_marginBottom="@dimen/default_margin_small"
             android:text="@string/or"
             app:textPadding="@dimen/default_margin"
-            app:strokeWidth="@dimen/default_stroke_width"/>
+            app:strokeWidth="@dimen/default_stroke_width_thin"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/register"

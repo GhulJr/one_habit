@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
+        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
         tools:text="Some title" />
 
 </FrameLayout>
