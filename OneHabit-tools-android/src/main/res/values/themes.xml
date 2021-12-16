@@ -7,8 +7,9 @@
         <item name="colorOnPrimary">@color/primary_black</item>
         <item name="android:textColorPrimary">@color/primary_black</item>
         <item name="android:textColor">@color/primary_black</item>
-        <item name="android:windowBackground">@color/secondary_white</item>
+        <item name="android:windowBackground">@color/primary_white</item>
         <item name="fontFamily">@font/mplus_rounded_regular</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:letterSpacing">@dimen/default_letter_spacing</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>

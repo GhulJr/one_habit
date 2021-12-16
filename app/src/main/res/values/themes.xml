@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Theme.OneHabit.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.OneHabit.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.OneHabit.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

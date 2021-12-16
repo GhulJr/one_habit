@@ -9,7 +9,7 @@
         <item name="strokeColor">@color/primary_black</item>
         <item name="strokeWidth">@dimen/default_stroke_width</item>
         <item name="android:textStyle">bold</item>
-        <item name="cornerRadius">@dimen/default_corner_radius</item>
+        <item name="rippleColor">@color/primary_black</item>
     </style>
 
     <style name="OneHabit.Button.Primary.Text" parent="Widget.MaterialComponents.Button.TextButton">
@@ -18,6 +18,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/default_text_size_large</item>
         <item name="android:textColor">@color/primary_black</item>
+        <item name="rippleColor">@color/primary_black</item>
     </style>
 
     <style name="OneHabit.Button.Primary" parent="Widget.MaterialComponents.Button">
@@ -28,6 +29,7 @@
         <item name="backgroundTint">@color/primary_black</item>
         <item name="android:textStyle">bold</item>
         <item name="cornerRadius">@dimen/default_corner_radius</item>
+        <item name="rippleColor">@color/primary_white</item>
     </style>
 
     <style name="OneHabit.TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Body1">
@@ -35,6 +37,12 @@
         <item name="android:textColor">@color/primary_black</item>
         <item name="fontFamily">@font/mplus_rounded_regular</item>
     </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Bold" parent="OneHabit.TextAppearance.Primary">
+        <item name="fontFamily">@font/mplus_rounded_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
     <style name="OneHabit.TextAppearance.Primary.Large" parent="OneHabit.TextAppearance.Primary">
         <item name="android:textSize">@dimen/default_text_size_large</item>
@@ -52,6 +60,21 @@
         <item name="android:textColor">@color/primary_black</item>
         <item name="fontFamily">@font/mplus_rounded_bold</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="OneHabit.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusBottomEnd">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/default_corner_radius</item>
+        <item name="boxStrokeWidth">@dimen/default_stroke_width_thin</item>
+        <item name="boxStrokeWidthFocused">@dimen/default_stroke_width</item>
+        <item name="boxStrokeColor">@color/primary_black</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="hintEnabled">true</item>
+        <item name="android:textColorHint">@color/primary_black</item>
+        <item name="hintTextColor">@color/primary_black</item>
+        <item name="hintTextAppearance">@style/OneHabit.TextAppearance.Primary.Bold</item>
     </style>
 
 </resources>
