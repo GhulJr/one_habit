@@ -74,6 +74,9 @@
         <item name="hintEnabled">true</item>
         <item name="android:textColorHint">@color/primary_black</item>
         <item name="hintTextColor">@color/primary_black</item>
+        <item name="startIconTint">@color/primary_black</item>
+        <item name="endIconTint">@color/primary_black</item>
+        <item name="passwordToggleTint">@color/primary_black</item>
         <item name="hintTextAppearance">@style/OneHabit.TextAppearance.Primary.Bold</item>
     </style>
 
