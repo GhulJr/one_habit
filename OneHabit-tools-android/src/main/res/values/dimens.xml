@@ -6,6 +6,7 @@
     <dimen name="default_button_height">56dp</dimen>
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="default_text_size_large">20sp</dimen>
+    <dimen name="default_text_size_small">14sp</dimen>
     <dimen name="default_text_size_title">48sp</dimen>
     <dimen name="default_text_size_toolbar">28sp</dimen>
     <dimen name="default_letter_spacing">0.02</dimen>
