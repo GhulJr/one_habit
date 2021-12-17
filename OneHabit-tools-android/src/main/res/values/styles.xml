@@ -62,6 +62,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="OneHabit.TextAppearance.Primary.Title.Toolbar" parent="OneHabit.TextAppearance.Primary.Title">
+        <item name="android:textSize">@dimen/default_text_size_toolbar</item>
+    </style>
+
     <style name="OneHabit.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusBottomEnd">@dimen/default_corner_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/default_corner_radius</item>
@@ -78,6 +82,11 @@
         <item name="endIconTint">@color/primary_black</item>
         <item name="passwordToggleTint">@color/primary_black</item>
         <item name="hintTextAppearance">@style/OneHabit.TextAppearance.Primary.Bold</item>
+    </style>
+
+    <style name="OneHabit.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">@style/OneHabit.TextAppearance.Primary.Title.Toolbar</item>
+        <item name="background">@color/primary_white</item>
     </style>
 
 </resources>

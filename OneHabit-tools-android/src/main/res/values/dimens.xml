@@ -7,6 +7,7 @@
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="default_text_size_large">20sp</dimen>
     <dimen name="default_text_size_title">48sp</dimen>
+    <dimen name="default_text_size_toolbar">28sp</dimen>
     <dimen name="default_letter_spacing">0.02</dimen>
     <dimen name="default_stroke_width">2dp</dimen>
     <dimen name="default_stroke_width_thin">1dp</dimen>
