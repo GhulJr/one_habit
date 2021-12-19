@@ -22,6 +22,8 @@
     <string name="password">Password</string>
     <string name="send">Send</string>
     <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot password?</string>
 
 
 </resources>
