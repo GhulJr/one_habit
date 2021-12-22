@@ -11,6 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OneHabit">
         <activity
+            android:name=".ui.intro.launch.LaunchActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.intro.login.forgot_password.ForgotPasswordActivity"
             android:exported="true" />
         <activity
@@ -18,22 +27,15 @@
             android:exported="true" />
         <activity
             android:name=".ui.intro.register.RegisterActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
-        </activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.intro.IntroActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".ui.intro.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true" />
