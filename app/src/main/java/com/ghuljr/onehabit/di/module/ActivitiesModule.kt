@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit.di
+package com.ghuljr.onehabit.di.module
 
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity

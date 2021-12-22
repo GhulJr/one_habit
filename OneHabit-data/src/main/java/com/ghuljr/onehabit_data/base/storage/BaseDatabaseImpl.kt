@@ -33,7 +33,7 @@ interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
 }
 
 //TODO: use composition over inheritance
-abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
+internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
     private val box: Box<ENTITY>,
     private val computationScheduler: ComputationScheduler
 ) : BaseDatabase<ID, ENTITY> {
