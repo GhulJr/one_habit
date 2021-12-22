@@ -1,8 +1,11 @@
 package com.ghuljr.onehabit
 
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent
+import com.ghuljr.onehabit.ui.intro.IntroActivity
+import com.ghuljr.onehabit_tools.extension.onlyFalse
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
 import dagger.android.AndroidInjector
@@ -12,7 +15,8 @@ import javax.inject.Inject
 
 class App : DaggerApplication() {
 
-    @Inject lateinit var loggedInUserFirebaseService: LoggedInUserFirebaseService
+    @Inject
+    lateinit var loggedInUserFirebaseService: LoggedInUserFirebaseService
 
     @CallSuper
     override fun onCreate() {
@@ -20,9 +24,18 @@ class App : DaggerApplication() {
 
         FirebaseConfigHelper.init(this)
         logRxJavaErrors()
+
+        loggedInUserFirebaseService.isUserLoggedInFlowable
+            .onlyFalse()
+            .subscribe {
+                startActivity(IntroActivity.newIntent(this).apply {
+                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                })
+            }
     }
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = DaggerAppComponent.create()
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
+        DaggerAppComponent.create()
 
     private fun logRxJavaErrors() {
         RxJavaPlugins.setErrorHandler {
