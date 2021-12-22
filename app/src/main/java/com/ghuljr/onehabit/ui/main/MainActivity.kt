@@ -1,5 +1,7 @@
 package com.ghuljr.onehabit.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityMainBinding
@@ -17,4 +19,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
 
     override fun getPresenterView(): MainView = this
     override fun bindView(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+
+    companion object {
+        fun newIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
+    }
 }

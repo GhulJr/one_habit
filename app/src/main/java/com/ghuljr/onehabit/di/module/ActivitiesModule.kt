@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit.di.module
 
+import com.ghuljr.onehabit.ui.intro.launch.LaunchActivity
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterFragmentsModule
@@ -23,4 +24,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [RegisterFragmentsModule::class])
     fun registerActivity(): RegisterActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun launchActivity(): LaunchActivity
 }

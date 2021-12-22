@@ -6,6 +6,7 @@ import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent
 import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit_tools.extension.onlyFalse
+import com.ghuljr.onehabit_tools_android.extension.asSingleTop
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
 import dagger.android.AndroidInjector
@@ -28,9 +29,7 @@ class App : DaggerApplication() {
         loggedInUserFirebaseService.isUserLoggedInFlowable
             .onlyFalse()
             .subscribe {
-                startActivity(IntroActivity.newIntent(this).apply {
-                    flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                })
+                startActivity(IntroActivity.newIntent(this).asSingleTop())
             }
     }
 
