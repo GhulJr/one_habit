@@ -6,7 +6,6 @@ import com.ghuljr.onehabit.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
 
-
     private val viewBind by lazy { ActivityIntroBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

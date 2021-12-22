@@ -1,22 +1,19 @@
 package com.ghuljr.onehabit.ui.intro.register.credentials
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.ghuljr.onehabit.R
+import com.ghuljr.onehabit.databinding.FragmentRegisterCredentialsBinding
+import com.ghuljr.onehabit.ui.base.BaseFragment
+import com.ghuljr.onehabit_presenter.intro.register.RegisterCredentialsPresenter
+import com.ghuljr.onehabit_presenter.intro.register.RegisterCredentialsView
 
-class RegisterCredentialsFragment : Fragment() {
+class RegisterCredentialsFragment : BaseFragment<FragmentRegisterCredentialsBinding, RegisterCredentialsView, RegisterCredentialsPresenter>(), RegisterCredentialsView {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    override fun bindView(
+        layoutInflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentRegisterCredentialsBinding =
+        FragmentRegisterCredentialsBinding.inflate(layoutInflater, container, false)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_register_credentials, container, false)
-    }
+    override fun getPresenterView(): RegisterCredentialsView = this
 }

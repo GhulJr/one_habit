@@ -1,12 +1,16 @@
 package com.ghuljr.onehabit.ui.intro.register
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.ghuljr.onehabit.R
+import com.ghuljr.onehabit.databinding.ActivityRegisterBinding
+import dagger.android.support.DaggerAppCompatActivity
 
-class RegisterActivity : AppCompatActivity() {
+//TODO: create presenter contract when confirmation would be required
+class RegisterActivity : DaggerAppCompatActivity() {
+
+    private val viewBind by lazy { ActivityRegisterBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(viewBind.root)
     }
 }
