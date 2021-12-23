@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
-interface PasswordWithRepeatValidator {
+interface PasswordWithRepeatValidator: PasswordValidator {
 
     val validatedRepeatPasswordEitherObservable: Observable<Either<PasswordError.NotMatching, Unit>>
     fun repeatPasswordChanged(repeat: String)

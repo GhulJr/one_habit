@@ -45,6 +45,6 @@ abstract class BaseFragment<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
         super.onDestroyView()
     }
 
-    abstract fun getPresenterView(): VIEW
     abstract fun bindView(layoutInflater: LayoutInflater, container: ViewGroup?): BINDING
+    abstract fun getPresenterView(): VIEW
 }

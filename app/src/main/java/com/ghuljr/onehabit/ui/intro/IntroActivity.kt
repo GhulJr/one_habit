@@ -18,8 +18,8 @@ class IntroActivity : BaseActivity<ActivityIntroBinding, IntroView, IntroPresent
     override fun getPresenterView(): IntroView = this
     override fun bindView(): ActivityIntroBinding = ActivityIntroBinding.inflate(layoutInflater)
 
-    override fun signInClickObservable(): Observable<Unit> = viewBind.signInButton.throttleClicks().share()
-    override fun registerClickObservable(): Observable<Unit> = viewBind.registerButton.throttleClicks().share()
+    override fun signInClickObservable(): Observable<Unit> = viewBind.signInButton.throttleClicks()
+    override fun registerClickObservable(): Observable<Unit> = viewBind.registerButton.throttleClicks()
 
     override fun openSignIn(){
         startActivity(LoginActivity.newIntent(this))

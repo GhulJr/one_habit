@@ -34,6 +34,6 @@ abstract class BaseActivity<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
         super.onStop()
     }
 
-    abstract fun getPresenterView(): VIEW
     abstract fun bindView(): BINDING
+    abstract fun getPresenterView(): VIEW
 }
