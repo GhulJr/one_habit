@@ -5,14 +5,28 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ghuljr.onehabit.databinding.ActivityIntroBinding
+import com.ghuljr.onehabit.ui.base.BaseActivity
+import com.ghuljr.onehabit.ui.intro.login.LoginActivity
+import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
+import com.ghuljr.onehabit_presenter.intro.IntroPresenter
+import com.ghuljr.onehabit_presenter.intro.IntroView
+import com.ghuljr.onehabit_tools_android.extension.throttleClicks
+import io.reactivex.rxjava3.core.Observable
 
-class IntroActivity : AppCompatActivity() {
+class IntroActivity : BaseActivity<ActivityIntroBinding, IntroView, IntroPresenter>(), IntroView {
 
-    private val viewBind by lazy { ActivityIntroBinding.inflate(layoutInflater) }
+    override fun getPresenterView(): IntroView = this
+    override fun bindView(): ActivityIntroBinding = ActivityIntroBinding.inflate(layoutInflater)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(viewBind.root)
+    override fun signInClickObservable(): Observable<Unit> = viewBind.signInButton.throttleClicks().share()
+    override fun registerClickObservable(): Observable<Unit> = viewBind.registerButton.throttleClicks().share()
+
+    override fun openSignIn(){
+        startActivity(LoginActivity.newIntent(this))
+    }
+
+    override fun openRegister() {
+        startActivity(RegisterActivity.newIntent(this))
     }
 
     companion object {

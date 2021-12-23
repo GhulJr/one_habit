@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit.di.module
 
+import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit.ui.intro.launch.LaunchActivity
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
@@ -28,4 +29,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector
     fun launchActivity(): LaunchActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun introActivity(): IntroActivity
 }

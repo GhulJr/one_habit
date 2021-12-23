@@ -17,8 +17,8 @@ abstract class BaseActivity<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
     protected val viewBind by lazy { bindView() }
 
     @CallSuper
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(viewBind.root)
     }
 
