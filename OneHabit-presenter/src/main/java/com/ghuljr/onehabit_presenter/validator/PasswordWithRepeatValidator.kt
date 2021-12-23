@@ -8,10 +8,11 @@ import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.extension.onlyRight
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.kotlin.Observables
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
-interface PasswordWithRepeatValidator: PasswordValidator {
+interface PasswordWithRepeatValidator : PasswordValidator {
 
     val validatedRepeatPasswordEitherObservable: Observable<Either<PasswordError.NotMatching, Unit>>
     fun repeatPasswordChanged(repeat: String)
@@ -24,13 +25,16 @@ class PasswordWithRepeatValidatorImpl @Inject constructor(
 
     private val repeatSubject = BehaviorSubject.create<String>()
 
-    override val validatedRepeatPasswordEitherObservable: Observable<Either<PasswordError.NotMatching, Unit>> = repeatSubject
-        .withLatestFrom(validatedPasswordEitherObservable.onlyRight()) { repeated, password ->
-            if(repeated == password) Unit.right() else PasswordError.NotMatching.left()
+    override val validatedRepeatPasswordEitherObservable: Observable<Either<PasswordError.NotMatching, Unit>> =
+        Observable.combineLatest(
+            repeatSubject,
+            validatedPasswordEitherObservable
+        ) { repeated, passwordEither ->
+            if (passwordEither.orNull() == repeated) Unit.right() else PasswordError.NotMatching.left()
         }
-        .subscribeOn(computationScheduler)
-        .replay(1)
-        .refCount()
+            .subscribeOn(computationScheduler)
+            .replay(1)
+            .refCount()
 
     override fun repeatPasswordChanged(repeat: String) = repeatSubject.onNext(repeat)
 }

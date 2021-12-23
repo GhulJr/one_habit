@@ -66,11 +66,11 @@ class PasswordValidatorTest {
 
     @Test
     fun `when correct email is provided, then return validated email`() {
-        passwordValidator.passwordChanged(TestData.PASSWORD_VALID)
+        passwordValidator.passwordChanged(TestData.PASSWORD_VALID_1)
         testScheduler.triggerActions()
 
         passwordValidationObserver.assertValueCount(1)
-            .assertValueAt(0) { it.orNull()!! == TestData.PASSWORD_VALID }
+            .assertValueAt(0) { it.orNull()!! == TestData.PASSWORD_VALID_1 }
     }
 
     @Test
@@ -78,11 +78,11 @@ class PasswordValidatorTest {
         passwordValidator.passwordChanged(TestData.PASSWORD_ONLY_LOWER_CASE)
         testScheduler.triggerActions()
 
-        passwordValidator.passwordChanged(TestData.PASSWORD_VALID)
+        passwordValidator.passwordChanged(TestData.PASSWORD_VALID_1)
         testScheduler.triggerActions()
 
         passwordValidationObserver.assertValueCount(2)
             .assertValueAt(0) { it.swap().orNull()!! == PasswordError.InvalidFormat }
-            .assertValueAt(1) { it.orNull()!! == TestData.PASSWORD_VALID }
+            .assertValueAt(1) { it.orNull()!! == TestData.PASSWORD_VALID_1 }
     }
 }
