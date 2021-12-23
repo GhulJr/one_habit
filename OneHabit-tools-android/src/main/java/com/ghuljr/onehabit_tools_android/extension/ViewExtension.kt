@@ -9,6 +9,7 @@ import com.ghuljr.onehabit_error.PasswordError
 import com.ghuljr.onehabit_error.ValidationError
 import com.ghuljr.onehabit_error_android.extension.textForError
 import com.ghuljr.onehabit_tools.extension.onlyFalse
+import com.ghuljr.onehabit_tools.extension.onlyTrue
 import com.ghuljr.onehabit_tools.extension.toUnit
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding4.view.clicks
@@ -25,8 +26,16 @@ fun Intent.asSingleTop(): Intent = apply {
 
 // Layout events
 fun View.throttleClicks(): Observable<Unit> = clicks().throttleFirst(500L, TimeUnit.MILLISECONDS).share()
-fun View.focusLostObservable(): Observable<Unit> = focusChanges().onlyFalse().toUnit().share()
+
+fun View.focusLostObservable(): Observable<Unit> = focusChanges()
+    .scan(false to false) { (_, previous), current -> previous to current }
+    .filter { (previous, current) -> previous && !current }
+    .toUnit()
+    .share()
+
 fun EditText.debouncedTextChanges(): Observable<String> = textChanges().debounce(500L, TimeUnit.MILLISECONDS).map { it.toString() }.share()
-fun <E: BaseError> TextInputLayout.setErrorOption(error: Option<E>) {
+
+fun <E : BaseError> TextInputLayout.setErrorOption(error: Option<E>) {
     this.error = error.orNull()?.textForError(resources)
 }
+

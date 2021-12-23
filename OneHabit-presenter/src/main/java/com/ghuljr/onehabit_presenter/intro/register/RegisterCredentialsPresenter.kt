@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_presenter.intro.register
 
 import arrow.core.Option
+import arrow.core.none
 import arrow.core.zip
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.validator.EmailValidator
@@ -43,15 +44,31 @@ class RegisterCredentialsPresenter @Inject constructor(
 
         val validateEmailSignal = Observable.merge(view.emailFocusLostObservable(), sendClicked)
         val validatePasswordSignal = Observable.merge(passwordFocusLost, sendClicked)
-        val validateRepeatPasswordSignal = Observable.merge(view.repeatPasswordFocusLostObservable(), passwordFocusLost, sendClicked)
+        val validateRepeatPasswordSignal = Observable.merge(
+            view.repeatPasswordFocusLostObservable(),
+            passwordFocusLost,
+            sendClicked
+        )
 
         return CompositeDisposable(
             view.emailChangedObservable()
-                .subscribe(emailValidator::emailChanged),
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.setEmailErrorOption(none())
+                    emailValidator.emailChanged(it)
+                },
             view.passwordChangedObservable()
-                .subscribe(passwordValidator::passwordChanged),
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.setPasswordErrorOption(none())
+                    passwordValidator.passwordChanged(it)
+                },
             view.repeatPasswordChangedObservable()
-                .subscribe(passwordValidator::repeatPasswordChanged),
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.setRepeatPasswordErrorOption(none())
+                    passwordValidator.repeatPasswordChanged(it)
+                },
             validateEmailSignal
                 .switchMapSingle { emailValidator.validatedEmailEitherObservable.firstOrError() }
                 .leftToOption()

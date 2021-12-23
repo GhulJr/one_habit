@@ -97,6 +97,9 @@
         <item name="boxStrokeColor">@color/primary_black</item>
         <item name="hintAnimationEnabled">true</item>
         <item name="hintEnabled">true</item>
+        <item name="errorTextColor">@color/color_error</item>
+        <item name="errorIconTint">@color/color_error</item>
+        <item name="boxStrokeErrorColor">@color/color_error</item>
         <item name="android:textColorHint">@color/primary_black</item>
         <item name="hintTextColor">@color/primary_black</item>
         <item name="startIconTint">@color/primary_black</item>

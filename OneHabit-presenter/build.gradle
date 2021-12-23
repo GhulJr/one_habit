@@ -9,6 +9,10 @@ java {
 }
 
 dependencies {
+    // Test
+    testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "junit:junit:$junit_version"
+
     implementation project(":OneHabit-data")
     implementation project(":OneHabit-tools")
     implementation project(":OneHabit-error")
