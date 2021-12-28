@@ -94,5 +94,4 @@ dependencies {
 
     api project(":OneHabit-tools")
     implementation project(":OneHabit-data")
-    implementation project(":OneHabit-error-android")
 }

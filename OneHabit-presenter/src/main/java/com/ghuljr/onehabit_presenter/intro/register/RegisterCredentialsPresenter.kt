@@ -69,6 +69,9 @@ class RegisterCredentialsPresenter @Inject constructor(
                     view.setRepeatPasswordErrorOption(none())
                     passwordValidator.repeatPasswordChanged(it)
                 },
+            view.haveAccountClickedObservable()
+                .observeOn(uiScheduler)
+                .subscribe { view.openLoginFlow() },
             validateEmailSignal
                 .switchMapSingle { emailValidator.validatedEmailEitherObservable.firstOrError() }
                 .leftToOption()

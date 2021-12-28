@@ -9,5 +9,5 @@ import com.ghuljr.onehabit_error.LoadingEvent
 
 abstract class BaseEventManager(protected val eventView: View) {
 
-    abstract fun handleEvent(event: Option<BaseEvent>)
+    abstract fun handleEvent(event: Option<BaseEvent>): Boolean
 }

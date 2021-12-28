@@ -113,4 +113,9 @@
         <item name="background">@color/primary_white</item>
     </style>
 
+    <style name="OneHabit.CircularLoadingIndicator.Small.White" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorColor">@color/primary_white</item>
+        <item name="android:scaleX">0.6</item>
+        <item name="android:scaleY">0.6</item>
+    </style>
 </resources>

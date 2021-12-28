@@ -24,6 +24,7 @@ abstract class BaseFragment<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
         savedInstanceState: Bundle?
     ): View? {
         viewBind = bindView(inflater, container)
+        setUpView(viewBind!!)
         return viewBind!!.root
     }
 
@@ -41,10 +42,13 @@ abstract class BaseFragment<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
 
     @CallSuper
     override fun onDestroyView() {
+        destroyView()
         viewBind = null
         super.onDestroyView()
     }
 
     abstract fun bindView(layoutInflater: LayoutInflater, container: ViewGroup?): BINDING
     abstract fun getPresenterView(): VIEW
+    open fun setUpView(viewBind: BINDING) {}
+    open fun destroyView() {  }
 }

@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.EditText
 import arrow.core.Option
 import com.ghuljr.onehabit_error.ValidationError
-import com.ghuljr.onehabit_error_android.extension.textForError
 import com.ghuljr.onehabit_tools.extension.toUnit
 import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding4.view.clicks
@@ -30,8 +29,4 @@ fun View.focusLostObservable(): Observable<Unit> = focusChanges()
     .share()
 
 fun EditText.debouncedTextChanges(): Observable<String> = textChanges().debounce(500L, TimeUnit.MILLISECONDS).map { it.toString() }.share()
-
-fun <E : ValidationError> TextInputLayout.setErrorOption(error: Option<E>) {
-    this.error = error.orNull()?.textForError(resources)
-}
 

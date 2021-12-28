@@ -38,7 +38,9 @@ class PasswordValidatorImpl @Inject constructor(
 
 private fun String.validatePassword(): Either<ValidationError, String> = when {
     isEmpty() -> ValidationError.EmptyField.left()
-    length < PasswordValidator.MIN_PASSWORD_LENGTH -> PasswordError.ToShort(length, PasswordValidator.MIN_PASSWORD_LENGTH).left()
+    length < PasswordValidator.MIN_PASSWORD_LENGTH -> PasswordError.ToShort(length,
+        PasswordValidator.MIN_PASSWORD_LENGTH
+    ).left()
     !matches(PasswordValidator.PASSWORD_REGEX) -> PasswordError.InvalidFormat.left()
     else -> right()
 }

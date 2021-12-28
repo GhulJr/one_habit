@@ -8,7 +8,6 @@ import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 interface EmailValidator {
