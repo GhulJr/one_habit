@@ -4,6 +4,8 @@
     <string name="ok">Ok</string>
     <string name="app_name">OneHabit</string>
     <string name="next">Next</string>
+    <string name="sending">Sending...</string>
+
 
 
     <!-- Strings used for fragments for navigation -->
@@ -26,6 +28,10 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="login">Login</string>
     <string name="forgot_password">Forgot password?</string>
-
+    <string name="check_your_mailbox">Check your mailbox!</string>
+    <string name="check_your_mailbox_description">You will find an email with further steps to finish verification process.</string>
+    <string name="check_email_verification">All done? Continue</string>
+    <string name="didnt_received_anything">Didn\'t received anything?\nClick to resend</string>
+    <string name="click_here_to_retry">Click here to retry</string>
 
 </resources>

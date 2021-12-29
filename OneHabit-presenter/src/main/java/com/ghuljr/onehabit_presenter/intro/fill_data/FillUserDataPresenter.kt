@@ -28,7 +28,7 @@ class FillUserDataPresenter @Inject constructor(
             .subscribe { view.navigateBack() },
         view.currentStepObservable()
             .observeOn(uiScheduler)
-            .subscribe { view.displayCounter(FillUserDataView.CurrentStep.values().indexOf(it)) }
+            .subscribe { view.displayCounter(FillUserDataView.CurrentStep.values().indexOf(it) + 1) }
     )
 
     fun navigateBackClicked(): Unit = navigateBackClickSubject.onNext(Unit)

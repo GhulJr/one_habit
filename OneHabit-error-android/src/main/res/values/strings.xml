@@ -20,4 +20,6 @@
 
     <string name="error_logged_out_error">User is logged out. Please, re-login in order to proceed.</string>
     <string name="error_no_data">Oops… looks like there is no data to show.</string>
+    <string name="error_oops">Oops…</string>
+    <string name="error_send_email_verification">We faced some issues while sending you verification email.</string>
 </resources>
