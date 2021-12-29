@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit.ui.profile.fill_data
+package com.ghuljr.onehabit.ui.intro.fill_data
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

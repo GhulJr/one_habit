@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.fill_data.birthday.BirthdayFragment">
+    tools:context=".ui.intro.fill_data.verify_email.VerifyEmailFinishedFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

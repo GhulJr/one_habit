@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OneHabit">
         <activity
+            android:name=".ui.intro.fill_data.FillDataActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.intro.launch.LaunchActivity"
             android:exported="true">
             <intent-filter>
@@ -28,15 +31,15 @@
         <activity
             android:name=".ui.intro.register.RegisterActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.intro.IntroActivity"
-            android:launchMode="singleTop"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.intro.login.LoginActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true" />

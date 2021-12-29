@@ -7,7 +7,6 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
 interface LoggedInUserService {
-    val userIdFlowable: Flowable<Option<String>>
     val userFlowable: Flowable<Option<UserResponse>>
     val isUserLoggedInFlowable: Flowable<Boolean>
     fun register(email: String, password: String): Single<Either<BaseError, UserResponse>>

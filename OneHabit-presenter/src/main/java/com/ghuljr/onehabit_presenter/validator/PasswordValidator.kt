@@ -17,7 +17,7 @@ interface PasswordValidator {
 
     companion object {
         const val MIN_PASSWORD_LENGTH = 8
-        val PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{$MIN_PASSWORD_LENGTH,}\$".toRegex()
+        val PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=])(?=\\S+\$).{$MIN_PASSWORD_LENGTH,64}\$".toRegex()
     }
 }
 

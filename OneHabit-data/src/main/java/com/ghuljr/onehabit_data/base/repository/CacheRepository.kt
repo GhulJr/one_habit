@@ -4,9 +4,9 @@ import com.ghuljr.onehabit_data.DataSource
 import com.ghuljr.onehabit_data.cache.memory.ClassKey
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 
-abstract class CacheRepository<K: Any, V, H : DataSource<V>>(private val classHolderProvider: MemoryCache.Provider<K, H>) {
+abstract class CacheRepository<K: Any, V, H : DataSource<V>>(private val classHolderFactory: MemoryCache.Factory<K, H>) {
 
-    protected val cache: MemoryCache<K, H> by lazy { classHolderProvider.create(::createCacheHolder) }
+    protected val cache: MemoryCache<K, H> by lazy { classHolderFactory.create(::createCacheHolder) }
 
     abstract fun createCacheHolder(key: ClassKey<K>): H
 }

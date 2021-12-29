@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import android.util.Log
 import arrow.core.*
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
@@ -11,7 +10,6 @@ import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.toRx3
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -46,11 +44,6 @@ class LoggedInUserFirebaseService @Inject constructor(
 
     override val isUserLoggedInFlowable: Flowable<Boolean> = userProcessor
         .map { it.isDefined() }
-        .subscribeOn(computationScheduler)
-        .replay(1).refCount()
-
-    override val userIdFlowable: Flowable<Option<String>> = userProcessor
-        .map { it.map { it.userId } }
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
 
