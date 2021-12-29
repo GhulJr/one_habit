@@ -108,7 +108,8 @@ class LoggedInUserFirebaseService @Inject constructor(
     private fun FirebaseUser.toUserResponse(): UserResponse = UserResponse(
         userId = uid,
         email = email!!,    // Right now we got only on auth method
-        username = displayName.toOption()
+        username = displayName.toOption(),
+        isEmailVerified = isEmailVerified
     )
 
     private fun io.reactivex.Single<AuthResult>.handleSignInOrLogOut(): Single<Either<BaseError, UserResponse>> =

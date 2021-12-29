@@ -23,5 +23,6 @@ data class LoginRequest(val email: String, val password: String)
 data class UserResponse(
     val userId: String,
     val email: String,
-    val username: Option<String>
+    val username: Option<String>,
+    val isEmailVerified: Boolean
 )

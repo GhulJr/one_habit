@@ -11,7 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OneHabit">
         <activity
-            android:name=".ui.intro.fill_data.FillDataActivity"
+            android:name=".ui.intro.fill_data.FillUserDataActivity"
+            android:launchMode="singleTop"
             android:exported="false" />
         <activity
             android:name=".ui.intro.launch.LaunchActivity"
@@ -24,9 +25,6 @@
         </activity>
         <activity
             android:name=".ui.intro.login.forgot_password.ForgotPasswordActivity"
-            android:exported="true" />
-        <activity
-            android:name=".ui.profile.fill_data.FillDataActivity"
             android:exported="true" />
         <activity
             android:name=".ui.intro.register.RegisterActivity"
