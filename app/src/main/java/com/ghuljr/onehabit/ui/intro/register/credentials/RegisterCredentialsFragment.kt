@@ -31,15 +31,6 @@ class RegisterCredentialsFragment :
     @Inject lateinit var firebaseService: LoggedInUserFirebaseService
     private var eventHandler: EventHandler? = null
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        firebaseService.register("oskarrek98@gmail.com", "h@slO123")
-            .subscribe { userEither ->
-                userEither
-            }
-    }
-
     override fun setUpView(viewBind: FragmentRegisterCredentialsBinding) {
         eventHandler =
             EventHandler(listOf(SnackbarEventManager(viewBind.root)), viewBind.loadingIndicator)

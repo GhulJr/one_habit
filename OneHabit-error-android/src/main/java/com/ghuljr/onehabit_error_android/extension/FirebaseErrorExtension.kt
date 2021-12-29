@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_error_android.extension
 
+import android.util.Log
 import arrow.core.Either
 import arrow.core.left
 import com.ghuljr.onehabit_error.*
@@ -18,9 +19,9 @@ fun FirebaseAuthException.toError(): BaseError = when(this) {
     is FirebaseAuthRecentLoginRequiredException, //TODO: check if this should sign out or make a login deeplink
     is FirebaseAuthInvalidUserException -> LoggedOutError
     is FirebaseAuthMultiFactorException -> AuthError.TwoFactorVerificationFailed(message)
-    is FirebaseAuthUserCollisionException -> when(errorCode.toIntOrNull() ?: 0) {
-        ERROR_EMAIL_ALREADY_IN_USE -> AuthError.EmailInUse(message)
-        ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL -> AuthError.InvalidLoginCredentials(message)
+    is FirebaseAuthUserCollisionException -> when(errorCode) {
+        "ERROR_EMAIL_ALREADY_IN_USE" -> AuthError.EmailInUse(message)
+        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> AuthError.InvalidLoginCredentials(message)
         else -> UnknownError(message ?: "Unknown authorisation error")
     }
     else -> UnknownError(message ?: "Unknown authorisation error")
@@ -41,4 +42,7 @@ fun Throwable.toError(): BaseError = when(this) {
 }
 
 fun <R> Single<Either<Throwable, R>>.toBaseError(): Single<Either<BaseError, R>> = map { it.mapLeft { it.toError() } }
-fun <R> Single<Either<BaseError, R>>.resumeWithBaseError(): Single<Either<BaseError, R>> = onErrorReturn { it.toError().left() }
+fun <R> Single<Either<BaseError, R>>.resumeWithBaseError(): Single<Either<BaseError, R>> = onErrorReturn {
+    Log.e("Handled exception", "", it)
+    it.toError().left()
+}
