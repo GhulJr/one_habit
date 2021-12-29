@@ -1,21 +1,16 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import android.util.Log
 import arrow.core.Either
 import arrow.core.Option
-import arrow.core.left
 import arrow.core.toOption
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.extension.orLoggedOutError
 import com.ghuljr.onehabit_error_android.extension.resumeWithBaseError
 import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
 import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.extension.toRx3
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

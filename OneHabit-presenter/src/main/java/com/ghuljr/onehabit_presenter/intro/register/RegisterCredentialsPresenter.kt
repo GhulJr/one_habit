@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_presenter.intro.register
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.zip
+import com.ghuljr.onehabit_data.dao.LoggedInUserDao
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.validator.EmailValidator
 import com.ghuljr.onehabit_presenter.validator.PasswordWithRepeatValidator
@@ -20,6 +21,7 @@ import javax.inject.Inject
 
 @FragmentScope
 class RegisterCredentialsPresenter @Inject constructor(
+    private val loggedInUserDao: LoggedInUserDao,
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordWithRepeatValidator,
     @ComputationScheduler private val computationScheduler: Scheduler,

@@ -32,8 +32,7 @@ class RegisterCredentialsFragment :
     private var eventHandler: EventHandler? = null
 
     override fun setUpView(viewBind: FragmentRegisterCredentialsBinding) {
-        eventHandler =
-            EventHandler(listOf(SnackbarEventManager(viewBind.root)), viewBind.loadingIndicator)
+        eventHandler = EventHandler(listOf(SnackbarEventManager(viewBind.root)), viewBind.loadingIndicator)
     }
 
     override fun destroyView() {

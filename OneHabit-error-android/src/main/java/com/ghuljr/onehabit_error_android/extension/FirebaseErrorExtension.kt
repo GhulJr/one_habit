@@ -5,8 +5,6 @@ import arrow.core.Either
 import arrow.core.left
 import com.ghuljr.onehabit_error.*
 import com.google.firebase.FirebaseApiNotAvailableException
-import com.google.firebase.FirebaseError.ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL
-import com.google.firebase.FirebaseError.ERROR_EMAIL_ALREADY_IN_USE
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -41,6 +39,7 @@ fun Throwable.toError(): BaseError = when(this) {
     else -> UnknownError(message ?: "Unknown error")
 }
 
+// TODO: as long as I use Firebase such extensions must be placed in android module
 fun <R> Single<Either<Throwable, R>>.toBaseError(): Single<Either<BaseError, R>> = map { it.mapLeft { it.toError() } }
 fun <R> Single<Either<BaseError, R>>.resumeWithBaseError(): Single<Either<BaseError, R>> = onErrorReturn {
     Log.e("Handled exception", "", it)
