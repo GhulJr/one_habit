@@ -12,11 +12,13 @@
         android:layout_height="?actionBarSize"
         app:liftOnScroll="true">
 
+        <!--TODO: make it clickable-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/OneHabit.Toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:navigationIcon="@drawable/ic_arrow_back">
 
             <com.ghuljr.onehabit_tools_android.widget.SeparatorCounter
                 android:id="@+id/steps_counter"
@@ -42,13 +44,13 @@
         app:navGraph="@navigation/fill_data_graph" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/OneHabit.Button.Primary.Text.Red"
         android:id="@+id/sign_out_button"
+        style="@style/OneHabit.Button.Primary.Text.Red"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/default_button_height"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:layout_height="@dimen/default_button_height"
-        android:text="@string/sign_out"
-        android:layout_gravity="center_horizontal|bottom"/>
+        android:text="@string/sign_out" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

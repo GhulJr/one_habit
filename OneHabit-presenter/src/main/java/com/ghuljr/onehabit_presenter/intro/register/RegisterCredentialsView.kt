@@ -16,14 +16,21 @@ interface RegisterCredentialsView : BaseView<RegisterCredentialsPresenter> {
     fun passwordFocusLostObservable() : Observable<Unit>
     fun repeatPasswordFocusLostObservable(): Observable<Unit>
 
+    fun navigationBackClickedObservable(): Observable<Unit>
+
+    fun sendClickedObservable() : Observable<Unit>
+    fun haveAccountClickedObservable(): Observable<Unit>
+
+
     fun setEmailErrorOption(error: Option<ValidationError>)
     fun setPasswordErrorOption(error: Option<ValidationError>)
     fun setRepeatPasswordErrorOption(error: Option<ValidationError>)
 
-    fun sendClickedObservable() : Observable<Unit>
-    fun haveAccountClickedObservable(): Observable<Unit>
+    fun navigateBack()
+
     fun openLoginFlow()
 
     fun handleSendEvent(event: Option<BaseEvent>)
     fun handleSuccess()
+
 }

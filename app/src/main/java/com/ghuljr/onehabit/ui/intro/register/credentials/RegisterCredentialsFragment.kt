@@ -19,6 +19,7 @@ import com.ghuljr.onehabit_presenter.intro.register.RegisterCredentialsView
 import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.ghuljr.onehabit_tools_android.extension.focusLostObservable
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
+import com.ghuljr.onehabit_tools_android.extension.throttleNavigationClicks
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
@@ -68,6 +69,8 @@ class RegisterCredentialsFragment :
     override fun repeatPasswordFocusLostObservable(): Observable<Unit> =
         viewBind!!.repeatPasswordInput.focusLostObservable()
 
+    override fun navigationBackClickedObservable(): Observable<Unit> = viewBind!!.toolbar.throttleNavigationClicks()
+
     override fun setEmailErrorOption(error: Option<ValidationError>) {
         viewBind!!.emailLayout.setErrorOption(error)
     }
@@ -78,6 +81,10 @@ class RegisterCredentialsFragment :
 
     override fun setRepeatPasswordErrorOption(error: Option<ValidationError>) {
         viewBind!!.repeatPasswordLayout.setErrorOption(error)
+    }
+
+    override fun navigateBack() {
+        requireActivity().finish()
     }
 
     override fun sendClickedObservable(): Observable<Unit> = viewBind!!.sendButton.throttleClicks()
