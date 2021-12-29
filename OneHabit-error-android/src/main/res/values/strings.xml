@@ -7,4 +7,16 @@
     <string name="error_password_to_short">Password should be at least %1$d letters long</string>
     <string name="error_invalid_password_format">Password should contain at least one of each upper case and lower case letters, number and special sign</string>
     <string name="error_password_do_not_match">Repeated password is different</string>
+
+    <string name="error_no_network">Network connection is to weak or missing. Please, try again later.</string>
+    <string name="error_server_unavailable">Unable to connect to the host.</string>
+    <string name="error_too_many_requests">Due to unnatural activity requests from this device are blocked for a while. Please, try again later.</string>
+
+    <string name="error_email_in_use">Account with provided email already exists. Please, login to the app.</string> <!--TODO: there should be login button-->
+    <string name="error_email_not_sent">Verification email cannot be sent.</string> <!--TODO: there should be retry button-->
+    <string name="error_invalid_credentials">Invalid email or password.</string>
+    <string name="error_two_factor_failed">Two factor verification failed. Please, try again.</string>
+
+    <string name="error_logged_out_error">User is logged out. Please, re-login in order to proceed.</string>
+    <string name="error_no_data">Oops… looks like there is no data to show.</string>
 </resources>

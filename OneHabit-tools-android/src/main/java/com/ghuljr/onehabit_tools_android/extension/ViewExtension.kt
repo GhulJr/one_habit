@@ -20,7 +20,7 @@ fun Intent.asSingleTop(): Intent = apply {
 }
 
 // Layout events
-fun View.throttleClicks(): Observable<Unit> = clicks().throttleFirst(500L, TimeUnit.MILLISECONDS).share()
+fun View.throttleClicks(timeout: Long = 200L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<Unit> = clicks().throttleFirst(timeout, timeUnit).share()
 
 fun View.focusLostObservable(): Observable<Unit> = focusChanges()
     .scan(false to false) { (_, previous), current -> previous to current }
@@ -28,5 +28,5 @@ fun View.focusLostObservable(): Observable<Unit> = focusChanges()
     .toUnit()
     .share()
 
-fun EditText.debouncedTextChanges(): Observable<String> = textChanges().debounce(500L, TimeUnit.MILLISECONDS).map { it.toString() }.share()
+fun EditText.debouncedTextChanges(timeout: Long = 200L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<String> = textChanges().debounce(timeout, timeUnit).map { it.toString() }.share()
 

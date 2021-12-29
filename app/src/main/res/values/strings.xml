@@ -1,6 +1,7 @@
 <resources>
     <!-- General -->
     <string name="or">Or</string>
+    <string name="ok">Ok</string>
     <string name="app_name">OneHabit</string>
     <string name="next">Next</string>
 

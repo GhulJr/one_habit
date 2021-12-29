@@ -9,6 +9,7 @@ import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentRegisterCredentialsBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
+import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_error.ValidationError
@@ -21,6 +22,7 @@ import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.ghuljr.onehabit_tools_android.extension.focusLostObservable
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
+import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
@@ -32,7 +34,11 @@ class RegisterCredentialsFragment :
     private var eventHandler: EventHandler? = null
 
     override fun setUpView(viewBind: FragmentRegisterCredentialsBinding) {
-        eventHandler = EventHandler(listOf(SnackbarEventManager(viewBind.root)), viewBind.loadingIndicator)
+        eventHandler = EventHandler(listOf(SnackbarEventManager(
+            eventView = viewBind.root,
+            duration = Snackbar.LENGTH_INDEFINITE,
+            actionWithName = { } to getString(R.string.ok)
+        )), viewBind.loadingIndicator)
     }
 
     override fun destroyView() {
@@ -97,6 +103,7 @@ class RegisterCredentialsFragment :
     }
 
     override fun handleSuccess() {
-        TODO("Not yet implemented")
+        startActivity(MainActivity.newIntent(requireContext()))
+        requireActivity().finishAffinity()
     }
 }
