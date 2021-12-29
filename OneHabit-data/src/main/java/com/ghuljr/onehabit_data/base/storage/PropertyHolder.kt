@@ -9,7 +9,10 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.processors.BehaviorProcessor
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.Executors
 
 class PropertyHolder<TYPE> @AssistedInject constructor(
     private val preferences: Preferences,
@@ -17,6 +20,8 @@ class PropertyHolder<TYPE> @AssistedInject constructor(
     @Assisted private val key: String,
     @Assisted private val defaultValue: Option<TYPE> = none()
 ) {
+
+    private val singleThreadScheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 
     private val valueProcessor: BehaviorProcessor<Option<TYPE>> =
         BehaviorProcessor.createDefault(preferences.getValue(key, defaultValue))
@@ -28,8 +33,12 @@ class PropertyHolder<TYPE> @AssistedInject constructor(
             .refCount()
 
     //TODO: verify this, it might be error prone, making either with error might make it more readable
-    fun set(value: Option<TYPE>): Boolean = preferences.setValue(key, value)
-        .also { if(it) valueProcessor.onNext(value) }
+    fun set(value: Option<TYPE>): Single<Boolean> = Single.fromCallable {
+        preferences.setValue(key, value)
+            .also { if (it) valueProcessor.onNext(value) }
+    }
+        .subscribeOn(singleThreadScheduler)
+        .observeOn(computationScheduler)
 
     @AssistedFactory
     interface Factory<TYPE> {
