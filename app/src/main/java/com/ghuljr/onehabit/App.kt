@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit
 
-import android.content.Intent
 import android.util.Log
 import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent

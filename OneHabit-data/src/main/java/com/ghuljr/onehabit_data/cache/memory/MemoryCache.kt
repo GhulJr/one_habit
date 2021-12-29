@@ -3,7 +3,7 @@ package com.ghuljr.onehabit_data.cache.memory
 import arrow.core.Either
 import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
 import com.ghuljr.onehabit_error.BaseEvent
-import com.ghuljr.onehabit_error.LoggedOutEvent
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.extension.switchMapSingleRight
 import com.ghuljr.onehabit_tools.extension.toEither
@@ -27,7 +27,7 @@ class MemoryCache<K, V>(
 
     operator fun get(customKey: K? = null): Flowable<Either<BaseEvent, V>> =
         loggedInUserService.userIdFlowable
-            .toEither { LoggedOutEvent as BaseEvent }
+            .toEither { LoggedOutError as BaseEvent }
             .switchMapSingleRight { userId ->
                 Single.fromCallable { this.cache }
                     .subscribeOn(singleThreadScheduler)

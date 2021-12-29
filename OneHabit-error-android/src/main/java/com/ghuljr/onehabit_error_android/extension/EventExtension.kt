@@ -3,8 +3,10 @@ package com.ghuljr.onehabit_error_android.extension
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import arrow.core.Either
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.R
 
 // Text
@@ -26,3 +28,5 @@ fun BaseEvent.drawableForEvent(context: Context): Drawable? = when(this) {
     is BaseError -> drawableForError(context)
     else -> null
 }
+
+fun<L, R> Either<L, R>.orLoggedOutError(): Either<BaseError, R> = mapLeft { LoggedOutError }

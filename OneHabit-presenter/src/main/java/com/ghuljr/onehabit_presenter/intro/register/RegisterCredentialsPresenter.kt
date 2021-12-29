@@ -6,6 +6,8 @@ import arrow.core.zip
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.validator.EmailValidator
 import com.ghuljr.onehabit_presenter.validator.PasswordWithRepeatValidator
+import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
+import com.ghuljr.onehabit_tools.base.network.RegisterRequest
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
@@ -91,5 +93,3 @@ class RegisterCredentialsPresenter @Inject constructor(
         )
     }
 }
-
-data class RegisterRequest(val email: String, val password: String)

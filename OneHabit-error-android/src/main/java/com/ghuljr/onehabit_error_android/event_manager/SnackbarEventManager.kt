@@ -22,8 +22,8 @@ class SnackbarEventManager(
             if (shouldHandleEvent(it)) {
                 Snackbar.make(eventView, it.textForEvent(eventView.resources), duration)
                     .setAnchorView(anchorView)
-                    .setBackgroundTint(ContextCompat.getColor(eventView.context, R.color.primary_black))
-                    .setTextColor(ContextCompat.getColor(eventView.context, R.color.primary_white))
+                    .setBackgroundTint(ContextCompat.getColor(eventView.context, android.R.color.black))
+                    .setTextColor(ContextCompat.getColor(eventView.context, android.R.color.white))
                     .let {
                         if (actionWithName != null) {
                             val (action, name) = actionWithName

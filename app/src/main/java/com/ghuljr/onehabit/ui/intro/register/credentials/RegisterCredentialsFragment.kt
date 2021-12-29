@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import arrow.core.Option
-import arrow.core.some
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentRegisterCredentialsBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
-import com.ghuljr.onehabit_error.LoggedOutEvent
 import com.ghuljr.onehabit_error.ValidationError
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
@@ -22,13 +20,25 @@ import com.ghuljr.onehabit_presenter.intro.register.RegisterCredentialsView
 import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.ghuljr.onehabit_tools_android.extension.focusLostObservable
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
+import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
 import io.reactivex.rxjava3.core.Observable
+import javax.inject.Inject
 
 class RegisterCredentialsFragment :
     BaseFragment<FragmentRegisterCredentialsBinding, RegisterCredentialsView, RegisterCredentialsPresenter>(),
     RegisterCredentialsView {
 
+    @Inject lateinit var firebaseService: LoggedInUserFirebaseService
     private var eventHandler: EventHandler? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        firebaseService.register("oskarrek98@gmail.com", "h@slO123")
+            .subscribe { userEither ->
+                userEither
+            }
+    }
 
     override fun setUpView(viewBind: FragmentRegisterCredentialsBinding) {
         eventHandler =
