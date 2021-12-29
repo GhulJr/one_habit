@@ -22,6 +22,11 @@
         <item name="rippleColor">@color/primary_black</item>
     </style>
 
+    <style name="OneHabit.Button.Primary.Text.Red" parent="OneHabit.Button.Primary.Text">
+        <item name="android:textColor">@color/color_error</item>
+        <item name="rippleColor">@color/color_error</item>
+    </style>
+
     <style name="OneHabit.Button.Primary" parent="Widget.MaterialComponents.Button">
         <item name="android:minHeight">@dimen/default_button_height</item>
         <item name="textAllCaps">false</item>

@@ -20,6 +20,7 @@ fun FirebaseAuthException.toError(): BaseError = when(this) {
         else -> LoggedOutError
     }
     is FirebaseAuthMultiFactorException -> AuthError.TwoFactorVerificationFailed(message)
+    is FirebaseAuthInvalidCredentialsException -> AuthError.InvalidLoginCredentials(message)
     is FirebaseAuthUserCollisionException -> when(errorCode) {
         "ERROR_EMAIL_ALREADY_IN_USE" -> AuthError.EmailInUse(message)
         "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> AuthError.InvalidLoginCredentials(message)

@@ -18,6 +18,7 @@
     <!-- Login/register -->
     <string name="Google">Google</string>
     <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
     <string name="register">Register</string>
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>

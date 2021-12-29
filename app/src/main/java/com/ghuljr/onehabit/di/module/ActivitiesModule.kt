@@ -2,7 +2,6 @@ package com.ghuljr.onehabit.di.module
 
 import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit.ui.intro.fill_data.FillUserDataActivity
-import com.ghuljr.onehabit.ui.intro.fill_data.FillUserDataModule
 import com.ghuljr.onehabit.ui.intro.fill_data.verify_email.FillUserDataFragmentsModule
 import com.ghuljr.onehabit.ui.intro.launch.LaunchActivity
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
@@ -38,6 +37,6 @@ interface ActivitiesModule {
     fun introActivity(): IntroActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [FillUserDataModule::class, FillUserDataFragmentsModule::class])
+    @ContributesAndroidInjector(modules = [FillUserDataFragmentsModule::class])
     fun fillUserDataActivity(): FillUserDataActivity
 }

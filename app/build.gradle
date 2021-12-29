@@ -88,11 +88,6 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    // Navigation Component
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-    androidTestImplementation "androidx.navigation:navigation-testing:$navigation_version"
-
     implementation project(":OneHabit-presenter")
     implementation project(":OneHabit-data")
     implementation project(":OneHabit-error-android")

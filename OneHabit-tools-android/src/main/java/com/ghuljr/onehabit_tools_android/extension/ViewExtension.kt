@@ -3,10 +3,11 @@ package com.ghuljr.onehabit_tools_android.extension
 import android.content.Intent
 import android.view.View
 import android.widget.EditText
-import arrow.core.Option
-import com.ghuljr.onehabit_error.ValidationError
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import com.ghuljr.onehabit_tools.extension.toUnit
-import com.google.android.material.textfield.TextInputLayout
+import com.jakewharton.rxbinding4.appcompat.navigationClicks
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.view.focusChanges
 import com.jakewharton.rxbinding4.widget.textChanges
@@ -20,7 +21,9 @@ fun Intent.asSingleTop(): Intent = apply {
 }
 
 // Layout events
-fun View.throttleClicks(timeout: Long = 200L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<Unit> = clicks().throttleFirst(timeout, timeUnit).share()
+fun View.throttleClicks(timeout: Long = 500L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<Unit> = clicks().throttleFirst(timeout, timeUnit).share()
+fun Toolbar.throttleNavigationClicks(timeout: Long = 200L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<Unit> = navigationClicks().throttleFirst(timeout, timeUnit).share()
+
 
 fun View.focusLostObservable(): Observable<Unit> = focusChanges()
     .scan(false to false) { (_, previous), current -> previous to current }
@@ -29,4 +32,10 @@ fun View.focusLostObservable(): Observable<Unit> = focusChanges()
     .share()
 
 fun EditText.debouncedTextChanges(timeout: Long = 200L, timeUnit: TimeUnit = TimeUnit.MILLISECONDS): Observable<String> = textChanges().debounce(timeout, timeUnit).map { it.toString() }.share()
+
+fun<V> NavController.onDestinationChangedObservable(onChange: (NavDestination) -> V): Observable<V> = Observable.create { emitter ->
+    this.addOnDestinationChangedListener { _, destination, _ ->
+        if(!emitter.isDisposed) emitter.onNext(onChange(destination))
+    }
+}
 

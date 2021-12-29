@@ -13,11 +13,13 @@
         app:liftOnScroll="true">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             style="@style/OneHabit.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.ghuljr.onehabit_tools_android.widget.SeparatorCounter
+                android:id="@+id/steps_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -30,13 +32,23 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment_container"
+        android:id="@+id/nav_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/default_button_height"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/fill_data_graph"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:navGraph="@navigation/fill_data_graph" />
 
+    <com.google.android.material.button.MaterialButton
+        style="@style/OneHabit.Button.Primary.Text.Red"
+        android:id="@+id/sign_out_button"
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_height="@dimen/default_button_height"
+        android:text="@string/sign_out"
+        android:layout_gravity="center_horizontal|bottom"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

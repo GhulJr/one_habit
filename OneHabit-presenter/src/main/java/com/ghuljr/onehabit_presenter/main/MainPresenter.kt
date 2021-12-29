@@ -17,16 +17,8 @@ class MainPresenter @Inject constructor(
     override fun subscribeToView(view: MainView): Disposable = CompositeDisposable(
         loggedInUserRepository.userFlowable
             .onlyDefined()
-            .map {
-                mutableListOf<FillRemainingDataSteps>().apply {
-                    if(!it.isEmailVerified) add(FillRemainingDataSteps.VERIFY_EMAIL)
-                    if(it.username.isEmpty()) add(FillRemainingDataSteps.SET_DISPLAY_NAME)
-                }
-            }
-            .map { Nel.fromList(it) }
-            .filter { it.isDefined() }
-            .map { it.orNull()!! }
-            .subscribe { view.redirectToFillRemainingData(it) }
+            .filter { !it.isEmailVerified || it.username.isEmpty() }
+            .subscribe { view.redirectToFillRemainingData() }
     )
 }
 
