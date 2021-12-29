@@ -2,6 +2,8 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.Either
 import arrow.core.Option
+import arrow.core.some
+import com.ghuljr.onehabit_data.base.storage.PropertyHolder
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
@@ -20,10 +22,11 @@ import javax.inject.Singleton
 class LoggedInUserRepository @Inject constructor(
     private val loggedInUserService: LoggedInUserService,
     @NetworkScheduler private val networkScheduler: Scheduler,
-    @ComputationScheduler private  val computationScheduler: Scheduler
+    @ComputationScheduler private val computationScheduler: Scheduler,
+    private val propertyHolderFactory: PropertyHolder.Factory<Boolean>
 ) : LoggedInUserService by loggedInUserService {
 
-    //TODO(!!!): cache logged in user in the token storage
+    private val propertyHolder: PropertyHolder<Boolean> = propertyHolderFactory.create(KEY_IS_EMAIL_VERIFICATION_SEND, false.some())
 
     val userIdFlowable: Flowable<Option<String>> = loggedInUserService.userFlowable
         .map { it.map { it.userId } }
@@ -37,4 +40,8 @@ class LoggedInUserRepository @Inject constructor(
     fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
         .signIn(loginRequest.email, loginRequest.password)
         .subscribeOn(networkScheduler)
+
+    companion object {
+        const val KEY_IS_EMAIL_VERIFICATION_SEND = "is_email_verification_send"
+    }
 }

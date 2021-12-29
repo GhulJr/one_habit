@@ -3,6 +3,7 @@ package com.ghuljr.onehabit
 import android.util.Log
 import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent
+import com.ghuljr.onehabit.di.module.AppModule
 import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit_tools.extension.onlyFalse
 import com.ghuljr.onehabit_tools_android.extension.asSingleTop
@@ -33,7 +34,10 @@ class App : DaggerApplication() {
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
-        DaggerAppComponent.create()
+        DaggerAppComponent
+            .builder()
+            .appModule(AppModule(this))
+            .build()
 
     private fun logRxJavaErrors() {
         RxJavaPlugins.setErrorHandler {

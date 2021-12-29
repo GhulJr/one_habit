@@ -7,8 +7,12 @@ import arrow.core.Option
 import arrow.core.none
 import arrow.core.toOption
 import com.ghuljr.onehabit_tools.base.storage.Preferences
+import com.ghuljr.onehabit_tools.di.ForApplication
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PreferencesImpl(context: Context) : Preferences {
+@Singleton
+class PreferencesImpl @Inject constructor(@ForApplication context: Context) : Preferences {
 
     private val preferences: SharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
 

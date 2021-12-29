@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit.di.module
 
+import android.app.Application
 import android.content.Context
 import com.ghuljr.onehabit.App
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
@@ -14,7 +15,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Singleton
 
 @Module
-class AppModule {
+class AppModule(private val app: App) {
 
     @Singleton
     @get:Provides
@@ -34,5 +35,5 @@ class AppModule {
     @Singleton
     @Provides
     @ForApplication
-    fun context(app: App): Context = app
+    fun context(): Context = app
 }
