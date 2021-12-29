@@ -91,7 +91,7 @@ class RegisterCredentialsPresenter @Inject constructor(
                 .leftToOption()
                 .observeOn(uiScheduler)
                 .subscribe(view::setRepeatPasswordErrorOption),
-            view.sendClickedObservable()
+            sendClicked
                 .switchMap {
                     registerDataOptionObservable
                         .firstOrError()
@@ -102,7 +102,9 @@ class RegisterCredentialsPresenter @Inject constructor(
                 }
                 .observeOn(uiScheduler)
                 .subscribe {
-                    view.handleSendEvent(it.swap().orNone())    //TODO: create extensions for left mapping
+                    view.handleSendEvent(
+                        it.swap().orNone()
+                    )    //TODO: create extensions for left mapping
                     it.map { view.handleSuccess() }
                 },
             registerDataOptionObservable.subscribe()

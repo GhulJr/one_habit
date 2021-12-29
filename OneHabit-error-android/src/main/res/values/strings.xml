@@ -16,6 +16,7 @@
     <string name="error_email_not_sent">Verification email cannot be sent.</string> <!--TODO: there should be retry button-->
     <string name="error_invalid_credentials">Invalid email or password.</string>
     <string name="error_two_factor_failed">Two factor verification failed. Please, try again.</string>
+    <string name="error_account_do_not_exist">Account with provided credentials does not exist.</string>
 
     <string name="error_logged_out_error">User is logged out. Please, re-login in order to proceed.</string>
     <string name="error_no_data">Oops… looks like there is no data to show.</string>

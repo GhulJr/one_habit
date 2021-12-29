@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_data.repository
 import arrow.core.Either
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
+import com.ghuljr.onehabit_tools.base.network.LoginRequest
 import com.ghuljr.onehabit_tools.base.network.RegisterRequest
 import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
@@ -25,4 +26,7 @@ class LoggedInUserRepository @Inject constructor(
         .register(registerRequest.email, registerRequest.password)
         .subscribeOn(networkScheduler)
 
+    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
+        .signIn(loginRequest.email, loginRequest.password)
+        .subscribeOn(networkScheduler)
 }

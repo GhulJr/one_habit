@@ -15,7 +15,10 @@ import io.reactivex.rxjava3.core.Single
 fun FirebaseAuthException.toError(): BaseError = when(this) {
     is FirebaseAuthEmailException -> AuthError.EmailNotSent(message)
     is FirebaseAuthRecentLoginRequiredException, //TODO: check if this should sign out or make a login deeplink
-    is FirebaseAuthInvalidUserException -> LoggedOutError
+    is FirebaseAuthInvalidUserException -> when(errorCode) {
+        "ERROR_USER_DISABLED", "ERROR_USER_NOT_FOUND" -> AuthError.AccountDoNotExist(message)
+        else -> LoggedOutError
+    }
     is FirebaseAuthMultiFactorException -> AuthError.TwoFactorVerificationFailed(message)
     is FirebaseAuthUserCollisionException -> when(errorCode) {
         "ERROR_EMAIL_ALREADY_IN_USE" -> AuthError.EmailInUse(message)

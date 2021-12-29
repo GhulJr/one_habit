@@ -28,7 +28,6 @@ class RegisterCredentialsFragment :
     BaseFragment<FragmentRegisterCredentialsBinding, RegisterCredentialsView, RegisterCredentialsPresenter>(),
     RegisterCredentialsView {
 
-    @Inject lateinit var firebaseService: LoggedInUserFirebaseService
     private var eventHandler: EventHandler? = null
 
     override fun setUpView(viewBind: FragmentRegisterCredentialsBinding) {
