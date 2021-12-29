@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'kotlin'
     id 'io.objectbox'
+    id 'kotlin-kapt'
 }
 
 java {
@@ -22,6 +23,9 @@ dependencies {
     // ObjectBox
     implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
     implementation "io.objectbox:objectbox-rxjava3:$objectbox_version"
+
+    // Dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     api project(":OneHabit-error")
     api project(":OneHabit-tools")

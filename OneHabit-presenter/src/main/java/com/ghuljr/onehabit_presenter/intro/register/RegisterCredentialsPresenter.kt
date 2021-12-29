@@ -3,16 +3,16 @@ package com.ghuljr.onehabit_presenter.intro.register
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.zip
-import com.ghuljr.onehabit_data.dao.LoggedInUserDao
+import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
+import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.validator.EmailValidator
 import com.ghuljr.onehabit_presenter.validator.PasswordWithRepeatValidator
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
 import com.ghuljr.onehabit_tools.base.network.RegisterRequest
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
-import com.ghuljr.onehabit_tools.extension.leftToOption
+import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @FragmentScope
 class RegisterCredentialsPresenter @Inject constructor(
-    private val loggedInUserDao: LoggedInUserDao,
+    private val loggedInUserRepository: LoggedInUserRepository,
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordWithRepeatValidator,
     @ComputationScheduler private val computationScheduler: Scheduler,
@@ -91,6 +91,20 @@ class RegisterCredentialsPresenter @Inject constructor(
                 .leftToOption()
                 .observeOn(uiScheduler)
                 .subscribe(view::setRepeatPasswordErrorOption),
+            view.sendClickedObservable()
+                .switchMap {
+                    registerDataOptionObservable
+                        .firstOrError()
+                        .onlyDefined()
+                        .flatMapSingle { loggedInUserRepository.register(it) }
+                        .leftAsEvent()
+                        .toObservableWithLoading()
+                }
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.handleSendEvent(it.swap().orNone())    //TODO: create extensions for left mapping
+                    it.map { view.handleSuccess() }
+                },
             registerDataOptionObservable.subscribe()
         )
     }

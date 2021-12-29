@@ -88,6 +88,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation project(":OneHabit-presenter")
+    implementation project(":OneHabit-data")
     implementation project(":OneHabit-error-android")
     implementation project(":OneHabit-tools-android")
 }
