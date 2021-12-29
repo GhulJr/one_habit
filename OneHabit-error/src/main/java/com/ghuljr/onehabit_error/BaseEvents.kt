@@ -11,3 +11,4 @@ object LoggedOutError: BaseError
 
 data class UnknownError(val message: String?): BaseError
 
+

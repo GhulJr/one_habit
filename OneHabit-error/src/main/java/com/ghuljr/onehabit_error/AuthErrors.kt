@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_error
 
 sealed class AuthError(open val message: String?): BaseError {
+    object EmailNotYetVerified : AuthError(null)
     data class EmailNotSent(override val message: String?): AuthError(message)
     data class TwoFactorVerificationFailed(override val message: String?): AuthError(message)
     data class EmailInUse(override val message: String?): AuthError(message)

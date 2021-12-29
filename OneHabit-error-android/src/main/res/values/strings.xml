@@ -22,4 +22,5 @@
     <string name="error_no_data">Oops… looks like there is no data to show.</string>
     <string name="error_oops">Oops…</string>
     <string name="error_send_email_verification">We faced some issues while sending you verification email.</string>
+    <string name="error_email_not_verified_yet">Email is not verified yet. Make sure you checked your mailbox.</string>
 </resources>

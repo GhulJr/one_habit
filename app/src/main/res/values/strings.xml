@@ -32,6 +32,7 @@
     <string name="check_your_mailbox_description">You will find an email with further steps to finish verification process.</string>
     <string name="check_email_verification">All done? Continue</string>
     <string name="didnt_received_anything">Didn\'t received anything?\nClick to resend</string>
+    <string name="time_remaining_to_resend">Time remaining to resend again: %1$s seconds</string> <!--TODO: make quantity string-->
     <string name="click_here_to_retry">Click here to retry</string>
 
 </resources>

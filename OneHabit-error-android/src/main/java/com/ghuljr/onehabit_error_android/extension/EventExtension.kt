@@ -41,6 +41,7 @@ fun NetworkError.textForNetworkError(resources: Resources): String = when (this)
 }
 
 fun AuthError.textForAuthError(resources: Resources): String = when (this) {
+    is AuthError.EmailNotYetVerified -> resources.getString(R.string.error_email_not_verified_yet)
     is AuthError.EmailInUse -> resources.getString(R.string.error_email_in_use)
     is AuthError.EmailNotSent -> resources.getString(R.string.error_email_not_sent)
     is AuthError.InvalidLoginCredentials -> resources.getString(R.string.error_email_in_use)
