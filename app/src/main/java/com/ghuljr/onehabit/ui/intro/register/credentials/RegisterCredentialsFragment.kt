@@ -1,8 +1,6 @@
 package com.ghuljr.onehabit.ui.intro.register.credentials
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import arrow.core.Option
 import com.ghuljr.onehabit.R

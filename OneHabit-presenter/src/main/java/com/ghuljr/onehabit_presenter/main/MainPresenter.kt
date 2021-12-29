@@ -7,6 +7,6 @@ import javax.inject.Inject
 
 @ActivityScope
 class MainPresenter @Inject constructor() : BasePresenter<MainView>() {
-    override fun subscribeToView(view: MainView): Disposable = Disposable.empty()
 
+    override fun subscribeToView(view: MainView): Disposable = Disposable.empty()
 }
