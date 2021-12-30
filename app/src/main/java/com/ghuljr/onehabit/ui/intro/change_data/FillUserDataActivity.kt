@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit.ui.intro.fill_data
+package com.ghuljr.onehabit.ui.intro.change_data
 
 import android.content.Context
 import android.content.Intent
@@ -7,13 +7,11 @@ import androidx.navigation.findNavController
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityFillUserDataBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
-import com.ghuljr.onehabit.ui.intro.fill_data.verify_email.VerifyEmailFragmentDirections
 import com.ghuljr.onehabit_presenter.intro.fill_data.FillUserDataPresenter
 import com.ghuljr.onehabit_presenter.intro.fill_data.FillUserDataView
 import com.ghuljr.onehabit_tools_android.extension.onDestinationChangedObservable
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import com.ghuljr.onehabit_tools_android.extension.throttleNavigationClicks
-import com.jakewharton.rxbinding4.appcompat.navigationClicks
 import io.reactivex.rxjava3.core.Observable
 import java.lang.RuntimeException
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/verifyEmailFragment"
-        android:name="com.ghuljr.onehabit.ui.intro.fill_data.verify_email.VerifyEmailFragment"
+        android:name="com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFragment"
         android:label="VerifyEmailFragment">
         <action
             android:id="@+id/action_verifyEmailFragment_to_verifyEmailFinishedFragment"
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/verifyEmailFinishedFragment"
-        android:name="com.ghuljr.onehabit.ui.intro.fill_data.verify_email.VerifyEmailFinishedFragment"
+        android:name="com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFinishedFragment"
         android:label="fragment_verify_email_finished"
         tools:layout="@layout/fragment_verify_email_finished">
         <action

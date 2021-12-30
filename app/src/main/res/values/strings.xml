@@ -36,5 +36,8 @@
     <string name="click_here_to_retry">Click here to retry</string>
     <string name="almost_done">Almost done!</string>
     <string name="there_is_one_last_thing_we_want_to_ask_you">There is one last thing we want to ask you...</string>
+    <string name="finish">Finish</string>
+    <string name="username">Username</string>
+    <string name="how_should_we_call_you">How should we call you?</string>
 
 </resources>

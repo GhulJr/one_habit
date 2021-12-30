@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:paddingStart="@dimen/default_margin"
     android:paddingEnd="@dimen/default_margin"
-    tools:context=".ui.intro.fill_data.FillUserDataActivity">
+    tools:context=".ui.intro.change_data.FillUserDataActivity">
 
     <Space
         android:layout_width="match_parent"
