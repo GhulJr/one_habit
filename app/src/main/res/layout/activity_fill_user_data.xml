@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.intro.fill_data.FillUserDataActivity">
+    tools:context=".ui.intro.change_data.FillUserDataActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/OneHabit.Toolbar"

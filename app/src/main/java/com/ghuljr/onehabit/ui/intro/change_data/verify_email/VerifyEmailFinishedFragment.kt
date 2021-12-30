@@ -1,13 +1,9 @@
-package com.ghuljr.onehabit.ui.intro.fill_data.verify_email
+package com.ghuljr.onehabit.ui.intro.change_data.verify_email
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentVerifyEmailFinishedBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailFinishedPresenter

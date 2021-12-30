@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit.ui.intro.fill_data.verify_email
+package com.ghuljr.onehabit.ui.intro.change_data.verify_email
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,11 +6,9 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import arrow.core.Option
-import arrow.core.some
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentVerifyEmailBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
-import com.ghuljr.onehabit_error.AuthError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailPresenter
@@ -104,9 +102,12 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
         snackbarEventManager?.handleEvent(event)
     }
 
-    override fun emailVerified() {
+    override fun navigateToChangeUsername() {
         navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToVerifyEmailFinishedFragment())
-        navController?.backStack?.clear()
+    }
+
+    override fun finish() {
+        navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToMainActivity())
     }
 
     override fun checkEmailVerificationClickedObservable(): Observable<Unit> = viewBind!!.checkEmailReceivedButton.throttleClicks()

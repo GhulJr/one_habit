@@ -16,7 +16,8 @@ interface VerifyEmailView : BaseView<VerifyEmailPresenter> {
 
     fun handleVerifyEmailCheck(event: Option<BaseEvent>)
 
-    fun emailVerified()
+    fun navigateToChangeUsername()
+    fun finish()
 
     fun checkEmailVerificationClickedObservable(): Observable<Unit>
     fun resendClickedObservable(): Observable<Unit>

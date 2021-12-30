@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OneHabit">
         <activity
-            android:name=".ui.intro.fill_data.FillUserDataActivity"
+            android:name=".ui.intro.change_data.FillUserDataActivity"
             android:launchMode="singleTop"
             android:exported="false" />
         <activity

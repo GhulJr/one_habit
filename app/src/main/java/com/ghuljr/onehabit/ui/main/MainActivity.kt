@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.ghuljr.onehabit.databinding.ActivityMainBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
-import com.ghuljr.onehabit.ui.intro.fill_data.FillUserDataActivity
+import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit_presenter.main.MainPresenter
 import com.ghuljr.onehabit_presenter.main.MainView
 

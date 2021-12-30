@@ -1,8 +1,8 @@
 package com.ghuljr.onehabit.di.module
 
 import com.ghuljr.onehabit.ui.intro.IntroActivity
-import com.ghuljr.onehabit.ui.intro.fill_data.FillUserDataActivity
-import com.ghuljr.onehabit.ui.intro.fill_data.FillUserDataFragmentsModule
+import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
+import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataFragmentsModule
 import com.ghuljr.onehabit.ui.intro.launch.LaunchActivity
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity

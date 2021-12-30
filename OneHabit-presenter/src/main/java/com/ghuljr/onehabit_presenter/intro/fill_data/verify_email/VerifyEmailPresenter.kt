@@ -29,8 +29,12 @@ class VerifyEmailPresenter @Inject constructor(
                 .onlyDefined()
                 .filter { it.isEmailVerified }
                 .observeOn(uiScheduler)
-                .subscribe { view.emailVerified() },
-
+                .subscribe {
+                    if (it.username.isEmpty())
+                        view.navigateToChangeUsername()
+                    else
+                        view.finish()
+                },
             Observable.merge(resendClicked, retrySendClicked)
                 .map { true }
                 .startWithItem(false)
