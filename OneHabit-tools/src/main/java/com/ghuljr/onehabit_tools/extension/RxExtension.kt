@@ -204,3 +204,6 @@ fun <R> Maybe<Either<BaseEvent, R>>.toObservableWithLoading(): Observable<Either
 // toBaseEvent
 fun <L : BaseEvent, R> Maybe<Either<L, R>>.leftAsEvent(): Maybe<Either<BaseEvent, R>> =
     mapLeft { it as BaseEvent }
+
+fun <L : BaseEvent, R> Single<Either<L, R>>.leftAsEvent(): Single<Either<BaseEvent, R>> =
+    mapLeft { it as BaseEvent }

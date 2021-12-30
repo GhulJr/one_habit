@@ -39,19 +39,8 @@
         android:text="@string/check_your_mailbox_description" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/retry_send_button"
-        style="@style/OneHabit.Button.Primary.Text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin_small"
-        android:gravity="center"
-        android:text="@string/click_here_to_retry"
-
-        android:visibility="gone" />
-
-    <com.google.android.material.button.MaterialButton
         android:id="@+id/resend_button"
-        style="@style/OneHabit.Button.Secondary.Text.Red"
+        style="@style/OneHabit.Button.Secondary.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_small"
@@ -75,8 +64,18 @@
         android:layout_weight="1" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/retry_send_button"
+        style="@style/OneHabit.Button.Primary.Text.Red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:gravity="center"
+        android:text="@string/click_here_to_retry"
+        android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/check_email_received_button"
-        style="@style/OneHabit.Button.Primary"
+        style="@style/OneHabit.Button.Primary.Text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin_small"

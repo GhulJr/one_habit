@@ -2,14 +2,18 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.*
 import com.ghuljr.onehabit_data.base.storage.PropertyHolder
+import com.ghuljr.onehabit_error.AuthError
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.base.network.*
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,10 +25,12 @@ class LoggedInUserRepository @Inject constructor(
     private val propertyHolderFactory: PropertyHolder.Factory<Boolean>
 ) : LoggedInUserManager by loggedInUserService {
 
-    private val propertyHolder: PropertyHolder<Boolean> = propertyHolderFactory.create(KEY_IS_EMAIL_VERIFICATION_SEND, none())
+    private val propertyHolder: PropertyHolder<Boolean> =
+        propertyHolderFactory.create(KEY_IS_EMAIL_VERIFICATION_SEND, none())
 
     val isEmailVerificationSendFlowable: Flowable<Boolean> = propertyHolder.get()
         .map { it.getOrElse { false } }
+        .subscribeOn(computationScheduler)
         .replay(1)
         .refCount()
 
@@ -33,16 +39,32 @@ class LoggedInUserRepository @Inject constructor(
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
 
-    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
-        .register(registerRequest.email, registerRequest.password)
-        .subscribeOn(networkScheduler)
+    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> =
+        loggedInUserService
+            .register(registerRequest.email, registerRequest.password)
+            .subscribeOn(networkScheduler)
 
-    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
-        .signIn(loginRequest.email, loginRequest.password)
-        .subscribeOn(networkScheduler)
+    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> =
+        loggedInUserService
+            .signIn(loginRequest.email, loginRequest.password)
+            .subscribeOn(networkScheduler)
 
-    fun sendEmailVerification(): Single<Either<BaseError, Unit>> = loggedInUserService.sendAuthorisationEmail()
-        .mapRight { propertyHolder.set(true.some()) }
+    fun sendEmailVerification(): Single<Either<BaseError, Unit>> =
+        loggedInUserService.sendAuthorisationEmail()
+            .subscribeOn(networkScheduler)
+            .flatMapRight { propertyHolder.set(true.some()).toUnit() }
+
+    fun refreshUser(): Single<Either<BaseError, UserResponse>> = loggedInUserService.refreshUser()
+        .flatMapRightWithEither {
+            loggedInUserService.userFlowable
+                .firstOrError()
+                .map {
+                    it.toEither { LoggedOutError }.flatMap {
+                        if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()
+                        else it.right()
+                    }
+                }
+        }
 
     companion object {
         const val KEY_IS_EMAIL_VERIFICATION_SEND = "is_email_verification_send"

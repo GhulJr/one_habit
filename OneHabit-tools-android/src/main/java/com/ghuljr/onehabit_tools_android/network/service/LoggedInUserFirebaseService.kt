@@ -10,6 +10,7 @@ import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -21,6 +22,8 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.processors.BehaviorProcessor
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,6 +38,8 @@ class LoggedInUserFirebaseService @Inject constructor(
     private val onUserChangeListener = FirebaseAuth.AuthStateListener {
         userProcessor.onNext(it.currentUser?.toUserResponse().toOption())
     }
+
+    private val singleThreadScheduler = Schedulers.from(Executors.newSingleThreadExecutor())
 
     //TODO: check if there might be some leaks. If yes, then hold this listener in App.kt
     init {
@@ -70,33 +75,30 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun changeDisplayName(displayName: String): Single<Either<BaseError, Unit>> =
+    override fun changeDisplayName(displayName: String): Single<Either<BaseError, UserResponse>> =
         firebaseAuth
             .currentUser?.updateProfile(userProfileChangeRequest {
                 this.displayName = displayName
             })
-            ?.toSingle()
-            ?.toRx3()
+            ?.asUnitSingle()
             .toOption().getOrElse { Single.just(LoggedOutError.left()) }
-            .map { Unit.right() as Either<BaseError, Unit> }
+            .updateSynchronouslyWithUser()
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
     override fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>> = firebaseAuth
         .currentUser?.sendEmailVerification()
-        ?.toSingle()
-        ?.toRx3()
+        ?.asUnitSingle()
         .toOption().getOrElse { Single.just(LoggedOutError.left()) }
         .map { Unit.right() as Either<BaseError, Unit> }
         .resumeWithBaseError()
         .subscribeOn(networkScheduler)
 
-    override fun refreshUser(): Single<Either<BaseError, Unit>> = firebaseAuth
+    override fun refreshUser(): Single<Either<BaseError, UserResponse>> = firebaseAuth
         .currentUser?.reload()
-        ?.toSingle()
-        ?.toRx3()
+        ?.asUnitSingle()
         .toOption().getOrElse { Single.just(LoggedOutError.left()) }
-        .map { Unit.right() as Either<BaseError, Unit> }
+        .updateSynchronouslyWithUser()
         .resumeWithBaseError()
         .subscribeOn(networkScheduler)
 
@@ -111,6 +113,15 @@ class LoggedInUserFirebaseService @Inject constructor(
         username = displayName.toOption(),
         isEmailVerified = isEmailVerified
     )
+
+    private fun Single<*>.updateSynchronouslyWithUser(): Single<Either<BaseError, UserResponse>> =
+        map {
+            firebaseAuth.currentUser?.toUserResponse()
+                .rightIfNotNull { LoggedOutError } as Either<BaseError, UserResponse>
+        }
+            .observeOn(singleThreadScheduler)
+            .doOnSuccess { userProcessor.onNext(it.orNone()) }
+            .observeOn(networkScheduler)
 
     private fun io.reactivex.Single<AuthResult>.handleSignInOrLogOut(): Single<Either<BaseError, UserResponse>> =
         toRx3()

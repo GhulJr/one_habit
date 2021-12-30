@@ -5,11 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import arrow.core.Option
 import arrow.core.some
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentVerifyEmailBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit_error.AuthError
+import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailPresenter
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailView
@@ -44,7 +46,7 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
 
     override fun getPresenterView(): VerifyEmailView = this
 
-    override fun emailSending() {
+    override fun setEmailSending() {
         viewBind!!.apply {
             loadingIndicator.visibility = View.VISIBLE
             emailImage.setImageResource(R.drawable.ic_sending)
@@ -56,7 +58,7 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
         }
     }
 
-    override fun emailSend() {
+    override fun setEmailSend() {
         viewBind!!.apply {
             loadingIndicator.visibility = View.GONE
             emailImage.setImageResource(R.drawable.ic_email_unread)
@@ -68,7 +70,7 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
         }
     }
 
-    override fun emailSendError() {
+    override fun setEmailSendError() {
         viewBind!!.apply {
             loadingIndicator.visibility = View.GONE
             emailImage.setImageResource(R.drawable.ic_error_send)
@@ -98,12 +100,12 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
         }
     }
 
-    override fun displayEmailNotVerifiedYetMessage() {
-        snackbarEventManager?.handleEvent(AuthError.EmailNotYetVerified.some())
+    override fun handleVerifyEmailCheck(event: Option<BaseEvent>) {
+        snackbarEventManager?.handleEvent(event)
     }
 
     override fun emailVerified() {
-        navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToUsernameFragment())
+        navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToVerifyEmailFinishedFragment())
     }
 
     override fun checkEmailVerificationClickedObservable(): Observable<Unit> = viewBind!!.checkEmailReceivedButton.throttleClicks()
