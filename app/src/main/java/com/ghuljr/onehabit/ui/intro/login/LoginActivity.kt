@@ -9,6 +9,7 @@ import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityLoginBinding
 import com.ghuljr.onehabit.databinding.FragmentRegisterCredentialsBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
+import com.ghuljr.onehabit.ui.intro.login.forgot_password.ForgotPasswordActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit_error.BaseEvent
@@ -34,7 +35,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginView, LoginPresent
             actionWithName = { } to getString(R.string.ok)
         )), viewBind.loadingIndicator)
     }
-
 
     override fun bindView(): ActivityLoginBinding = ActivityLoginBinding.inflate(layoutInflater)
     override fun getPresenterView(): LoginView = this
@@ -74,7 +74,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginView, LoginPresent
     }
 
     override fun openResetPassword() {
-        TODO("Not yet implemented")
+        startActivity(ForgotPasswordActivity.newIntent(this))
     }
 
     override fun handleSignInEvent(event: Option<BaseEvent>) {
