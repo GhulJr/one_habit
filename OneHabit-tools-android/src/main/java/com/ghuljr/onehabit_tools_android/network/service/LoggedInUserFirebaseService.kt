@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
+import android.util.Log
 import arrow.core.*
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
@@ -9,6 +10,7 @@ import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
 import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.emptyToOption
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.auth.AuthResult
@@ -54,6 +56,7 @@ class LoggedInUserFirebaseService @Inject constructor(
 
     override val userFlowable: Flowable<Option<UserResponse>> = userProcessor
         .subscribeOn(computationScheduler)
+        .doOnNext { Log.e("RegisterTest", "$it") }
         .replay(1).refCount()
 
     override fun register(
@@ -110,7 +113,7 @@ class LoggedInUserFirebaseService @Inject constructor(
     private fun FirebaseUser.toUserResponse(): UserResponse = UserResponse(
         userId = uid,
         email = email!!,    // Right now we got only on auth method
-        username = displayName.toOption(),
+        username = displayName.emptyToOption(),
         isEmailVerified = isEmailVerified
     )
 

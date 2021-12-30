@@ -34,5 +34,7 @@
     <string name="didnt_received_anything">Didn\'t received anything?\nClick to resend</string>
     <string name="time_remaining_to_resend">Time remaining to resend again: %1$s seconds</string> <!--TODO: make quantity string-->
     <string name="click_here_to_retry">Click here to retry</string>
+    <string name="almost_done">Almost done!</string>
+    <string name="there_is_one_last_thing_we_want_to_ask_you">There is one last thing we want to ask you...</string>
 
 </resources>
