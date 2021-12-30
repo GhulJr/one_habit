@@ -39,5 +39,6 @@
     <string name="finish">Finish</string>
     <string name="username">Username</string>
     <string name="how_should_we_call_you">How should we call you?</string>
+    <string name="forgot_password_description">We will send you and email with further steps to reset password.</string>
 
 </resources>

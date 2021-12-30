@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_presenter.profile.change_data.name
+package com.ghuljr.onehabit_presenter.intro.fill_data.name
 
 import arrow.core.none
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository

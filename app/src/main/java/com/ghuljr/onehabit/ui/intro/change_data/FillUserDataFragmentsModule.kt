@@ -2,7 +2,7 @@ package com.ghuljr.onehabit.ui.intro.change_data
 
 import com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFinishedFragment
 import com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFragment
-import com.ghuljr.onehabit.ui.profile.fill_data.name.UsernameFragment
+import com.ghuljr.onehabit.ui.intro.change_data.name.UsernameFragment
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import android.util.Log
 import arrow.core.*
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
@@ -103,6 +102,14 @@ class LoggedInUserFirebaseService @Inject constructor(
         .updateSynchronouslyWithUser()
         .resumeWithBaseError()
         .subscribeOn(networkScheduler)
+
+    override fun resetPassword(email: String): Single<Either<BaseError, Unit>> =
+        firebaseAuth.sendPasswordResetEmail(email)
+            .asUnitSingle()
+            .toOption().getOrElse { Single.just(LoggedOutError.left()) }
+            .map { Unit.right() as Either<BaseError, Unit> }
+            .resumeWithBaseError()
+            .subscribeOn(networkScheduler)
 
     //TODO: auth email
     override fun signOut() {

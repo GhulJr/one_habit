@@ -18,6 +18,7 @@ interface LoggedInUserService: LoggedInUserManager {
     fun signIn(email: String, password: String): Single<Either<BaseError, UserResponse>>
     fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>>
     fun refreshUser(): Single<Either<BaseError, UserResponse>>
+    fun resetPassword(email: String): Single<Either<BaseError, Unit>>
 }
 
 data class RegisterRequest(val email: String, val password: String)

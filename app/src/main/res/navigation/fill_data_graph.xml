@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/usernameFragment"
-        android:name="com.ghuljr.onehabit.ui.profile.fill_data.name.UsernameFragment"
+        android:name="com.ghuljr.onehabit.ui.intro.change_data.name.UsernameFragment"
         android:label="fragment_username"
         tools:layout="@layout/fragment_username" >
         <action

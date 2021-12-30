@@ -5,6 +5,7 @@ import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataFragmentsModule
 import com.ghuljr.onehabit.ui.intro.launch.LaunchActivity
 import com.ghuljr.onehabit.ui.intro.login.LoginActivity
+import com.ghuljr.onehabit.ui.intro.login.forgot_password.ForgotPasswordActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterFragmentsModule
 import com.ghuljr.onehabit.ui.main.MainActivity
@@ -39,4 +40,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [FillUserDataFragmentsModule::class])
     fun fillUserDataActivity(): FillUserDataActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun forgotPasswordActivity(): ForgotPasswordActivity
 }

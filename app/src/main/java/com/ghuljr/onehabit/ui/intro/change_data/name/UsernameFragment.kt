@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit.ui.profile.fill_data.name
+package com.ghuljr.onehabit.ui.intro.change_data.name
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,8 +15,8 @@ import com.ghuljr.onehabit_error.ValidationError
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_error_android.extension.setErrorOption
-import com.ghuljr.onehabit_presenter.profile.change_data.name.UsernamePresenter
-import com.ghuljr.onehabit_presenter.profile.change_data.name.UsernameView
+import com.ghuljr.onehabit_presenter.intro.fill_data.name.UsernamePresenter
+import com.ghuljr.onehabit_presenter.intro.fill_data.name.UsernameView
 import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import com.google.android.material.snackbar.Snackbar
