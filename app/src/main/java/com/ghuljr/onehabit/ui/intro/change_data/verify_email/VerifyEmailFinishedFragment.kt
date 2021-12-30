@@ -8,7 +8,6 @@ import com.ghuljr.onehabit.databinding.FragmentVerifyEmailFinishedBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailFinishedPresenter
 import com.ghuljr.onehabit_presenter.intro.fill_data.verify_email.VerifyEmailFinishedView
-import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import io.reactivex.rxjava3.core.Observable
 
 class VerifyEmailFinishedFragment : BaseFragment<FragmentVerifyEmailFinishedBinding, VerifyEmailFinishedView, VerifyEmailFinishedPresenter>(), VerifyEmailFinishedView {
