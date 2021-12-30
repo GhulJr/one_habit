@@ -56,7 +56,6 @@ class LoggedInUserFirebaseService @Inject constructor(
 
     override val userFlowable: Flowable<Option<UserResponse>> = userProcessor
         .subscribeOn(computationScheduler)
-        .doOnNext { Log.e("RegisterTest", "$it") }
         .replay(1).refCount()
 
     override fun register(

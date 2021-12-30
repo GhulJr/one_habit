@@ -106,6 +106,7 @@ class VerifyEmailFragment : BaseFragment<FragmentVerifyEmailBinding, VerifyEmail
 
     override fun emailVerified() {
         navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToVerifyEmailFinishedFragment())
+        navController?.backStack?.clear()
     }
 
     override fun checkEmailVerificationClickedObservable(): Observable<Unit> = viewBind!!.checkEmailReceivedButton.throttleClicks()

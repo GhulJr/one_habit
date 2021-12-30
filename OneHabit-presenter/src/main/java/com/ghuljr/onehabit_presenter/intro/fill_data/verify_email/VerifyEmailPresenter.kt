@@ -42,7 +42,7 @@ class VerifyEmailPresenter @Inject constructor(
                                     .leftAsEvent()
                                     .toObservableWithLoading()
                             } else {
-                                Observable.just(Unit.right())
+                                Observable.just(true.right())
                             }
                         }
                 }

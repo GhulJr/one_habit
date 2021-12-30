@@ -30,11 +30,12 @@ class LoggedInUserRepository @Inject constructor(
 
     val isEmailVerificationSendFlowable: Flowable<Boolean> = propertyHolder.get()
         .map { it.getOrElse { false } }
+        .switchMap { isSend -> userFlowable.map { it.map { it.isEmailVerified }.getOrElse { false } || isSend } }
         .subscribeOn(computationScheduler)
         .replay(1)
         .refCount()
 
-    val userIdFlowable: Flowable<Option<String>> = loggedInUserService.userFlowable
+    val userIdFlowable: Flowable<Option<String>> = userFlowable
         .map { it.map { it.userId } }
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
@@ -49,12 +50,12 @@ class LoggedInUserRepository @Inject constructor(
             .signIn(loginRequest.email, loginRequest.password)
             .subscribeOn(networkScheduler)
 
-    fun sendEmailVerification(): Single<Either<BaseError, Unit>> =
+    fun sendEmailVerification(): Single<Either<BaseError, Boolean>> =
         loggedInUserService.sendAuthorisationEmail()
             .subscribeOn(networkScheduler)
-            .flatMapRight { propertyHolder.set(true.some()).toUnit() }
+            .flatMapRight { propertyHolder.set(true.some()) }
 
-    fun refreshUser(): Single<Either<BaseError, UserResponse>> = loggedInUserService.refreshUser()
+    fun refreshUser(): Single<Either<BaseError, UserResponse>> = refreshUser()
         .flatMapRightWithEither {
             loggedInUserService.userFlowable
                 .firstOrError()
