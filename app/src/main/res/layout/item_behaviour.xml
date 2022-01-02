@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="64dp"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:elevation="@dimen/cardview_default_elevation"
+    android:paddingStart="@dimen/default_margin"
+    android:paddingEnd="@dimen/default_margin">
+
+    <FrameLayout
+        android:id="@+id/selector_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View
+            android:id="@+id/timeline"
+            android:layout_width="@dimen/default_timeline_stroke"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:background="@color/color_enable_disable" />
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="@dimen/default_margin_very_large"
+            android:layout_height="@dimen/default_margin_very_large"
+            android:src="@drawable/ic_circle" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/default_margin_small"
+        android:paddingBottom="@dimen/default_margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/show_more"
+        app:layout_constraintStart_toEndOf="@id/selector_layout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
+            tools:text="Day 1: no junk" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
+            tools:text="Monday, 26th July" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/show_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_down"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

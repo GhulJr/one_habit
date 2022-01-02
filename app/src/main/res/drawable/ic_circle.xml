@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="16dp"/>
+    <stroke android:color="@color/color_enable_disable" android:width="@dimen/default_timeline_stroke"/>
+    <solid android:color="@color/primary_white"/>
+</shape>

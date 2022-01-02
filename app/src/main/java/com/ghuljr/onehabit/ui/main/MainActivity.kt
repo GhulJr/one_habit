@@ -14,7 +14,6 @@ import com.ghuljr.onehabit_presenter.main.MainView
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(), MainView {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

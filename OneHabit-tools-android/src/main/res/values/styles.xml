@@ -60,7 +60,7 @@
 
     <style name="OneHabit.TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">@dimen/default_text_size</item>
-        <item name="android:textColor">@color/primary_black</item>
+        <item name="android:textColor">@color/color_enable_disable</item>
         <item name="fontFamily">@font/mplus_rounded_regular</item>
     </style>
 
@@ -135,5 +135,9 @@
     <style name="OneHabit.AlertDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="backgroundTint">@color/primary_white</item>
         <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary</item>
+    </style>
+
+    <style name="OneHabit.Timeline.Line" parent="">
+
     </style>
 </resources>
