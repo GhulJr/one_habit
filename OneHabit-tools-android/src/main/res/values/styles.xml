@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--TODO: set text appearances for buttons-->
+    <style name="OneHabit.Button.Primary.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/default_button_height</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="strokeColor">@color/primary_black</item>
+        <item name="strokeWidth">@dimen/default_stroke_width</item>
+        <item name="android:textStyle">bold</item>
+        <item name="rippleColor">@color/primary_black</item>
+    </style>
+
+    <style name="OneHabit.Button.Primary.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minHeight">@dimen/default_button_height</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="rippleColor">@color/primary_black</item>
+    </style>
+
+    <style name="OneHabit.Button.Primary.Text.Red" parent="OneHabit.Button.Primary.Text">
+        <item name="android:textColor">@color/color_error</item>
+        <item name="rippleColor">@color/color_error</item>
+    </style>
+
+    <style name="OneHabit.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="android:minHeight">@dimen/default_button_height</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+        <item name="android:textColor">@color/secondary_white</item>
+        <item name="backgroundTint">@color/primary_black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">@dimen/default_corner_radius</item>
+        <item name="rippleColor">@color/primary_white</item>
+    </style>
+
+    <style name="OneHabit.Button.Secondary.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minHeight">0dp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary.Small</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="rippleColor">@color/primary_black</item>
+    </style>
+
+    <style name="OneHabit.Button.Secondary.Text.Red" parent="OneHabit.Button.Secondary.Text">
+        <item name="android:textColor">@color/color_error</item>
+        <item name="rippleColor">@color/color_error</item>
+    </style>
+
+    <style name="OneHabit.Button.Secondary.Text.Small" parent="OneHabit.Button.Secondary.Text">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="fontFamily">@font/mplus_rounded_regular</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Small" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">@dimen/default_text_size_small</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Bold" parent="OneHabit.TextAppearance.Primary">
+        <item name="fontFamily">@font/mplus_rounded_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="OneHabit.TextAppearance.Primary.Large" parent="OneHabit.TextAppearance.Primary">
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Header" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textSize">@dimen/default_text_size_large</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="fontFamily">@font/mplus_rounded_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Title" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textSize">@dimen/default_text_size_title</item>
+        <item name="android:textColor">@color/primary_black</item>
+        <item name="fontFamily">@font/mplus_rounded_bold</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="OneHabit.TextAppearance.Primary.Title.Toolbar" parent="OneHabit.TextAppearance.Primary.Title">
+        <item name="android:textSize">@dimen/default_text_size_toolbar</item>
+    </style>
+
+    <style name="OneHabit.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusBottomEnd">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/default_corner_radius</item>
+        <item name="boxCornerRadiusTopStart">@dimen/default_corner_radius</item>
+        <item name="boxStrokeWidth">@dimen/default_stroke_width_thin</item>
+        <item name="boxStrokeWidthFocused">@dimen/default_stroke_width</item>
+        <item name="boxStrokeColor">@color/primary_black</item>
+        <item name="hintAnimationEnabled">true</item>
+        <item name="hintEnabled">true</item>
+        <item name="errorTextColor">@color/color_error</item>
+        <item name="errorIconTint">@color/color_error</item>
+        <item name="boxStrokeErrorColor">@color/color_error</item>
+        <item name="android:textColorHint">@color/primary_black</item>
+        <item name="hintTextColor">@color/primary_black</item>
+        <item name="startIconTint">@color/primary_black</item>
+        <item name="endIconTint">@color/primary_black</item>
+        <item name="passwordToggleTint">@color/primary_black</item>
+        <item name="hintTextAppearance">@style/OneHabit.TextAppearance.Primary.Bold</item>
+    </style>
+
+    <style name="OneHabit.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="titleTextAppearance">@style/OneHabit.TextAppearance.Primary.Title.Toolbar</item>
+        <item name="background">@color/primary_white</item>
+    </style>
+
+    <style name="OneHabit.CircularLoadingIndicator.Small.White" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorColor">@color/primary_white</item>
+        <item name="android:scaleX">0.6</item>
+        <item name="android:scaleY">0.6</item>
+    </style>
+
+    <style name="OneHabit.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
+        <item name="indicatorColor">@color/primary_black</item>
+    </style>
+
+    <style name="OneHabit.AlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="backgroundTint">@color/primary_white</item>
+        <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary</item>
+    </style>
+</resources>

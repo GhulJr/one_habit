@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'androidx.navigation.safeargs'
 }
 
 android {
@@ -57,14 +58,20 @@ android {
         }
     }
 
+    android.variantFilter { variant ->
+        if (variant.buildType.name == 'debug' && variant.getFlavors().get(0).name == 'prod') {
+            variant.setIgnore(true)
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+
 }
 
 dependencies {
@@ -72,12 +79,17 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
 
     // Dagger
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation project(":OneHabit-presenter")
+    implementation project(":OneHabit-data")
     implementation project(":OneHabit-error-android")
     implementation project(":OneHabit-tools-android")
 }

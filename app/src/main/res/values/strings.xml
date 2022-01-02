@@ -1,3 +1,47 @@
 <resources>
+    <!-- General -->
+    <string name="or">Or</string>
+    <string name="ok">Ok</string>
     <string name="app_name">OneHabit</string>
+    <string name="next">Next</string>
+    <string name="sending">Sending...</string>
+    <string name="got_it">Got it</string>
+
+
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="hello_blank_fragment">awludhfa</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <!-- Login/register -->
+    <string name="Google">Google</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign out</string>
+    <string name="register">Register</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="send">Send</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="check_your_mailbox">Check your mailbox!</string>
+    <string name="check_your_mailbox_description">You will find an email with further steps to finish verification process.</string>
+    <string name="check_email_verification">All done? Continue</string>
+    <string name="didnt_received_anything">Didn\'t received anything?\nClick to resend</string>
+    <string name="time_remaining_to_resend">Time remaining to resend again: %1$s seconds</string> <!--TODO: make quantity string-->
+    <string name="click_here_to_retry">Click here to retry</string>
+    <string name="almost_done">Almost done!</string>
+    <string name="there_is_one_last_thing_we_want_to_ask_you">There is one last thing we want to ask you...</string>
+    <string name="finish">Finish</string>
+    <string name="username">Username</string>
+    <string name="how_should_we_call_you">How should we call you?</string>
+    <string name="forgot_password_description">We will send you and email with further steps to reset password.</string>
+    <string name="email_sent">Email has been sent</string>
+    <string name="email_sent_description">When you finish get back to the app and try login with your new password.</string>
+
 </resources>

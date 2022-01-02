@@ -7,3 +7,9 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
+
+dependencies {
+    implementation "io.reactivex.rxjava3:rxjava:$rxjava3_version"
+    implementation "io.reactivex.rxjava3:rxkotlin:$rxkotlin3_version"
+    implementation "io.arrow-kt:arrow-core:$arrow_version"
+}

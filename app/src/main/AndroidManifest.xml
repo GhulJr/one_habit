@@ -9,9 +9,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.OneHabit">
+        android:theme="@style/OneHabit.Theme">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.intro.change_data.FillUserDataActivity"
+            android:launchMode="singleTop"
+            android:exported="false" />
+        <activity
+            android:name=".ui.intro.launch.LaunchActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,6 +23,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.intro.login.forgot_password.ForgotPasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.intro.register.RegisterActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.intro.IntroActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".ui.intro.login.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

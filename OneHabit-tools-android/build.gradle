@@ -18,6 +18,10 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -49,6 +53,11 @@ dependencies {
     api "androidx.recyclerview:recyclerview:1.2.1"
     api "androidx.recyclerview:recyclerview-selection:1.1.0"
 
+    // Navigation Component
+    api "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    api "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    androidTestApi "androidx.navigation:navigation-testing:$navigation_version"
+
     // Dagger
     api "com.google.dagger:dagger-android:$dagger_version"
     api "com.google.dagger:dagger-android-support:$dagger_version"
@@ -72,19 +81,26 @@ dependencies {
     // RxPermission
     api "com.github.tbruyelle:rxpermissions:$rxpermissions_version"
 
+    // RxTasks
+    api 'io.ashdavies.rx.rxtasks:rx-tasks:2.2.0'
+
     // RxWork
     api "androidx.work:work-runtime:$work_version"
     api "androidx.work:work-runtime-ktx:$work_version"
     api "androidx.work:work-rxjava3:$work_version"
 
     // Firebase
-    api platform('com.google.firebase:firebase-bom:28.3.1')
-    releaseApi 'com.google.firebase:firebase-crashlytics-ktx'
+    api platform('com.google.firebase:firebase-bom:29.0.2')
+    api 'com.google.firebase:firebase-crashlytics-ktx' //TODO: in future use `releaseApi`
     api 'com.google.firebase:firebase-analytics-ktx'
     api 'com.google.firebase:firebase-database-ktx'
+    api 'com.google.firebase:firebase-auth-ktx'
+    api 'com.google.android.gms:play-services-auth:20.0.0'
 
     // Picasso
     api "com.squareup.picasso:picasso:$picasso_version"
 
     api project(":OneHabit-tools")
+    implementation project(":OneHabit-data")
+    implementation project(":OneHabit-error-android")
 }

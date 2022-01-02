@@ -21,12 +21,20 @@ dependencies {
     api "io.reactivex.rxjava3:rxjava:$rxjava3_version"
     api "io.reactivex.rxjava3:rxkotlin:$rxkotlin3_version"
 
+    // Compatibility with Rx2
+    api "io.reactivex.rxjava2:rxjava:2.2.21"
+    api"io.reactivex.rxjava2:rxkotlin:2.4.0"
+    api "com.github.akarnokd:rxjava3-bridge:3.0.2"
+
     // Arrow
     api "io.arrow-kt:arrow-core:$arrow_version"
     api "io.arrow-kt:arrow-optics:$arrow_version"
     kapt "io.arrow-kt:arrow-meta:$arrow_version"
 
+
     // Jackson converter
     api "com.fasterxml.jackson.core:jackson-core:$jackson_version"
     api "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson_version"
+
+    api project(":OneHabit-error")
 }

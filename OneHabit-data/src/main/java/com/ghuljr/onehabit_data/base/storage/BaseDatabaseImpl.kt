@@ -15,6 +15,9 @@ import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
 // the queries
 //TODO(optional): add the abstraction, so daos would only use interface classes
 
+
+//TODO: REMEMBER TO CREATE OFFLINE CACHE FOR SENDING REQUESTS, SO THE APP MIGHT BE USED OFFLINE
+// CREATE BANNERS AND SUCH THINGS TO INDICATE IT
 /**
  * The main idea is to create classes, that exposes pure Kotlin objects (instead of Entities).
  * In every case like this there would be a main Entity which we refer to and relational entities.
@@ -33,7 +36,7 @@ interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
 }
 
 //TODO: use composition over inheritance
-abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
+internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
     private val box: Box<ENTITY>,
     private val computationScheduler: ComputationScheduler
 ) : BaseDatabase<ID, ENTITY> {
