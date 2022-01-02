@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="64dp"
-    android:background="?selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:elevation="@dimen/cardview_default_elevation"
+    android:background="@color/color_background_gray"
+    android:clickable="false"
+    android:focusable="false"
+    android:elevation="0dp"
     android:paddingStart="@dimen/default_margin"
     android:paddingEnd="@dimen/default_margin">
 
@@ -30,9 +29,9 @@
 
         <ImageView
             android:layout_gravity="center"
-            android:layout_width="@dimen/default_checkbox_size"
-            android:layout_height="@dimen/default_checkbox_size"
-            android:src="@drawable/ic_circle" />
+            android:layout_width="@dimen/default_checkbox_size_small"
+            android:layout_height="@dimen/default_checkbox_size_small"
+            android:src="@drawable/ic_circle_gray" />
     </FrameLayout>
 
     <LinearLayout
@@ -52,22 +51,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="2"
-            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-            tools:text="Day 1: no junk" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
-            tools:text="Monday, 26th July" />
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary"
+            tools:text="Drink water" />
 
     </LinearLayout>
 
-    <ImageView
+    <com.ghuljr.onehabit_tools_android.widget.SeparatorCounter
         android:id="@+id/show_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_down"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
