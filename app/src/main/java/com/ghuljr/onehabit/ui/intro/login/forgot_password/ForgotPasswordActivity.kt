@@ -2,8 +2,8 @@ package com.ghuljr.onehabit.ui.intro.login.forgot_password
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import arrow.core.Option
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityForgotPasswordBinding
@@ -22,7 +22,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding4.appcompat.navigationClicks
 import io.reactivex.rxjava3.core.Observable
 
-class ForgotPasswordActivity : BaseActivity<ActivityForgotPasswordBinding, ForgotPasswordView, ForgotPasswordPresenter>(), ForgotPasswordView {
+class ForgotPasswordActivity :
+    BaseActivity<ActivityForgotPasswordBinding, ForgotPasswordView, ForgotPasswordPresenter>(),
+    ForgotPasswordView {
 
     private val eventHandler: EventHandler by lazy {
         EventHandler(listOf(SnackbarEventManager(
@@ -33,18 +35,28 @@ class ForgotPasswordActivity : BaseActivity<ActivityForgotPasswordBinding, Forgo
     }
 
     override fun onBackPressed() {
-        presenter.backClicked()
+        presenter.finish()
     }
 
-    override fun bindView(): ActivityForgotPasswordBinding = ActivityForgotPasswordBinding.inflate(layoutInflater)
+    override fun bindView(): ActivityForgotPasswordBinding =
+        ActivityForgotPasswordBinding.inflate(layoutInflater)
+
     override fun getPresenterView(): ForgotPasswordView = this
 
-    override fun emailChangedObservable(): Observable<String> = viewBind.emailInput.debouncedTextChanges()
+    override fun emailChangedObservable(): Observable<String> =
+        viewBind.emailInput.debouncedTextChanges()
+
     override fun sendClickedObservable(): Observable<Unit> = viewBind.sendButton.throttleClicks()
-    override fun navigateBackClickedObservable(): Observable<Unit> = viewBind.toolbar.navigationClicks()
+    override fun navigateBackClickedObservable(): Observable<Unit> =
+        viewBind.toolbar.navigationClicks()
 
     override fun handleSendSuccess() {
-
+        AlertDialog.Builder(this, R.style.OneHabit_AlertDialog)
+            .setTitle(R.string.email_sent)
+            .setMessage(R.string.email_sent_description)
+            .setCancelable(false)
+            .setPositiveButton(R.string.got_it) { _, _ -> presenter.finish() }
+            .show()
     }
 
     override fun handleValidateEmailError(error: Option<ValidationError>) {
@@ -62,11 +74,12 @@ class ForgotPasswordActivity : BaseActivity<ActivityForgotPasswordBinding, Forgo
         eventHandler.invoke(event)
     }
 
-    override fun navigateBack() {
+    override fun finishResetingPassword() {
         finish()
     }
 
     companion object {
-        fun newIntent(context: Context): Intent = Intent(context, ForgotPasswordActivity::class.java)
+        fun newIntent(context: Context): Intent =
+            Intent(context, ForgotPasswordActivity::class.java)
     }
 }

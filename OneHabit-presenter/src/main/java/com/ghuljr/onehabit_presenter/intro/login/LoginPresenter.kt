@@ -65,6 +65,9 @@ class LoginPresenter @Inject constructor(
             view.dontHaveAccountClickedObservable()
                 .observeOn(uiScheduler)
                 .subscribe { view.openRegisterFlow() },
+            view.resetPasswordClickedObservable()
+                .observeOn(uiScheduler)
+                .subscribe { view.openResetPassword() },
             validateEmailSignal
                 .switchMapSingle { emailValidator.validatedEmailEitherObservable.firstOrError() }
                 .leftToOption()

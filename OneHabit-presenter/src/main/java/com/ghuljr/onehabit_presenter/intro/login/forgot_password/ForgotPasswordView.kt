@@ -14,5 +14,5 @@ interface ForgotPasswordView : BaseView<ForgotPasswordPresenter> {
     fun handleSendSuccess()
     fun handleValidateEmailError(error: Option<ValidationError>)
     fun handleSendEvent(event: Option<BaseEvent>)
-    fun navigateBack()
+    fun finishResetingPassword()
 }

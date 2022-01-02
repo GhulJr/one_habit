@@ -24,7 +24,7 @@ class ForgotPasswordPresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler
 ) : BasePresenter<ForgotPasswordView>() {
 
-    private val navigationBackClickSubject = PublishSubject.create<Unit>()
+    private val finishSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: ForgotPasswordView): Disposable {
         val sendClick = view.sendClickedObservable().share()
@@ -35,9 +35,9 @@ class ForgotPasswordPresenter @Inject constructor(
                     view.handleValidateEmailError(none())
                     emailValidator.emailChanged(it)
                 },
-            Observable.merge(navigationBackClickSubject, view.navigateBackClickedObservable())
+            Observable.merge(finishSubject, view.navigateBackClickedObservable())
                 .observeOn(uiScheduler)
-                .subscribe { view.navigateBack() },
+                .subscribe { view.finishResetingPassword() },
             sendClick
                 .switchMapSingle {
                     emailValidator.validatedEmailEitherObservable
@@ -64,5 +64,5 @@ class ForgotPasswordPresenter @Inject constructor(
         )
     }
 
-    fun backClicked(): Unit = navigationBackClickSubject.onNext(Unit)
+    fun finish(): Unit = finishSubject.onNext(Unit)
 }

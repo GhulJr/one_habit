@@ -131,4 +131,9 @@
     <style name="OneHabit.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="indicatorColor">@color/primary_black</item>
     </style>
+
+    <style name="OneHabit.AlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="backgroundTint">@color/primary_white</item>
+        <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary</item>
+    </style>
 </resources>
