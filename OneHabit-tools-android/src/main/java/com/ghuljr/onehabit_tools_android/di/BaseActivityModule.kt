@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_tools_android.base.di
+package com.ghuljr.onehabit_tools_android.di
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

@@ -20,7 +20,7 @@ import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.ghuljr.onehabit_tools_android.extension.focusLostObservable
 import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import com.ghuljr.onehabit_tools_android.extension.throttleNavigationClicks
-import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
+import com.ghuljr.onehabit_tools_android.data.network.service.LoggedInUserFirebaseService
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject

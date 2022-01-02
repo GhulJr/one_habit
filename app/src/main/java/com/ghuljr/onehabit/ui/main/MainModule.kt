@@ -1,6 +1,6 @@
 package com.ghuljr.onehabit.ui.main
 
-import com.ghuljr.onehabit_tools_android.base.di.BaseActivityModule
+import com.ghuljr.onehabit_tools_android.di.BaseActivityModule
 import dagger.Module
 
 @Module

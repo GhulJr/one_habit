@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_tools_android.network.service
+package com.ghuljr.onehabit_tools_android.data.network.service
 
 import arrow.core.*
 import com.ghuljr.onehabit_error.BaseError

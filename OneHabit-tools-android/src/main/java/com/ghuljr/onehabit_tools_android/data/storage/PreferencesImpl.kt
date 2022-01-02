@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_tools_android.base.storage
+package com.ghuljr.onehabit_tools_android.data.storage
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

@@ -8,7 +8,7 @@ import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit_tools.extension.onlyFalse
 import com.ghuljr.onehabit_tools_android.extension.asSingleTop
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
-import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
+import com.ghuljr.onehabit_tools_android.data.network.service.LoggedInUserFirebaseService
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
