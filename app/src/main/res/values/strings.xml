@@ -43,4 +43,9 @@
     <string name="email_sent">Email has been sent</string>
     <string name="email_sent_description">When you finish get back to the app and try login with your new password.</string>
 
+    <!-- Main -->
+    <string name="today">Today</string>
+    <string name="plan">Plan</string>
+    <string name="profile">Profile</string>
+
 </resources>

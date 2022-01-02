@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/todayBehaviourFragment">
 
+    <fragment
+        android:id="@+id/todayBehaviourFragment"
+        android:name="com.ghuljr.onehabit.ui.main.today.TodayBehaviourFragment"
+        android:label="fragment_today_behaviour"
+        tools:layout="@layout/fragment_today_behaviour" >
+        <action
+            android:id="@+id/action_todayBehaviourFragment_to_currentStageFragment"
+            app:destination="@id/currentStageFragment" />
+        <action
+            android:id="@+id/action_todayBehaviourFragment_to_myProfileFragment"
+            app:destination="@id/myProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/currentStageFragment"
+        android:name="com.ghuljr.onehabit.ui.main.habit.CurrentStageFragment"
+        android:label="fragment_current_stage"
+        tools:layout="@layout/fragment_current_stage" />
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.ghuljr.onehabit.ui.main.profile.MyProfileFragment"
+        android:label="fragment_my_profile"
+        tools:layout="@layout/fragment_my_profile" />
 </navigation>
