@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="64dp"
     android:background="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true"
     android:elevation="@dimen/cardview_default_elevation"
+    android:focusable="true"
+    android:minHeight="64dp"
     android:paddingStart="@dimen/default_margin"
     android:paddingEnd="@dimen/default_margin">
 
@@ -26,12 +26,12 @@
             android:layout_width="@dimen/default_timeline_stroke"
             android:layout_height="match_parent"
             android:layout_marginStart="15dp"
-            android:background="@color/color_enable_disable" />
+            android:background="@drawable/ic_timeline_line" />
 
         <ImageView
-            android:layout_gravity="center"
             android:layout_width="@dimen/default_checkbox_size"
             android:layout_height="@dimen/default_checkbox_size"
+            android:layout_gravity="center"
             android:src="@drawable/ic_circle" />
     </FrameLayout>
 
