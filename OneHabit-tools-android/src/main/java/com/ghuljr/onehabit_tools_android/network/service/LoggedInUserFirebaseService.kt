@@ -87,22 +87,26 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>> = firebaseAuth
-        .currentUser?.sendEmailVerification()
-        ?.asUnitSingle()
-        .toOption().getOrElse { Single.just(LoggedOutError.left()) }
-        .map { Unit.right() as Either<BaseError, Unit> }
-        .resumeWithBaseError()
-        .subscribeOn(networkScheduler)
+    override fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>> = firebaseAuth.currentUser
+            ?.sendEmailVerification()
+            ?.asUnitSingle()
+            .toOption()
+            .map { Single.just(Unit.right() as Either<BaseError, Unit>) }
+            .getOrElse { Single.just(LoggedOutError.left() as Either<BaseError, Unit>) }
+            .resumeWithBaseError()
+            .subscribeOn(networkScheduler)
 
+    /*TODO: something is wrong here*/
     override fun refreshUser(): Single<Either<BaseError, UserResponse>> = firebaseAuth
         .currentUser?.reload()
         ?.asUnitSingle()
-        .toOption().getOrElse { Single.just(LoggedOutError.left()) }
+        .toOption()
+        .getOrElse { Single.just(LoggedOutError.left()) }
         .updateSynchronouslyWithUser()
         .resumeWithBaseError()
         .subscribeOn(networkScheduler)
 
+    /*TODO: something is wrong here*/
     override fun resetPassword(email: String): Single<Either<BaseError, Unit>> =
         firebaseAuth.sendPasswordResetEmail(email)
             .asUnitSingle()
@@ -111,7 +115,6 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    //TODO: auth email
     override fun signOut() {
         firebaseAuth.signOut()
     }

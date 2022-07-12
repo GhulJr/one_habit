@@ -51,7 +51,6 @@ android {
             dimension "default"
             applicationId "com.ghuljr.onehabit.stag"
         }
-
         prod {
             dimension "default"
             applicationId "com.ghuljr.onehabit"

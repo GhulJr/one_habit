@@ -28,7 +28,11 @@ class LoggedInUserRepository @Inject constructor(
 
     val isEmailVerificationSendFlowable: Flowable<Boolean> = propertyHolder.get()
         .map { it.getOrElse { false } }
-        .switchMap { isSend -> userFlowable.map { it.map { it.isEmailVerified }.getOrElse { false } || isSend } }
+        .switchMap { isSend ->
+            userFlowable.map {
+                it.map { it.isEmailVerified }.getOrElse { false } || isSend
+            }
+        }
         .subscribeOn(computationScheduler)
         .replay(1)
         .refCount()
@@ -36,15 +40,18 @@ class LoggedInUserRepository @Inject constructor(
     val userIdFlowable: Flowable<Option<String>> = userFlowable
         .map { it.map { it.userId } }
         .subscribeOn(computationScheduler)
-        .replay(1).refCount()
+        .replay(1)
+        .refCount()
 
-    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
-        .register(registerRequest.email, registerRequest.password)
-        .subscribeOn(networkScheduler)
+    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> =
+        loggedInUserService
+            .register(registerRequest.email, registerRequest.password)
+            .subscribeOn(networkScheduler)
 
-    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
-        .signIn(loginRequest.email, loginRequest.password)
-        .subscribeOn(networkScheduler)
+    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> =
+        loggedInUserService
+            .signIn(loginRequest.email, loginRequest.password)
+            .subscribeOn(networkScheduler)
 
     fun sendEmailVerification(): Single<Either<BaseError, Boolean>> = loggedInUserService
         .sendAuthorisationEmail()
@@ -52,13 +59,10 @@ class LoggedInUserRepository @Inject constructor(
         .flatMapRight { propertyHolder.set(true.some()) }
 
     fun refreshUser(): Single<Either<BaseError, UserResponse>> = loggedInUserService
-        .userFlowable
-        .firstOrError()
-        .map {
-            it.toEither { LoggedOutError }.flatMap {
-                if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()
-                else it.right()
-            }
+        .refreshUser()
+        .mapRightWithEither {
+            if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()
+            else it.right()
         }
 
     companion object {
