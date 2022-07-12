@@ -1,13 +1,11 @@
 package com.ghuljr.onehabit_data.base.storage
 
-import arrow.core.Option
-import arrow.core.firstOrNone
-import arrow.core.toOption
 import io.objectbox.Box
 import io.objectbox.rx3.RxQuery
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
 
+// TODO: finish this class
 
 //TODO: in future make an adjustment to better handle ids, because I guess right now it might multiply
 // the same data classes, just because objectBoxId is generated anew, or just assign ids by yourself.
@@ -21,9 +19,7 @@ import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
 /**
  * The main idea is to create classes, that exposes pure Kotlin objects (instead of Entities).
  * In every case like this there would be a main Entity which we refer to and relational entities.
- * Every database should represent such
- * */
-
+ **/
 interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
     val dataObservable: Observable<List<ENTITY>>
 
@@ -35,7 +31,6 @@ interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
     fun invalidate()
 }
 
-//TODO: use composition over inheritance
 internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
     private val box: Box<ENTITY>,
     private val computationScheduler: ComputationScheduler
@@ -49,7 +44,7 @@ internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
     override fun dataObservable(customId: ID): Observable<List<ENTITY>> = RxQuery.observable(box.query()/*.equal(BaseEntity_)*/.build())
         .subscribeOn(computationScheduler)
 
-/*    abstract fun append(vararg entity: ENTITY)
+/*  abstract fun append(vararg entity: ENTITY)
     abstract fun remove(vararg  entity: ENTITY)
     abstract fun replace(vararg entity: ENTITY, insertIfAbsent: Boolean = false)
     abstract fun update(vararg entity: ENTITY)

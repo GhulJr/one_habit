@@ -2,6 +2,7 @@ package com.ghuljr.onehabit_data.cache.memory
 
 import arrow.core.Either
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
+import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoggedOutError
@@ -19,6 +20,11 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
+/** MemoryCache is responsible for containing and switching different sets of data in memory
+ * @param loggedInUserRepository    used to get current logged in user id
+ * @param computationScheduler      used to schedule computation work on background thread
+ * @param provider                  method, that will create new data, if nothing is cached
+ * */
 class MemoryCache<K, V> @AssistedInject constructor(
     private val loggedInUserRepository: LoggedInUserRepository,
     @ComputationScheduler private val computationScheduler: Scheduler,
@@ -29,9 +35,13 @@ class MemoryCache<K, V> @AssistedInject constructor(
 
     private val cache = ConcurrentHashMap<ClassKey<K>, V>()
 
-    operator fun get(customKey: K? = null): Flowable<Either<BaseEvent, V>> =
+    /** Used to obtain particular instance of code
+     * @param customKey         optional parameter, that, alongside user id, is used to identify particular set of cached data
+     * @return                  flowable, that will emmit either LoggedOutError, if there is no user, or particular set of data
+     * */
+    operator fun get(customKey: K? = null): Flowable<Either<LoggedOutError, V>> =
         loggedInUserRepository.userIdFlowable
-            .toEither { LoggedOutError as BaseEvent }
+            .toEither { LoggedOutError }
             .switchMapSingleRight { userId ->
                 Single.fromCallable { this.cache }
                     .subscribeOn(singleThreadScheduler)
@@ -44,6 +54,11 @@ class MemoryCache<K, V> @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory<K, V> {
+
+        /** Used to inject required arguments and implement provider manually
+         * @param provider      method, that will create new data, if nothing is cached
+         * @return              new instance of MemoryCache
+         **/
         fun create(provider: (ClassKey<K>) -> V): MemoryCache<K, V>
     }
 }

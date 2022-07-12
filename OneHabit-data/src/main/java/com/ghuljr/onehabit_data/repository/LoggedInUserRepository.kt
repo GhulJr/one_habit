@@ -12,8 +12,6 @@ import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,31 +38,27 @@ class LoggedInUserRepository @Inject constructor(
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
 
-    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> =
-        loggedInUserService
-            .register(registerRequest.email, registerRequest.password)
-            .subscribeOn(networkScheduler)
+    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
+        .register(registerRequest.email, registerRequest.password)
+        .subscribeOn(networkScheduler)
 
-    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> =
-        loggedInUserService
-            .signIn(loginRequest.email, loginRequest.password)
-            .subscribeOn(networkScheduler)
+    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> = loggedInUserService
+        .signIn(loginRequest.email, loginRequest.password)
+        .subscribeOn(networkScheduler)
 
-    fun sendEmailVerification(): Single<Either<BaseError, Boolean>> =
-        loggedInUserService.sendAuthorisationEmail()
-            .subscribeOn(networkScheduler)
-            .flatMapRight { propertyHolder.set(true.some()) }
+    fun sendEmailVerification(): Single<Either<BaseError, Boolean>> = loggedInUserService
+        .sendAuthorisationEmail()
+        .subscribeOn(networkScheduler)
+        .flatMapRight { propertyHolder.set(true.some()) }
 
-    fun refreshUser(): Single<Either<BaseError, UserResponse>> = refreshUser()
-        .flatMapRightWithEither {
-            loggedInUserService.userFlowable
-                .firstOrError()
-                .map {
-                    it.toEither { LoggedOutError }.flatMap {
-                        if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()
-                        else it.right()
-                    }
-                }
+    fun refreshUser(): Single<Either<BaseError, UserResponse>> = loggedInUserService
+        .userFlowable
+        .firstOrError()
+        .map {
+            it.toEither { LoggedOutError }.flatMap {
+                if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()
+                else it.right()
+            }
         }
 
     companion object {
