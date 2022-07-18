@@ -41,7 +41,7 @@
         android:layout_marginBottom="@dimen/default_button_height"
         app:defaultNavHost="true"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:navGraph="@navigation/fill_data_graph" />
+        app:navGraph="@navigation/nav_fill_data" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_out_button"
