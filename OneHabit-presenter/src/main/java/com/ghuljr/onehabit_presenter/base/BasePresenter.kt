@@ -20,7 +20,6 @@ abstract class BasePresenter<VIEW>: PresenterContract<VIEW> {
         onViewDetached()
     }
 
-    //TODO: create own @CallSuper annotation
     final override fun onViewAttached() { disposable.set(subscribeToView(view!!)) }
     override fun onViewDetached() { disposable.set(CompositeDisposable()) }
 
