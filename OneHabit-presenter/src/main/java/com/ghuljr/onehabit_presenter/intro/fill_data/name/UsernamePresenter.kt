@@ -46,7 +46,7 @@ class UsernamePresenter @Inject constructor(
                         .firstOrError()
                         .onlyRight()
                         .flatMapObservable {
-                            loggedInUserRepository.changeDisplayName(it)
+                            loggedInUserRepository.changeUsername(it)
                                 .leftAsEvent()
                                 .toObservableWithLoading()
                         }
@@ -54,7 +54,7 @@ class UsernamePresenter @Inject constructor(
                 .observeOn(uiScheduler)
                 .subscribe {
                     view.handleChangeNameEvent(it.swap().orNone())
-                    it.map { view.finish() }
+                    it.tap { view.finish() }
                 },
             usernameValidator.validatedFieldEitherObservable.subscribe()
         )

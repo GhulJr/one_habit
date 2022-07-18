@@ -76,13 +76,15 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun changeDisplayName(displayName: String): Single<Either<BaseError, UserResponse>> =
+    override fun changeUsername(displayName: String): Single<Either<BaseError, UserResponse>> =
         firebaseAuth
             .currentUser?.updateProfile(userProfileChangeRequest {
                 this.displayName = displayName
             })
             ?.asUnitSingle()
-            .toOption().getOrElse { Single.just(LoggedOutError.left()) }
+            .toOption()
+            .map { it }
+            .getOrElse { Single.just(LoggedOutError.left()) }
             .updateSynchronouslyWithUser()
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)

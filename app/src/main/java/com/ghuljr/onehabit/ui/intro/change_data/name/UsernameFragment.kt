@@ -9,6 +9,7 @@ import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentUsernameBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFragmentDirections
+import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_error.ValidationError
@@ -22,8 +23,7 @@ import com.ghuljr.onehabit_tools_android.extension.throttleClicks
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
 
-class UsernameFragment : BaseFragment<FragmentUsernameBinding, UsernameView, UsernamePresenter>(),
-    UsernameView {
+class UsernameFragment : BaseFragment<FragmentUsernameBinding, UsernameView, UsernamePresenter>(), UsernameView {
 
     private var navController: NavController? = null
     private var eventHandler: EventHandler? = null
@@ -70,7 +70,7 @@ class UsernameFragment : BaseFragment<FragmentUsernameBinding, UsernameView, Use
     }
 
     override fun finish() {
-        navController?.navigate(VerifyEmailFragmentDirections.actionVerifyEmailFragmentToMainActivity())
+        startActivity(MainActivity.newIntent(requireContext()))
+        requireActivity().finishAffinity()
     }
-
 }
