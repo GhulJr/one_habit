@@ -7,5 +7,5 @@ import android.view.View
 import android.view.ViewGroup
 import com.ghuljr.onehabit.R
 
-class SettingsFragment : Fragment() {
+class ProfileFragment : Fragment() {
 }
