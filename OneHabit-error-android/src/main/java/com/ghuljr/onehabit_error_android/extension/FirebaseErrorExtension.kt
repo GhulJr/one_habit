@@ -44,7 +44,6 @@ fun Throwable.toError(): BaseError = when(this) {
 }
 
 // TODO: as long as I use Firebase such extensions must be placed in android module
-fun <R> Single<Either<Throwable, R>>.toBaseError(): Single<Either<BaseError, R>> = map { it.mapLeft { it.toError() } }
 fun <R> Single<Either<BaseError, R>>.resumeWithBaseError(): Single<Either<BaseError, R>> = onErrorReturn {
     Log.e("Handled exception", "", it)
     it.toError().left()
