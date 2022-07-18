@@ -12,7 +12,6 @@
         android:layout_height="?actionBarSize"
         app:liftOnScroll="true">
 
-        <!--TODO: make it clickable-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             style="@style/OneHabit.Toolbar"
