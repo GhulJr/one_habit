@@ -11,6 +11,7 @@ import com.ghuljr.onehabit.databinding.ActivityMainBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit_presenter.main.MainPresenter
+import com.ghuljr.onehabit_presenter.main.MainStep
 import com.ghuljr.onehabit_presenter.main.MainView
 
 class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(), MainView {
@@ -30,6 +31,20 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
     override fun redirectToFillRemainingData() {
         startActivity(FillUserDataActivity.newIntent(this))
         finishAffinity()
+    }
+
+    override fun changeTitle(currentStep: MainStep) {
+        viewBind.toolbar.title = getString(
+            when(currentStep) {
+                MainStep.TIMELINE -> R.string.timeline
+                MainStep.TODAY -> R.string.today
+                MainStep.PROFILE -> R.string.profile
+            }
+        )
+    }
+
+    fun setCurrentStep(currentStep: MainStep) {
+        presenter.setCurrentStep(currentStep)
     }
 
     companion object {
