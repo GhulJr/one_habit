@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit_presenter.main
 
-import arrow.core.Nel
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope

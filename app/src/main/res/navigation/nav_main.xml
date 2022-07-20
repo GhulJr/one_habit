@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/todayFragment"
         android:name="com.ghuljr.onehabit.ui.main.today.TodayFragment"
-        android:label="fragment_today"
-        tools:layout="@layout/fragment_today" >
+        android:label="@string/today"
+        tools:layout="@layout/fragment_today">
         <action
             android:id="@+id/action_todayFragment_to_settingsFragment"
             app:destination="@id/profileFragment" />
@@ -17,8 +17,8 @@
     <fragment
         android:id="@+id/timelineFragment"
         android:name="com.ghuljr.onehabit.ui.main.timeline.TimelineFragment"
-        android:label="fragment_timeline"
-        tools:layout="@layout/fragment_timeline" >
+        android:label="@string/timeline"
+        tools:layout="@layout/fragment_timeline">
         <action
             android:id="@+id/action_timelineFragment_to_todayFragment"
             app:destination="@id/todayFragment" />
@@ -26,6 +26,6 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.ghuljr.onehabit.ui.main.settings.ProfileFragment"
-        android:label="fragment_settings"
+        android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

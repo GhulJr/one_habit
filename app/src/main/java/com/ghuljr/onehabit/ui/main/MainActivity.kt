@@ -22,7 +22,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBind.bottomNavigation.setupWithNavController(navController)
+        viewBind.apply {
+            bottomNavigation.setupWithNavController(navController)
+        }
     }
 
     override fun redirectToFillRemainingData() {
