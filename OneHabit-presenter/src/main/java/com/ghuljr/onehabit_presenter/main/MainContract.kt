@@ -5,4 +5,5 @@ import com.ghuljr.onehabit_presenter.base.BaseView
 
 interface MainView: BaseView<MainPresenter> {
     fun redirectToFillRemainingData()
+    fun changeTitle(currentStep: MainStep)
 }

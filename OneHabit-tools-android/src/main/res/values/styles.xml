@@ -136,4 +136,8 @@
         <item name="backgroundTint">@color/primary_white</item>
         <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary</item>
     </style>
+
+    <style name="OneHabit.BottomNavigation.SelectedItem" parent="">
+        <item name="android:color">@color/color_error</item>
+    </style>
 </resources>

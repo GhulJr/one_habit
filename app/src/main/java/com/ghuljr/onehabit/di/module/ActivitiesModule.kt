@@ -9,7 +9,7 @@ import com.ghuljr.onehabit.ui.intro.login.forgot_password.ForgotPasswordActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterFragmentsModule
 import com.ghuljr.onehabit.ui.main.MainActivity
-import com.ghuljr.onehabit.ui.main.MainModule
+import com.ghuljr.onehabit.ui.main.MainFragmentsModule
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -18,7 +18,7 @@ import dagger.android.ContributesAndroidInjector
 interface ActivitiesModule {
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [MainModule::class])
+    @ContributesAndroidInjector(modules = [MainFragmentsModule::class])
     fun mainActivity(): MainActivity
 
     @ActivityScope
