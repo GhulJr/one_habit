@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_today" >
         <action
             android:id="@+id/action_todayFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
@@ -24,7 +24,7 @@
             app:destination="@id/todayFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingsFragment"
+        android:id="@+id/profileFragment"
         android:name="com.ghuljr.onehabit.ui.main.settings.ProfileFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_profile" />
