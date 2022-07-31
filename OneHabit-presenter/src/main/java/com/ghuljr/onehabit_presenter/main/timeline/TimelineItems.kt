@@ -1,6 +1,6 @@
 package com.ghuljr.onehabit_presenter.main.timeline
 
-import com.ghuljr.onehabit_presenter.base.UniqueItem
+import com.ghuljr.onehabit_tools.base.list.UniqueItem
 
 sealed interface TimelineItem : UniqueItem
 

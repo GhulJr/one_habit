@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_presenter.base
+package com.ghuljr.onehabit_tools.base.list
 
 interface UniqueItem {
     fun theSame(item: UniqueItem): Boolean
