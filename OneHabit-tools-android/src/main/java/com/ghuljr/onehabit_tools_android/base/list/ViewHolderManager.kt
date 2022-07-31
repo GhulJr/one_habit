@@ -5,19 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 
-abstract class HolderManager<ITEM : UniqueItem<ITEM>>(@LayoutRes private val layoutRes: Int) {
-    abstract fun isType(comparable: UniqueItem<*>): Boolean
+abstract class ViewHolderManager<ITEM : UniqueItem>(@LayoutRes private val layoutRes: Int) {
 
-    abstract fun createViewHolder(view: View): ItemViewHolder<ITEM>
+    abstract fun isType(item: UniqueItem): Boolean
+
+    abstract fun createViewHolder(view: View): ViewHolder<ITEM>
 
     fun createViewHolder(
         parent: ViewGroup,
         inflater: LayoutInflater
-    ): ItemViewHolder<ITEM> {
-        return createViewHolder(createView(parent, inflater))
-    }
+    ): ViewHolder<ITEM> = createViewHolder(createView(parent, inflater))
 
     private fun createView(parent: ViewGroup, inflater: LayoutInflater): View {
         return inflater.inflate(layoutRes, parent, false)
@@ -25,6 +23,6 @@ abstract class HolderManager<ITEM : UniqueItem<ITEM>>(@LayoutRes private val lay
 }
 
 
-abstract class ItemViewHolder<ITEM : UniqueItem<ITEM>>(view: View) : RecyclerView.ViewHolder(view) {
+abstract class ViewHolder<ITEM : UniqueItem>(view: View) : RecyclerView.ViewHolder(view) {
     abstract fun bind(item: ITEM)
 }
