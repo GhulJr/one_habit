@@ -19,7 +19,7 @@ class BehaviourViewHolderManager : ViewHolderManager(R.layout.item_timeline_beha
 
         override fun bind(item: BehaviourItem) {
             viewBind.apply {
-                val alpha = if (item.state == BehaviourItem.State.Future) 0.5f else 1.0f
+                val alpha = if (item.state == BehaviourItem.State.Future) 0.3f else 1.0f
                 val iconRes = when (item.state) {
                     is BehaviourItem.State.Today -> R.drawable.ic_timeline_today
                     is BehaviourItem.State.Future -> R.drawable.ic_timeline_future
@@ -38,12 +38,15 @@ class BehaviourViewHolderManager : ViewHolderManager(R.layout.item_timeline_beha
                     }
                 )
 
-                header.text = view.resources.getText(R.string.timeline_day_header, item.dayNumber.toString())
+                header.text = view.resources.getString(R.string.timeline_day_header, item.dayNumber.toString())
                 title.text = item.title
                 stateIcon.setImageResource(iconRes)
                 stateIcon.imageTintList = iconTint
 
-                root.forEach { view -> view.alpha = alpha }
+                root.forEach { view ->
+                    if(view.id != R.id.icon_background)
+                        view.alpha = alpha
+                }
             }
         }
     }

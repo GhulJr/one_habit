@@ -5,7 +5,7 @@
     <color name="secondary_white">#FAFAFA</color>
     <color name="color_error">#eb4034</color>
     <color name="color_warning">#eb9c34</color>
-    <color name="color_success">#34eb65</color>
+    <color name="color_success">#30D32C</color>
     <color name="color_navigation">#333333</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">@color/primary_black</color>
