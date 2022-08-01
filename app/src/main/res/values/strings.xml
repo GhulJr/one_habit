@@ -48,4 +48,7 @@
     <string name="today">Today</string>
     <string name="profile">Profile</string>
 
+    <!-- Timeline -->
+    <string name="timeline_day_header">Day %1$s</string>
+
 </resources>

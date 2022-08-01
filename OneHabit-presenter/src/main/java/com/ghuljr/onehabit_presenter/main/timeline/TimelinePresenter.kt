@@ -20,8 +20,18 @@ class TimelinePresenter @Inject constructor(): BasePresenter<TimelineView>() {
         val list = mutableListOf<TimelineItem>()
 
         list.add(HeaderItem("I'm header, nice to meet you!"))
-        for (i in 0..100) {
-            list.add(BehaviourItem("$i I'm Behaviour! Really nice to meet you"))
+        for (i in 1..14) {
+            list.add(BehaviourItem(
+                title = "Do not eat chocolate!",
+                dayNumber = i,
+                state = when {
+                    i < 9 && i % 5 == 0 -> BehaviourItem.State.Past.NotSubmitted
+                    i < 9 && i % 7 == 0 -> BehaviourItem.State.Past.Failure
+                    i < 9 -> BehaviourItem.State.Past.Success
+                    i == 9 -> BehaviourItem.State.Today
+                    else -> BehaviourItem.State.Future
+                }
+            ))
         }
         list.add(SummaryItem("Summary item :)"))
 
