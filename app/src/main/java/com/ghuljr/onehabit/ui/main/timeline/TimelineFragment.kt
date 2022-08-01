@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HeaderViewListAdapter
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTimelineBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.main.MainActivity
