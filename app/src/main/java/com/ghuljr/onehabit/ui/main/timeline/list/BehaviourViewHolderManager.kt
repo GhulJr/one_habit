@@ -16,7 +16,7 @@ class BehaviourViewHolderManager : ViewHolderManager(R.layout.item_timeline_beha
         private val viewBind = ItemTimelineBehaviourBinding.bind(view)
 
         override fun bind(item: BehaviourItem) {
-            viewBind.title.text = item.title
+            //viewBind.title.text = item.title
         }
     }
 }
