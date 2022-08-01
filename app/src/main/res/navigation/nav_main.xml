@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_today">
         <action
             android:id="@+id/action_todayFragment_to_settingsFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
     <fragment
         android:id="@+id/timelineFragment"
@@ -21,7 +25,11 @@
         tools:layout="@layout/fragment_timeline">
         <action
             android:id="@+id/action_timelineFragment_to_todayFragment"
-            app:destination="@id/todayFragment" />
+            app:destination="@id/todayFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
