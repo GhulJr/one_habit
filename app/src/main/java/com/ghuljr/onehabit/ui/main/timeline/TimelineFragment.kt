@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HeaderViewListAdapter
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTimelineBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.main.MainActivity
@@ -21,8 +18,7 @@ import com.ghuljr.onehabit_presenter.main.timeline.TimelineView
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 
 
-class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(),
-    TimelineView {
+class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(), TimelineView {
 
     private val timelineAdapter = ItemListAdapter(
         listOf(

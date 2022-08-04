@@ -4,6 +4,7 @@
     <color name="primary_white">#FFFFFF</color>
     <color name="secondary_white">#FAFAFA</color>
     <color name="color_error">#eb4034</color>
+    <color name="color_warning">#eb9c34</color>
     <color name="color_success">#30D32C</color>
     <color name="color_navigation">#333333</color>
 
