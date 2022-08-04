@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Default -->
     <dimen name="default_margin">16dp</dimen>
     <dimen name="default_margin_large">24dp</dimen>
     <dimen name="default_margin_small">8dp</dimen>
@@ -15,4 +16,9 @@
     <dimen name="default_corner_radius">6dp</dimen>
     <dimen name="default_logo_very_large">256dp</dimen>
     <dimen name="default_logo_large">128dp</dimen>
+
+    <!-- Timeline -->
+    <dimen name="timeline_icon_size">56dp</dimen>
+    <dimen name="timeline_thickness">4dp</dimen>
+
 </resources>

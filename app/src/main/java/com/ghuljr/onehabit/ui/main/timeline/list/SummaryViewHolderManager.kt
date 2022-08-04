@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ItemTimelineHeaderBinding
+import com.ghuljr.onehabit.databinding.ItemTimelineSummaryBinding
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
 import com.ghuljr.onehabit_presenter.main.timeline.HeaderItem
 import com.ghuljr.onehabit_presenter.main.timeline.SummaryItem
@@ -15,10 +16,10 @@ class SummaryViewHolderManager : ViewHolderManager(R.layout.item_timeline_summar
 
     override fun createViewHolder(view: View) = object : ViewHolder<SummaryItem>(view) {
 
-        private val viewBind = ItemTimelineHeaderBinding.bind(view)
+        private val viewBind = ItemTimelineSummaryBinding.bind(view)
 
         override fun bind(item: SummaryItem) {
-            // TODO: handle binding
+
         }
     }
 }

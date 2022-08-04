@@ -156,7 +156,7 @@
     </style>
 
     <style name="OneHabit.Timeline.Image" parent="">
-        <item name="android:minHeight">56dp</item>
-        <item name="android:minWidth">56dp</item>
+        <item name="android:minHeight">@dimen/timeline_icon_size</item>
+        <item name="android:minWidth">@dimen/timeline_icon_size</item>
     </style>
 </resources>

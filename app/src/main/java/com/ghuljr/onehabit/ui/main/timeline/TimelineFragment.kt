@@ -18,8 +18,7 @@ import com.ghuljr.onehabit_presenter.main.timeline.TimelineView
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 
 
-class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(),
-    TimelineView {
+class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(), TimelineView {
 
     private val timelineAdapter = ItemListAdapter(
         listOf(

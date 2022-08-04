@@ -19,7 +19,7 @@ class TimelinePresenter @Inject constructor(): BasePresenter<TimelineView>() {
     private fun getFakeData(): List<TimelineItem> {
         val list = mutableListOf<TimelineItem>()
 
-        list.add(HeaderItem("I'm header, nice to meet you!"))
+        list.add(HeaderItem("Chocolate slayer!"))
         for (i in 1..14) {
             list.add(BehaviourItem(
                 title = "Do not eat chocolate!",
@@ -33,8 +33,7 @@ class TimelinePresenter @Inject constructor(): BasePresenter<TimelineView>() {
                 }
             ))
         }
-        list.add(SummaryItem("Summary item :)"))
-
+        list.add(SummaryItem(dayNumber = 9, totalDays = list.count { it is BehaviourItem }))
         return list
     }
 }

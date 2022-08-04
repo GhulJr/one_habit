@@ -6,7 +6,7 @@ sealed interface TimelineItem : UniqueItem
 
 data class HeaderItem(val title: String) : TimelineItem {
 
-    override fun theSame(item: UniqueItem): Boolean = title == (item as? HeaderItem)?.title
+    override fun theSame(item: UniqueItem): Boolean = item is HeaderItem
     override fun matches(item: UniqueItem): Boolean = this == item
 }
 
@@ -31,8 +31,11 @@ data class BehaviourItem(
     }
 }
 
-data class SummaryItem(val title: String) : TimelineItem {
+data class SummaryItem(
+    val dayNumber: Int,
+    val totalDays: Int
+) : TimelineItem {
 
-    override fun theSame(item: UniqueItem): Boolean = title == (item as? HeaderItem)?.title
+    override fun theSame(item: UniqueItem): Boolean = item is SummaryItem
     override fun matches(item: UniqueItem): Boolean = this == item
 }
