@@ -148,4 +148,15 @@
     <style name="OneHabit.BottomNavigation.SelectedItem" parent="">
         <item name="android:color">@color/color_error</item>
     </style>
+
+    <style name="OneHabit.Timeline.Line" parent="">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@color/primary_black</item>
+    </style>
+
+    <style name="OneHabit.Timeline.Image" parent="">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:minWidth">56dp</item>
+    </style>
 </resources>

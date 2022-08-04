@@ -5,12 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--TODO: create style for these -->
-
     <View
+        style="@style/OneHabit.Timeline.Line"
         android:layout_width="4dp"
         android:layout_height="0dp"
-        android:background="@color/primary_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/state_icon"
         app:layout_constraintStart_toStartOf="@id/state_icon"
@@ -21,20 +19,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/primary_white"
-        app:layout_constraintTop_toTopOf="@id/state_icon"
         app:layout_constraintBottom_toBottomOf="@id/state_icon"
+        app:layout_constraintEnd_toEndOf="@id/state_icon"
         app:layout_constraintStart_toStartOf="@id/state_icon"
-        app:layout_constraintEnd_toEndOf="@id/state_icon" />
+        app:layout_constraintTop_toTopOf="@id/state_icon" />
 
     <ImageView
         android:id="@+id/state_icon"
+        style="@style/OneHabit.Timeline.Image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
-        android:minWidth="56dp"
-        android:minHeight="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
