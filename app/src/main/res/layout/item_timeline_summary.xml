@@ -20,8 +20,8 @@
         android:layout_height="@dimen/timeline_icon_size"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin_large"
-        android:background="@color/primary_white"
         android:layout_marginBottom="@dimen/default_margin"
+        android:background="@color/primary_white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,15 +32,14 @@
         style="@style/OneHabit.Timeline.Image.Summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_finish"
         app:layout_constraintBottom_toBottomOf="@id/timeline_position"
-        app:layout_constraintStart_toStartOf="@id/timeline_position"
         app:layout_constraintEnd_toEndOf="@id/timeline_position"
+        app:layout_constraintStart_toStartOf="@id/timeline_position"
         app:layout_constraintTop_toTopOf="@id/timeline_position" />
 
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header"
+        android:id="@+id/progress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin_small"
@@ -48,24 +47,19 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="@style/OneHabit.TextAppearance.Primary.Title.Small"
-        app:layout_constraintEnd_toStartOf="@id/progress"
+        app:layout_constraintBottom_toBottomOf="@id/state_icon"
+        app:layout_constraintEnd_toStartOf="@id/next"
         app:layout_constraintStart_toEndOf="@id/state_icon"
         app:layout_constraintTop_toTopOf="@id/state_icon"
-        app:layout_constraintBottom_toBottomOf="@id/state_icon"
-        tools:text="Summary" />
+        tools:text="54%" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/progress"
+    <ImageView
+        android:id="@+id/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_margin_small"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/OneHabit.TextAppearance.Primary"
-        app:layout_constraintBottom_toBottomOf="@id/header"
+        android:src="@drawable/ic_arrow_next"
+        app:layout_constraintBottom_toBottomOf="@id/progress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/header"
-        tools:text="54%" />
+        app:layout_constraintTop_toTopOf="@id/progress" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
