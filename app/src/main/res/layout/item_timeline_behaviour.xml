@@ -37,7 +37,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_checked" />
 
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/header"
         android:layout_width="0dp"

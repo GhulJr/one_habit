@@ -36,6 +36,8 @@ data class SummaryItem(
     val totalDays: Int
 ) : TimelineItem {
 
+    val percentage: Int = (dayNumber.toFloat() / totalDays * 100).toInt()
+
     override fun theSame(item: UniqueItem): Boolean = item is SummaryItem
     override fun matches(item: UniqueItem): Boolean = this == item
 }

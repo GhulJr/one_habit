@@ -19,6 +19,7 @@
 
     <!-- Timeline -->
     <dimen name="timeline_icon_size">56dp</dimen>
+    <dimen name="timeline_summary_icon_size">80dp</dimen>
     <dimen name="timeline_thickness">4dp</dimen>
 
 </resources>

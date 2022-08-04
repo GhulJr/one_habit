@@ -159,4 +159,9 @@
         <item name="android:minHeight">@dimen/timeline_icon_size</item>
         <item name="android:minWidth">@dimen/timeline_icon_size</item>
     </style>
+
+    <style name="OneHabit.Timeline.Image.Summary" parent="OneHabit.Timeline.Image">
+        <item name="android:minHeight">@dimen/timeline_summary_icon_size</item>
+        <item name="android:minWidth">@dimen/timeline_summary_icon_size</item>
+    </style>
 </resources>

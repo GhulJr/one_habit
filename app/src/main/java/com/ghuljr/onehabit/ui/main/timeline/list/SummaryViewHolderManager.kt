@@ -19,7 +19,10 @@ class SummaryViewHolderManager : ViewHolderManager(R.layout.item_timeline_summar
         private val viewBind = ItemTimelineSummaryBinding.bind(view)
 
         override fun bind(item: SummaryItem) {
-
+            viewBind.apply {
+                header.text = view.resources.getString(R.string.summary)
+                progress.text = view.resources.getString(R.string.percentage, item.percentage.toString())
+            }
         }
     }
 }
