@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/default_list_items_elevation"
+    app:cardElevation="@dimen/default_list_items_elevation"
     app:cardBackgroundColor="?android:windowBackground"
     app:cardCornerRadius="@dimen/default_corner_radius"
     app:strokeColor="@color/primary_black"
-    app:strokeWidth="@dimen/default_stroke_width"
-    android:layout_margin="@dimen/default_margin">
+    app:strokeWidth="@dimen/default_stroke_width">
 
     <!-- TODO: create styles -->
     <!-- TODO: display details somehow-->
