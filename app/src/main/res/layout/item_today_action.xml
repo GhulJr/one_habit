@@ -8,12 +8,106 @@
     app:cardBackgroundColor="?android:windowBackground"
     app:cardCornerRadius="@dimen/default_corner_radius"
     app:strokeColor="@color/primary_black"
-    app:strokeWidth="@dimen/default_stroke_width">
+    app:strokeWidth="@dimen/default_stroke_width"
+    android:layout_margin="@dimen/default_margin">
 
     <!-- TODO: create styles -->
+    <!-- TODO: display details somehow-->
+    <!-- TODO: display FAB to be able to collapse-->
+    <!-- TODO: change colors of times -->
+    <!-- TODO: how to show edit?-->
+
+    <!--Bottom sheet?-->
+    <!--
+         <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:id="@+id/divider_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="Next"
+            app:layout_constraintTop_toBottomOf="@id/time"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/next_times"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/divider_time"
+            tools:text="-10:30-\n-20:22-\n-23:59-" />
+
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:id="@+id/divider_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="Side note"
+            app:layout_constraintTop_toBottomOf="@id/next_times"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/side_note"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/divider_description"
+            tools:text="Vegetables are very good, remember that ;)" />
+
+    <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:id="@+id/divider_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin_small"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:text="Actions"
+            app:layout_constraintTop_toBottomOf="@id/side_note"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/decline"
+            style="@style/OneHabit.Button.Primary"
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="Decline"
+            android:textColor="@color/primary_white"
+            app:backgroundTint="@color/color_error"
+            app:layout_constraintEnd_toStartOf="@id/confirm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_actions" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirm"
+            style="@style/OneHabit.Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:textColor="@color/primary_white"
+            app:backgroundTint="@color/color_success"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/decline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_actions" />-->
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView
@@ -35,7 +129,7 @@
             android:textStyle="normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="12:26" />
+            tools:text="10:00" />
 
         <ImageView
             android:id="@+id/item_settings"
@@ -59,6 +153,8 @@
             app:layout_constraintTop_toBottomOf="@id/item_settings"
             app:layout_constraintVertical_bias="1.0"
             tools:text="1 of 3" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
