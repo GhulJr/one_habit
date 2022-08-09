@@ -8,17 +8,15 @@
     app:cardElevation="@dimen/default_list_items_elevation"
     app:cardBackgroundColor="?android:windowBackground"
     app:cardCornerRadius="@dimen/default_corner_radius"
-    app:strokeWidth="0dp"
-    android:layout_margin="@dimen/default_margin">
+    app:strokeWidth="0dp">
 
-    <!--TODO: give info if adding limit is reached-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:background="@drawable/bg_dotted"
+        android:background="@drawable/bg_dashed"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView
@@ -32,6 +30,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="+ Add" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>
