@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--TODO: set text appearances for buttons-->
     <style name="OneHabit.Button.Primary.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:minHeight">@dimen/default_button_height</item>
         <item name="textAllCaps">false</item>

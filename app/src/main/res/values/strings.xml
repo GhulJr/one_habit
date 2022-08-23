@@ -41,5 +41,6 @@
 
     <!-- Timeline -->
     <string name="timeline_day_header">Day %1$s</string>
+    <string name="edit">Edit</string>
 
 </resources>
