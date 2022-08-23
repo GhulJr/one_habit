@@ -16,6 +16,8 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TODAY)
+
+        ActionInfoBottomSheetDialog().show(childFragmentManager, null)
     }
 
     override fun bindView(

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:windowBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         style="@style/OneHabit.Toolbar"
@@ -33,14 +34,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
-                    tools:text="Eat vegetables" />
+                    android:text="Eat vegetables" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
                     android:textStyle="italic"
-                    tools:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)" />
+                    android:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)" />
 
             </LinearLayout>
 
@@ -75,7 +76,7 @@
             android:gravity="center"
             android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
             android:textStyle="italic"
-            tools:text="-10:30-\n-20:22-\n-23:59-" />
+            android:text="-10:30-\n-20:22-\n-23:59-" />
 
         <com.ghuljr.onehabit_tools_android.widget.TextDivider
             android:id="@+id/divider_actions"
@@ -113,10 +114,6 @@
                 android:text="Confirm"
                 android:textColor="@color/primary_white"
                 app:backgroundTint="@color/color_success" />
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
