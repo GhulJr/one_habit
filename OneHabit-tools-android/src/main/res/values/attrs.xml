@@ -2,9 +2,9 @@
 <resources>
     <declare-styleable name="OneHabit.Widget.TextDivider">
         <attr name="android:text" format="string" />
-        <attr name="animate" format="boolean" />
         <attr name="strokeWidth" format="dimension" />
         <attr name="textPadding" format="dimension" />
+        <attr name="textSize" format="dimension" />
     </declare-styleable>
 
     <!--TODO: handle style changes (bold etc.)-->

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
@@ -23,8 +24,12 @@ class TextDivider(context: Context, attrs: AttributeSet) : FrameLayout(context, 
 
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.OneHabit_Widget_TextDivider, 0, 0).apply {
-            viewBind.title.text = getString(R.styleable.OneHabit_Widget_TextDivider_android_text)
             textPadding = getDimension(R.styleable.OneHabit_Widget_TextDivider_textPadding, 0f)
+
+            viewBind.apply {
+                title.text = getString(R.styleable.OneHabit_Widget_TextDivider_android_text)
+                title.setTextSize(TypedValue.COMPLEX_UNIT_PX, getDimension(R.styleable.OneHabit_Widget_TextDivider_textSize, resources.getDimension(R.dimen.default_text_size_large)))
+            }
 
             paint.apply {
                 strokeWidth = getDimension(R.styleable.OneHabit_Widget_TextDivider_strokeWidth, 0f)

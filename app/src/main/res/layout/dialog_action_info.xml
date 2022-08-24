@@ -44,13 +44,13 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Eat vegetables"
+                        tools:text="Eat vegetables"
                         android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)"
+                        tools:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)"
                         android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
                         android:textStyle="italic" />
 
@@ -69,7 +69,7 @@
             android:layout_marginBottom="@dimen/default_margin_small"
             android:paddingStart="@dimen/default_margin"
             android:paddingEnd="@dimen/default_margin"
-            android:text="When"
+            android:text="@string/when"
             app:strokeWidth="@dimen/default_stroke_width_thin"
             app:textPadding="@dimen/default_margin" />
 
@@ -80,7 +80,7 @@
             android:gravity="center"
             android:paddingStart="@dimen/default_margin"
             android:paddingEnd="@dimen/default_margin"
-            android:text="-10:30-\n-20:22-\n-23:59-"
+            tools:text="-10:30-\n-20:22-\n-23:59-"
             android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
             android:textStyle="italic" />
 
@@ -93,7 +93,7 @@
             android:layout_marginBottom="@dimen/default_margin_small"
             android:paddingStart="@dimen/default_margin"
             android:paddingEnd="@dimen/default_margin"
-            android:text="Actions"
+            android:text="@string/actions"
             app:strokeWidth="@dimen/default_stroke_width_thin"
             app:textPadding="@dimen/default_margin" />
 
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/default_margin"
                 android:layout_weight="1"
-                android:text="Decline"
+                android:text="@string/decline"
                 android:textColor="@color/primary_white"
                 app:backgroundTint="@color/color_error" />
 
@@ -121,7 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Confirm"
+                android:text="@string/confirm"
                 android:textColor="@color/primary_white"
                 app:backgroundTint="@color/color_success" />
         </LinearLayout>

@@ -42,5 +42,9 @@
     <!-- Timeline -->
     <string name="timeline_day_header">Day %1$s</string>
     <string name="edit">Edit</string>
+    <string name="actions">Actions</string>
+    <string name="when">When</string>
+    <string name="confirm">Confirm</string>
+    <string name="decline">Decline</string>
 
 </resources>
