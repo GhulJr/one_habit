@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary_black">#000000</color>
+    <color name="primary_black_transparent">#77000000</color>
     <color name="primary_white">#FFFFFF</color>
     <color name="secondary_white">#FAFAFA</color>
     <color name="color_error">#eb4034</color>
+    <color name="color_error_transparent">#AAeb4034</color>
     <color name="color_warning">#eb9c34</color>
     <color name="color_success">#30D32C</color>
+    <color name="color_success_transparent">#AA30D32C</color>
     <color name="color_navigation">#333333</color>
     <color name="color_gray">#696969</color>
     <color name="mtrl_textinput_default_box_stroke_color">@color/primary_black</color>
