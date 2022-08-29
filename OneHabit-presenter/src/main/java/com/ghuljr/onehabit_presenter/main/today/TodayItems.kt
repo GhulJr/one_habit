@@ -1,16 +1,25 @@
 package com.ghuljr.onehabit_presenter.main.today
 
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
+import java.sql.Timestamp
 
-sealed interface TodayItem : UniqueItem
+sealed interface TodayItem : UniqueItem {
+
+    sealed class Action : TodayItem {
+        abstract val title: String
+        abstract val time: String?
+        abstract val quantity: Quantity?
+        protected abstract val onActionClick: () -> Unit
+    }
+}
 
 /*TODO: use ids to distinct items?*/
 data class TodayActionItem(
-    val title: String,
-    val time: String?,
-    val quantity: Quantity?,
-    private val onActionClick: () -> Unit
-) : TodayItem {
+    override val title: String,
+    override val time: String?,
+    override val quantity: Quantity?,
+    override val onActionClick: () -> Unit
+) : TodayItem.Action() {
 
     override fun theSame(item: UniqueItem): Boolean = compareTo(item)
     override fun matches(item: UniqueItem): Boolean = compareTo(item)
@@ -22,45 +31,49 @@ data class TodayActionItem(
     fun openActionDetails() = onActionClick()
 }
 
-data class CustomAction(val w: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+data class CustomActionItem(
+    override val title: String,
+    override val time: String?,
+    override val onActionClick: () -> Unit
+) : TodayItem.Action() {
 
-    override fun matches(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+    override val quantity: Quantity? = null
+
+    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
+    override fun matches(item: UniqueItem): Boolean = compareTo(item)
+
+    private fun compareTo(item: UniqueItem) = (item as? CustomActionItem)?.let {
+        it.title == title && it.time == time
+    } ?: false
+
+    fun openActionDetails() = onActionClick()
 }
 
-data class FinishedItem(val w: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+data class FinishedItem(
+    override val title: String,
+    override val time: String?,
+    override val quantity: Quantity?,
+    override val onActionClick: () -> Unit
+) : TodayItem.Action() {
 
-    override fun matches(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
+    override fun matches(item: UniqueItem): Boolean = compareTo(item)
+
+    private fun compareTo(item: UniqueItem) = (item as? FinishedItem)?.let {
+        it.title == title && it.time == time && it.quantity?.first == quantity?.first
+    } ?: false
+
+    fun openActionDetails() = onActionClick()
 }
 
-data class TodayHeaderItem(val w: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun matches(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+data class TodayHeaderItem(val title: String) : TodayItem {
+    override fun theSame(item: UniqueItem): Boolean = (item as? TodayHeaderItem)?.title == title
+    override fun matches(item: UniqueItem): Boolean = item == this
 }
 
-data class TodayTimestampItem(val w: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun matches(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
-
+data class TodayTimestampItem(val timestamp: String) : TodayItem {
+    override fun theSame(item: UniqueItem): Boolean = (item as? TodayTimestampItem)?.timestamp == timestamp
+    override fun matches(item: UniqueItem): Boolean = item == this
 }
 
 object AddAction : TodayItem {
