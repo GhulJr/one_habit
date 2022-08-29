@@ -47,4 +47,7 @@
     <string name="confirm">Confirm</string>
     <string name="decline">Decline</string>
 
+    <!-- Today -->
+    <string name="today_quantity">%1$s of %2$s</string>
+
 </resources>

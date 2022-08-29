@@ -8,6 +8,9 @@
     app:cardCornerRadius="@dimen/default_corner_radius"
     app:cardElevation="@dimen/default_list_items_elevation"
     app:strokeColor="@color/primary_black"
+    android:clickable="true"
+    android:focusable="true"
+    android:addStatesFromChildren="true"
     app:strokeWidth="@dimen/default_stroke_width">
 
     <!-- TODO: add styles -->
@@ -15,8 +18,11 @@
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_button_click_black"
+        android:clickable="true"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:focusable="true"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView

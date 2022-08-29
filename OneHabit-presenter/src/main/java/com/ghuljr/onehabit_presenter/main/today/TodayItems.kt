@@ -4,14 +4,22 @@ import com.ghuljr.onehabit_tools.base.list.UniqueItem
 
 sealed interface TodayItem : UniqueItem
 
-data class TodayAction(val w: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+/*TODO: use ids to distinct items?*/
+data class TodayActionItem(
+    val title: String,
+    val time: String?,
+    val quantity: Quantity?,
+    private val onActionClick: () -> Unit
+) : TodayItem {
 
-    override fun matches(item: UniqueItem): Boolean {
-        TODO("Not yet implemented")
-    }
+    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
+    override fun matches(item: UniqueItem): Boolean = compareTo(item)
+
+    private fun compareTo(item: UniqueItem) = (item as? TodayActionItem)?.let {
+        it.title == title && it.time == time && it.quantity?.first == quantity?.first
+    } ?: false
+
+    fun openActionDetails() = onActionClick()
 }
 
 data class CustomAction(val w: String) : TodayItem {
@@ -59,4 +67,6 @@ object AddAction : TodayItem {
     override fun theSame(item: UniqueItem): Boolean = item is AddAction
     override fun matches(item: UniqueItem): Boolean = item == this
 }
+
+typealias Quantity = Pair<Int, Int>
 
