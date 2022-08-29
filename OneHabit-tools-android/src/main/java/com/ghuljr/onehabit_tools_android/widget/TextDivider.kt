@@ -22,6 +22,10 @@ class TextDivider(context: Context, attrs: AttributeSet) : FrameLayout(context, 
     private val layoutColor: Int
     private val textPadding: Float
 
+    var text: String
+    set(value){ viewBind.title.text = value }
+    get() = text
+
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.OneHabit_Widget_TextDivider, 0, 0)
             .apply {

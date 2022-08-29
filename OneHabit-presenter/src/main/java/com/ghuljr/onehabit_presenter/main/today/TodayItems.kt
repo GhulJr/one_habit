@@ -1,7 +1,6 @@
 package com.ghuljr.onehabit_presenter.main.today
 
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
-import java.sql.Timestamp
 
 sealed interface TodayItem : UniqueItem {
 
@@ -49,7 +48,7 @@ data class CustomActionItem(
     fun openActionDetails() = onActionClick()
 }
 
-data class FinishedItem(
+data class TodayActionFinishedItem(
     override val title: String,
     override val time: String?,
     override val quantity: Quantity?,
@@ -59,7 +58,7 @@ data class FinishedItem(
     override fun theSame(item: UniqueItem): Boolean = compareTo(item)
     override fun matches(item: UniqueItem): Boolean = compareTo(item)
 
-    private fun compareTo(item: UniqueItem) = (item as? FinishedItem)?.let {
+    private fun compareTo(item: UniqueItem) = (item as? TodayActionFinishedItem)?.let {
         it.title == title && it.time == time && it.quantity?.first == quantity?.first
     } ?: false
 
@@ -76,9 +75,13 @@ data class TodayTimestampItem(val timestamp: String) : TodayItem {
     override fun matches(item: UniqueItem): Boolean = item == this
 }
 
-object AddAction : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean = item is AddAction
+data class AddActionItem(
+    private val onActionClick: () -> Unit
+) : TodayItem {
+    override fun theSame(item: UniqueItem): Boolean = item is AddActionItem
     override fun matches(item: UniqueItem): Boolean = item == this
+
+    fun addAction() = onActionClick()
 }
 
 typealias Quantity = Pair<Int, Int>
