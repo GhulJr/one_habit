@@ -18,21 +18,20 @@ import com.ghuljr.onehabit_presenter.main.timeline.TimelineView
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 
 
-class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(), TimelineView {
+class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, TimelinePresenter>(),
+    TimelineView {
 
     private val timelineAdapter = ItemListAdapter(
-        listOf(
-            HeaderViewHolderManager(),
-            BehaviourViewHolderManager(),
-            SummaryViewHolderManager()
-        )
+        HeaderViewHolderManager(),
+        BehaviourViewHolderManager(),
+        SummaryViewHolderManager()
     )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TIMELINE)
 
-        viewBind?.apply {
+        viewBind.apply {
             timelineRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 adapter = timelineAdapter

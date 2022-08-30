@@ -41,5 +41,15 @@
 
     <!-- Timeline -->
     <string name="timeline_day_header">Day %1$s</string>
+    <string name="edit">Edit</string>
+    <string name="actions">Actions</string>
+    <string name="when">When</string>
+    <string name="confirm">Confirm</string>
+    <string name="decline">Decline</string>
+
+    <!-- Today -->
+    <string name="today_quantity">%1$s of %2$s</string>
+    <string name="finished_items">Finished items</string>
+    <string name="add">+ Add</string>
 
 </resources>

@@ -11,21 +11,23 @@ import com.ghuljr.onehabit_presenter.base.BaseView
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PRESENTER: BasePresenter<VIEW>>
+abstract class BaseFragment<BINDING : ViewBinding, VIEW : BaseView<PRESENTER>, PRESENTER : BasePresenter<VIEW>>
     : DaggerFragment() {
-    
+
     @Inject
     lateinit var presenter: PRESENTER
-    protected var viewBind: BINDING? = null
+    private var _viewBind: BINDING? = null
+    val viewBind: BINDING
+        get() = _viewBind!!
 
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewBind = bindView(inflater, container)
-        setUpView(viewBind!!)
-        return viewBind!!.root
+        _viewBind = bindView(inflater, container)
+        setUpView(viewBind)
+        return viewBind.root
     }
 
     @CallSuper
@@ -43,12 +45,12 @@ abstract class BaseFragment<BINDING: ViewBinding, VIEW : BaseView<PRESENTER>, PR
     @CallSuper
     override fun onDestroyView() {
         destroyView()
-        viewBind = null
+        _viewBind = null
         super.onDestroyView()
     }
 
     abstract fun bindView(layoutInflater: LayoutInflater, container: ViewGroup?): BINDING
     abstract fun getPresenterView(): VIEW
     open fun setUpView(viewBind: BINDING) {}
-    open fun destroyView() {  }
+    open fun destroyView() {}
 }

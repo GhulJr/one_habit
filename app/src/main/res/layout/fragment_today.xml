@@ -5,10 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.today.TodayFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/today_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Today" />
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/default_margin"
+        tools:itemCount="100"
+        tools:listitem="@layout/item_today_action" />
 
 </FrameLayout>
