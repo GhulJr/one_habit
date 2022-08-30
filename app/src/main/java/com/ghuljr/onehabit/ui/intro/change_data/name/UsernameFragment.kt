@@ -8,7 +8,6 @@ import arrow.core.Option
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentUsernameBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
-import com.ghuljr.onehabit.ui.intro.change_data.verify_email.VerifyEmailFragmentDirections
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent

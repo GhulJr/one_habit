@@ -8,6 +8,7 @@
     app:cardCornerRadius="@dimen/default_corner_radius"
     app:cardElevation="@dimen/default_list_items_elevation"
     app:strokeColor="@color/primary_black_transparent"
+    android:background="@drawable/ripple_button_click_black"
     app:strokeWidth="@dimen/default_stroke_width">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:background="@drawable/ripple_button_click_black"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView

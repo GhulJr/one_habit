@@ -2,6 +2,7 @@ package com.ghuljr.onehabit.ui.main.today.list
 
 import android.view.View
 import com.ghuljr.onehabit.R
+import com.ghuljr.onehabit.databinding.ItemTodayActionAddBinding
 import com.ghuljr.onehabit.databinding.ItemTodayActionBinding
 import com.ghuljr.onehabit_presenter.main.today.AddActionItem
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
@@ -13,12 +14,10 @@ class AddActionViewHolderManager : ViewHolderManager(R.layout.item_today_action_
 
     override fun createViewHolder(view: View): ViewHolder<*> = object : ViewHolder<AddActionItem>(view) {
 
-        private val viewBind = ItemTodayActionBinding.bind(view)
+        private val viewBind = ItemTodayActionAddBinding.bind(view)
 
         override fun bind(item: AddActionItem) {
             viewBind.root.setOnClickListener { item.addAction() }
         }
-
     }
-
 }

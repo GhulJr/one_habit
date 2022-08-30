@@ -6,4 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:strokeWidth="@dimen/default_stroke_width_thin"
     app:textPadding="@dimen/default_margin"
-    tools:text="Finished items" />
+    app:textSize="24sp"
+    android:paddingTop="@dimen/default_margin"
+    android:paddingBottom="@dimen/default_margin"
+    android:text="@string/finished_items" />

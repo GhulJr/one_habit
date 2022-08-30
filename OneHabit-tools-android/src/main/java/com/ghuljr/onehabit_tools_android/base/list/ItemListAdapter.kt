@@ -7,7 +7,7 @@ import com.ghuljr.onehabit_tools.base.list.UniqueItem
 import java.lang.RuntimeException
 
 class ItemListAdapter(
-    private val itemManagers: List<ViewHolderManager>
+    private vararg val itemManagers: ViewHolderManager
 ) : ListAdapter<UniqueItem, ViewHolderManager.ViewHolder<*>>(DefaultItemCallback()) {
 
     override fun getItemViewType(position: Int): Int {

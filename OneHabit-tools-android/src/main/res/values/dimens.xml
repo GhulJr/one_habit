@@ -18,6 +18,7 @@
     <dimen name="default_logo_very_large">256dp</dimen>
     <dimen name="default_logo_large">128dp</dimen>
     <dimen name="default_list_items_elevation">0dp</dimen>
+    <dimen name="default_toolbar_height">90dp</dimen>
 
     <!-- Timeline -->
     <dimen name="timeline_icon_size">56dp</dimen>

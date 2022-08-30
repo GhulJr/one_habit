@@ -8,6 +8,7 @@
         <item name="android:textColorPrimary">@color/primary_black</item>
         <item name="android:textColor">@color/primary_black</item>
         <item name="android:windowBackground">@color/primary_white</item>
+        <item name="android:actionBarSize">@dimen/default_toolbar_height</item>
         <item name="fontFamily">@font/mplus_rounded_regular</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:navigationBarColor">@color/primary_black</item>

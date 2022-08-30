@@ -65,13 +65,8 @@ data class TodayActionFinishedItem(
     fun openActionDetails() = onActionClick()
 }
 
-data class TodayHeaderItem(val title: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean = (item as? TodayHeaderItem)?.title == title
-    override fun matches(item: UniqueItem): Boolean = item == this
-}
-
-data class TodayTimestampItem(val timestamp: String) : TodayItem {
-    override fun theSame(item: UniqueItem): Boolean = (item as? TodayTimestampItem)?.timestamp == timestamp
+object DoneActionsHeaderItem : TodayItem {
+    override fun theSame(item: UniqueItem): Boolean = item is DoneActionsHeaderItem
     override fun matches(item: UniqueItem): Boolean = item == this
 }
 

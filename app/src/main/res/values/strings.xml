@@ -49,5 +49,7 @@
 
     <!-- Today -->
     <string name="today_quantity">%1$s of %2$s</string>
+    <string name="finished_items">Finished items</string>
+    <string name="add">+ Add</string>
 
 </resources>

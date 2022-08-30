@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:background="@drawable/bg_dashed"
+        android:background="@drawable/bg_ripple_dashed"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView

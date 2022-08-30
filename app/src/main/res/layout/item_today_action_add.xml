@@ -7,7 +7,9 @@
     app:cardElevation="@dimen/default_list_items_elevation"
     app:cardBackgroundColor="?android:windowBackground"
     app:cardCornerRadius="@dimen/default_corner_radius"
-    app:strokeWidth="0dp">
+    app:strokeWidth="0dp"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_container"
@@ -15,7 +17,7 @@
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:background="@drawable/bg_dashed"
+        android:background="@drawable/bg_ripple_dashed"
         android:padding="@dimen/default_margin">
 
         <com.google.android.material.textview.MaterialTextView
@@ -27,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="+ Add" />
+            android:text="@string/add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
