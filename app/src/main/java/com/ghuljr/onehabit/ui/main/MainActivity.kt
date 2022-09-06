@@ -33,14 +33,25 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
         finishAffinity()
     }
 
-    override fun changeTitle(currentStep: MainStep) {
-        viewBind.toolbar.title = getString(
-            when(currentStep) {
-                MainStep.TIMELINE -> R.string.timeline
-                MainStep.TODAY -> R.string.today
-                MainStep.PROFILE -> R.string.profile
-            }
+    override fun changeCurrentStep(currentStep: MainStep) {
+        setSubtitle("")
+        setTitle(
+            getString(
+                when (currentStep) {
+                    MainStep.TIMELINE -> R.string.timeline
+                    MainStep.TODAY -> R.string.today
+                    MainStep.PROFILE -> R.string.profile
+                }
+            )
         )
+    }
+
+    override fun setTitle(title: String) {
+        viewBind.toolbar.title = title
+    }
+
+    override fun setSubtitle(subtitle: String) {
+        viewBind.toolbar.subtitle = subtitle
     }
 
     fun setCurrentStep(currentStep: MainStep) {

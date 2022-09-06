@@ -27,7 +27,15 @@ class MainPresenter @Inject constructor(
             .subscribe { view.redirectToFillRemainingData() },
         currentStepSubject
             .observeOn(uiScheduler)
-            .subscribe { view.changeTitle(it) }
+            .subscribe {
+                view.apply {
+                    changeCurrentStep(it)
+                    if(it == MainStep.PROFILE) {
+                        setTitle("Oskarek")                     // TODO: set user name and email from backend
+                        setSubtitle("oskarrek98@gmail.com")
+                    }
+                }
+            }
     )
 
     fun setCurrentStep(currentStep: MainStep): Unit = currentStepSubject.onNext(currentStep)
