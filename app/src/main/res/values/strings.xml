@@ -52,4 +52,22 @@
     <string name="finished_items">Finished items</string>
     <string name="add">+ Add</string>
 
+    <!-- Profile -->
+    <string name="current_habit">Current Habit</string>
+    <string name="habit_details">Habit details</string>
+    <string name="all_habits">All Habits</string>
+    <string name="add_new_habit">Add new Habit</string>
+    <string name="profile_details">Profile details</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="change_display_name">Change display name</string>
+    <string name="notifications">Notifications</string>
+    <string name="unread_notifications">Unread notifications</string>
+    <string name="enable_notifications">Enable notifications</string>
+    <string name="settings">Settings</string>
+    <string name="about_the_app">About the App</string>
+    <string name="help">Help</string>
+    <string name="logout">Logout</string>
+    <string name="app_version_1_s">App version %1$s</string>
+
 </resources>

@@ -164,4 +164,12 @@
         <item name="android:minWidth">@dimen/timeline_summary_icon_size</item>
         <item name="android:src">@drawable/ic_finish</item>
     </style>
+
+    <style name="OneHabit.Profile.SettingsItem" parent="">
+        <item name="android:background">@drawable/ripple_button_click_black</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:padding">@dimen/default_margin</item>
+        <item name="android:textAppearance">@style/OneHabit.TextAppearance.Primary.Large</item>
+    </style>
 </resources>

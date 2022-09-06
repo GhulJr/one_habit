@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.ghuljr.onehabit.ui.main.settings.ProfileFragment"
+        android:name="com.ghuljr.onehabit.ui.main.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
