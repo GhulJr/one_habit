@@ -1,8 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.profile.ProfileFragment">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:padding="@dimen/default_margin"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/current_habit"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary.Title.Small" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/current_habit_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:text="Eat vegetable"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary.Bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/current_habit_percentage_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Week 1 of 10"
+                    android:paddingStart="@dimen/default_margin_small"
+                    android:paddingEnd="@dimen/default_margin_small"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
+                    android:textStyle="italic" />
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/current_habit_progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:indeterminate="false"
+                    android:progress="50"
+                    android:progressTint="@color/primary_black"
+                    app:indicatorColor="@color/primary_black"
+                    app:trackCornerRadius="@dimen/default_corner_radius"
+                    app:trackThickness="@dimen/default_progress_indicator_thickness" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>
