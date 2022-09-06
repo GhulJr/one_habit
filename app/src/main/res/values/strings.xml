@@ -57,5 +57,9 @@
     <string name="habit_details">Habit details</string>
     <string name="all_habits">All Habits</string>
     <string name="add_new_habit">Add new Habit</string>
+    <string name="profile_details">Profile details</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="change_display_name">Change display name</string>
 
 </resources>
