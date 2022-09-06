@@ -51,6 +51,11 @@
     <string name="today_quantity">%1$s of %2$s</string>
     <string name="finished_items">Finished items</string>
     <string name="add">+ Add</string>
+
+    <!-- Profile -->
     <string name="current_habit">Current Habit</string>
+    <string name="habit_details">Habit details</string>
+    <string name="all_habits">All Habits</string>
+    <string name="add_new_habit">Add new Habit</string>
 
 </resources>
