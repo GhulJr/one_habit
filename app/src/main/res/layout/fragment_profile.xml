@@ -12,9 +12,9 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:padding="@dimen/default_margin"
+        android:paddingTop="@dimen/default_margin"
+        android:paddingBottom="@dimen/default_margin"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/default_margin">
+                android:padding="@dimen/default_margin"
+                android:paddingStart="@dimen/default_margin"
+                android:paddingEnd="@dimen/default_margin">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -66,103 +68,105 @@
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/habit_details"
-                android:drawableRight="@drawable/ic_arrow_next"/>
+                android:drawableRight="@drawable/ic_arrow_next"
+                android:text="@string/habit_details" />
 
             <com.ghuljr.onehabit_tools_android.widget.TextDivider
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_list"
+                android:text="@string/all_habits" />
+
+            <com.ghuljr.onehabit_tools_android.widget.TextDivider
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_add_outline"
+                android:text="@string/add_new_habit" />
+
+            <com.ghuljr.onehabit_tools_android.widget.TextDivider
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/all_habits"
-                android:drawableRight="@drawable/ic_list"/>
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginTop="@dimen/default_margin_extra_large"
+                android:layout_marginEnd="@dimen/default_margin"
+                android:text="@string/profile"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:drawableRight="@drawable/ic_profile_box"
+                android:text="@string/profile_details" />
 
             <com.ghuljr.onehabit_tools_android.widget.TextDivider
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/add_new_habit"
-                android:drawableRight="@drawable/ic_add_outline"/>
+                android:drawableRight="@drawable/ic_change_email"
+                android:text="@string/change_email" />
 
             <com.ghuljr.onehabit_tools_android.widget.TextDivider
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
-                android:layout_marginTop="@dimen/default_margin_large_x2"
-                android:text="@string/profile"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/profile_details"
-                android:drawableRight="@drawable/ic_profile_box"/>
+                android:drawableRight="@drawable/ic_change_password"
+                android:text="@string/change_password" />
 
             <com.ghuljr.onehabit_tools_android.widget.TextDivider
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/change_email"
-                android:drawableRight="@drawable/ic_change_email"/>
+                android:drawableRight="@drawable/ic_change_display_name"
+                android:text="@string/change_display_name" />
 
             <com.ghuljr.onehabit_tools_android.widget.TextDivider
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/change_password"
-                android:drawableRight="@drawable/ic_change_password"/>
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/default_margin"
-                android:paddingBottom="@dimen/default_margin"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Large"
-                android:text="@string/change_display_name"
-                android:drawableRight="@drawable/ic_change_display_name"/>
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"/>
-
+                android:layout_height="@dimen/text_divider_underline"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginEnd="@dimen/default_margin" />
 
             <!--
             - Profile details
