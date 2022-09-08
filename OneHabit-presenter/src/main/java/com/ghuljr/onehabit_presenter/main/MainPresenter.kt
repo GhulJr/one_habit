@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_presenter.main
 
+import arrow.core.getOrElse
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
@@ -27,12 +28,13 @@ class MainPresenter @Inject constructor(
             .subscribe { view.redirectToFillRemainingData() },
         currentStepSubject
             .observeOn(uiScheduler)
-            .subscribe {
+            .withLatestFrom(loggedInUserRepository.userFlowable.toObservable().onlyDefined()) { currentStep, user -> currentStep to user }
+            .subscribe { (currentStep, user) ->
                 view.apply {
-                    changeCurrentStep(it)
-                    if(it == MainStep.PROFILE) {
-                        setTitle("Oskarek")                     // TODO: set user name and email from backend
-                        setSubtitle("oskarrek98@gmail.com")
+                    changeCurrentStep(currentStep)
+                    if(currentStep == MainStep.PROFILE) {
+                        setTitle(user.username.getOrElse { user.userId })
+                        setSubtitle(user.email)
                     }
                 }
             }
