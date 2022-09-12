@@ -5,10 +5,14 @@ import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent
 import com.ghuljr.onehabit.di.module.AppModule
 import com.ghuljr.onehabit.ui.intro.IntroActivity
+import com.ghuljr.onehabit_tools.base.network.ActionResponse
 import com.ghuljr.onehabit_tools.extension.onlyFalse
 import com.ghuljr.onehabit_tools_android.extension.asSingleTop
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
