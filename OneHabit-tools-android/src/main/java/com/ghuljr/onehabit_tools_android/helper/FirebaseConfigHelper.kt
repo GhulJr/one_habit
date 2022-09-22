@@ -15,8 +15,7 @@ object FirebaseConfigHelper {
     fun init(application: Application) {
         if(!isInitialized) {
             Firebase.initialize(application)
-            Firebase.database.setPersistenceEnabled(true)
-            Firebase.database.setPersistenceCacheSizeBytes(maxCacheSize)
+            Firebase.database.setPersistenceEnabled(false)
             Firebase.database.setLogLevel(if(BuildConfig.DEBUG) Logger.Level.DEBUG else Logger.Level.ERROR)
             isInitialized = true
             Log.i(TAG, "Firebase initialized!")
@@ -26,5 +25,4 @@ object FirebaseConfigHelper {
     }
 
     private const val TAG = "FirebaseConfigHelper"
-    private const val maxCacheSize: Long = 20 * 1024 * 1024 // 20 MB
 }

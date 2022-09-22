@@ -17,7 +17,7 @@ import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
  * The main idea is to create classes, that exposes pure Kotlin objects (instead of Entities).
  * In every case like this there would be a main Entity which we refer to and relational entities.
  **/
-interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
+interface BaseDatabase<ID: Any, ENTITY: BaseEntity> {
     val dataObservable: Observable<List<ENTITY>>
 
     fun dataObservable(customId: ID): Observable<List<ENTITY>>
@@ -28,7 +28,7 @@ interface BaseDatabase<ID: Any, ENTITY: BaseEntity<ID>> {
     fun invalidate()
 }
 
-internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity<ID>>(
+internal abstract class BaseDatabaseImpl<ID: Any, ENTITY: BaseEntity>(
     private val box: Box<ENTITY>,
     private val computationScheduler: ComputationScheduler
 ) : BaseDatabase<ID, ENTITY> {

@@ -3,11 +3,11 @@ package com.ghuljr.onehabit_presenter.intro.login
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.zip
+import com.ghuljr.onehabit_data.network.model.LoginRequest
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_presenter.validator.EmailValidator
 import com.ghuljr.onehabit_presenter.validator.PasswordValidator
-import com.ghuljr.onehabit_tools.base.network.LoginRequest
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler

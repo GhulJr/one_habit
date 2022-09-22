@@ -1,6 +1,6 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import com.ghuljr.onehabit_tools.base.network.ActionResponse
+import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
@@ -21,6 +21,6 @@ class ActionsFirebaseService @Inject constructor(
     private val database = Firebase.database.getReference("actions")
 
     override fun getTodayActions(): List<ActionResponse> {
-
+        return emptyList()
     }
 }

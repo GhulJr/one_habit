@@ -4,8 +4,7 @@ data class Goal(
     val orderNumber: Int,
     val todayMotto: String,
     val actions: List<Action>,
-    val finishedState: FinishState,
-    val dayTimeMs: Int
+    val finishedState: FinishState
 ) {
 
     val totalScore = actions.sumOf { it.score }

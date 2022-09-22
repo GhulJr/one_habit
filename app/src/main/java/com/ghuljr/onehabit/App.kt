@@ -5,7 +5,6 @@ import androidx.annotation.CallSuper
 import com.ghuljr.onehabit.di.DaggerAppComponent
 import com.ghuljr.onehabit.di.module.AppModule
 import com.ghuljr.onehabit.ui.intro.IntroActivity
-import com.ghuljr.onehabit_tools.base.network.ActionResponse
 import com.ghuljr.onehabit_tools.extension.onlyFalse
 import com.ghuljr.onehabit_tools_android.extension.asSingleTop
 import com.ghuljr.onehabit_tools_android.helper.FirebaseConfigHelper
