@@ -1,16 +1,14 @@
 package com.ghuljr.onehabit_data.domain
 
 data class Goal(
-    val orderNumber: Int,
-    val todayMotto: String,
-    val actions: List<Action>,
-    val finishedState: FinishState
+    val title: String,
+    val state: State,
+    val actions: List<Action>
 ) {
+    val totalScore: Int = actions.sumOf { it.scored }
+    val maxScore = actions.sumOf { it.worth }
 
-    val totalScore = actions.sumOf { it.score }
-
-    // TODO: it might be only needed for visual model. Instead I could store
-    enum class FinishState {
-        SUCCESS, REQUIRES_ACTION, FAILED, ACTIVE, FUTURE
+    enum class State {
+         PENDING, ACTIVE, FAILED, PARTIAL, SUCCEED
     }
 }
