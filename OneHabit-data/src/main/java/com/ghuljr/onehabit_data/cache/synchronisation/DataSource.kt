@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_data
+package com.ghuljr.onehabit_data.cache.synchronisation
 
 import arrow.core.Either
 import arrow.core.Option

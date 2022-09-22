@@ -1,7 +1,7 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import com.ghuljr.onehabit_tools.base.network.ActionResponse
-import com.ghuljr.onehabit_tools.base.network.ActionsService
+import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.google.firebase.database.ktx.database
@@ -21,6 +21,6 @@ class ActionsFirebaseService @Inject constructor(
     private val database = Firebase.database.getReference("actions")
 
     override fun getTodayActions(): List<ActionResponse> {
-        TODO("Not yet implemented")
+
     }
 }

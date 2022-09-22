@@ -5,7 +5,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.extension.orLoggedOutError
 import com.ghuljr.onehabit_error_android.extension.resumeWithBaseError
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
+import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_tools.base.network.UserResponse
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler

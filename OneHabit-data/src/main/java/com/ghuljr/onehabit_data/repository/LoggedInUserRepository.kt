@@ -2,9 +2,10 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.*
 import com.ghuljr.onehabit_data.base.storage.PropertyHolder
+import com.ghuljr.onehabit_data.network.service.LoggedInUserManager
+import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_error.AuthError
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.base.network.*
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler

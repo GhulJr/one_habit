@@ -1,7 +1,7 @@
 package com.ghuljr.onehabit_presenter.intro.launch
 
 import com.ghuljr.onehabit_presenter.base.BasePresenter
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
+import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.onlyFalse

@@ -1,7 +1,7 @@
 package com.ghuljr.onehabit_tools_android.di
 
-import com.ghuljr.onehabit_tools.base.network.ActionsService
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
+import com.ghuljr.onehabit_data.network.service.ActionsService
+import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_tools_android.network.service.ActionsFirebaseService
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
 import dagger.Binds

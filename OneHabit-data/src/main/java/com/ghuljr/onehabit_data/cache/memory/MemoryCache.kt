@@ -2,9 +2,6 @@ package com.ghuljr.onehabit_data.cache.memory
 
 import arrow.core.Either
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
-import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
-import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.extension.switchMapSingleRight
@@ -18,7 +15,6 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
-import javax.inject.Inject
 
 /** MemoryCache is responsible for containing and switching different sets of data in memory
  * @param loggedInUserRepository    used to get current logged in user id

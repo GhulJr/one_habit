@@ -1,7 +1,8 @@
-package com.ghuljr.onehabit_tools.base.network
+package com.ghuljr.onehabit_data.network.service
 
 import arrow.core.Either
 import arrow.core.Option
+import com.ghuljr.onehabit_data.network.model.UserResponse
 import com.ghuljr.onehabit_error.BaseError
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
@@ -20,13 +21,3 @@ interface LoggedInUserService: LoggedInUserManager {
     fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>>
     fun refreshUser(): Single<Either<BaseError, UserResponse>>
 }
-
-data class RegisterRequest(val email: String, val password: String)
-data class LoginRequest(val email: String, val password: String)
-
-data class UserResponse(
-    val userId: String,
-    val email: String,
-    val username: Option<String>,
-    val isEmailVerified: Boolean
-)

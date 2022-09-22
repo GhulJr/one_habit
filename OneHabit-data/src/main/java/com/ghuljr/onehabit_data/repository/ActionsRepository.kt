@@ -1,6 +1,6 @@
 package com.ghuljr.onehabit_data.repository
 
-import com.ghuljr.onehabit_tools.base.network.ActionsService
+import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import io.reactivex.rxjava3.core.Scheduler
