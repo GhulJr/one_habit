@@ -1,7 +1,7 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.*
-import com.ghuljr.onehabit_data.network.model.UserResponse
+import com.ghuljr.onehabit_data.network.model.UserAuthResponse
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.extension.orLoggedOutError
@@ -34,7 +34,7 @@ class LoggedInUserFirebaseService @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler
 ) : LoggedInUserService {
 
-    private val userProcessor = BehaviorProcessor.create<Option<UserResponse>>()
+    private val userProcessor = BehaviorProcessor.create<Option<UserAuthResponse>>()
     private val firebaseAuth: FirebaseAuth by lazy { Firebase.auth }
     private val onUserChangeListener = FirebaseAuth.AuthStateListener {
         userProcessor.onNext(it.currentUser?.toUserResponse().toOption())
@@ -53,14 +53,14 @@ class LoggedInUserFirebaseService @Inject constructor(
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
 
-    override val userFlowable: Flowable<Option<UserResponse>> = userProcessor
+    override val userFlowable: Flowable<Option<UserAuthResponse>> = userProcessor
         .subscribeOn(computationScheduler)
         .replay(1).refCount()
 
     override fun register(
         email: String,
         password: String
-    ): Single<Either<BaseError, UserResponse>> =
+    ): Single<Either<BaseError, UserAuthResponse>> =
         firebaseAuth
             .createUserWithEmailAndPassword(email, password)
             .toSingle()
@@ -68,7 +68,7 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun signIn(email: String, password: String): Single<Either<BaseError, UserResponse>> =
+    override fun signIn(email: String, password: String): Single<Either<BaseError, UserAuthResponse>> =
         firebaseAuth
             .signInWithEmailAndPassword(email, password)
             .toSingle()
@@ -76,7 +76,7 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun changeUsername(displayName: String): Single<Either<BaseError, UserResponse>> =
+    override fun changeUsername(displayName: String): Single<Either<BaseError, UserAuthResponse>> =
         firebaseAuth
             .currentUser?.updateProfile(userProfileChangeRequest {
                 this.displayName = displayName
@@ -99,7 +99,7 @@ class LoggedInUserFirebaseService @Inject constructor(
             .subscribeOn(networkScheduler)
 
     /*TODO: something is wrong here*/
-    override fun refreshUser(): Single<Either<BaseError, UserResponse>> = firebaseAuth
+    override fun refreshUser(): Single<Either<BaseError, UserAuthResponse>> = firebaseAuth
         .currentUser?.reload()
         ?.asUnitSingle()
         .toOption()
@@ -121,23 +121,23 @@ class LoggedInUserFirebaseService @Inject constructor(
         firebaseAuth.signOut()
     }
 
-    private fun FirebaseUser.toUserResponse(): UserResponse = UserResponse(
+    private fun FirebaseUser.toUserResponse(): UserAuthResponse = UserAuthResponse(
         userId = uid,
         email = email!!,    // Right now we got only on auth method
         username = displayName.emptyToOption(),
         isEmailVerified = isEmailVerified
     )
 
-    private fun Single<*>.updateSynchronouslyWithUser(): Single<Either<BaseError, UserResponse>> =
+    private fun Single<*>.updateSynchronouslyWithUser(): Single<Either<BaseError, UserAuthResponse>> =
         map {
             firebaseAuth.currentUser?.toUserResponse()
-                .rightIfNotNull { LoggedOutError } as Either<BaseError, UserResponse>
+                .rightIfNotNull { LoggedOutError } as Either<BaseError, UserAuthResponse>
         }
             .observeOn(singleThreadScheduler)
             .doOnSuccess { userProcessor.onNext(it.orNone()) }
             .observeOn(networkScheduler)
 
-    private fun io.reactivex.Single<AuthResult>.handleSignInOrLogOut(): Single<Either<BaseError, UserResponse>> =
+    private fun io.reactivex.Single<AuthResult>.handleSignInOrLogOut(): Single<Either<BaseError, UserAuthResponse>> =
         toRx3()
             .map {
                 Either.catch { it.user!!.toUserResponse() }
