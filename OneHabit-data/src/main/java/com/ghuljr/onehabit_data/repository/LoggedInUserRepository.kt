@@ -2,10 +2,13 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.*
 import com.ghuljr.onehabit_data.base.storage.PropertyHolder
+import com.ghuljr.onehabit_data.network.model.LoginRequest
+import com.ghuljr.onehabit_data.network.model.RegisterRequest
+import com.ghuljr.onehabit_data.network.model.UserAuthResponse
+import com.ghuljr.onehabit_data.network.service.LoggedInUserManager
+import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_error.AuthError
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
-import com.ghuljr.onehabit_tools.base.network.*
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -43,12 +46,12 @@ class LoggedInUserRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserResponse>> =
+    fun register(registerRequest: RegisterRequest): Single<Either<BaseError, UserAuthResponse>> =
         loggedInUserService
             .register(registerRequest.email, registerRequest.password)
             .subscribeOn(networkScheduler)
 
-    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserResponse>> =
+    fun signIn(loginRequest: LoginRequest): Single<Either<BaseError, UserAuthResponse>> =
         loggedInUserService
             .signIn(loginRequest.email, loginRequest.password)
             .subscribeOn(networkScheduler)
@@ -58,7 +61,7 @@ class LoggedInUserRepository @Inject constructor(
         .subscribeOn(networkScheduler)
         .flatMapRight { propertyHolder.set(true.some()) }
 
-    fun refreshUser(): Single<Either<BaseError, UserResponse>> = loggedInUserService
+    fun refreshUser(): Single<Either<BaseError, UserAuthResponse>> = loggedInUserService
         .refreshUser()
         .mapRightWithEither {
             if (!it.isEmailVerified) AuthError.EmailNotYetVerified.left()

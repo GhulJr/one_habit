@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_tools_android.base.storage
+package com.ghuljr.onehabit_tools_android.base.storage.persistence
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import arrow.core.Option
 import arrow.core.none
 import arrow.core.toOption
-import com.ghuljr.onehabit_tools.base.storage.Preferences
+import com.ghuljr.onehabit_data.storage.persistence.Preferences
 import com.ghuljr.onehabit_tools.di.ForApplication
 import javax.inject.Inject
 import javax.inject.Singleton

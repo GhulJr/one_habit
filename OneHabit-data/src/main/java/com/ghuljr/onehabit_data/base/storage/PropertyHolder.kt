@@ -2,7 +2,7 @@ package com.ghuljr.onehabit_data.base.storage
 
 import arrow.core.Option
 import arrow.core.none
-import com.ghuljr.onehabit_tools.base.storage.Preferences
+import com.ghuljr.onehabit_data.storage.persistence.Preferences
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

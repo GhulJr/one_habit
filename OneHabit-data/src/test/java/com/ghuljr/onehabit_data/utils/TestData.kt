@@ -2,7 +2,7 @@ package com.ghuljr.onehabit_data.utils
 
 import arrow.core.Option
 import arrow.core.none
-import com.ghuljr.onehabit_data.DataSource
+import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_error.BaseError
 
 object TestData {

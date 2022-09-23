@@ -1,0 +1,296 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:9044374626221534936",
+      "lastPropertyId": "9:7634113128211595513",
+      "name": "ActionEntity",
+      "properties": [
+        {
+          "id": "1:2164047499452988483",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3389447004492817083",
+          "name": "id",
+          "indexId": "1:4024654593842445342",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:120234604359481557",
+          "name": "userId",
+          "indexId": "4:2383593520363173505",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "5:9206139248513794813",
+          "name": "currentRepeat",
+          "type": 5
+        },
+        {
+          "id": "6:4110004159947996498",
+          "name": "totalRepeats",
+          "type": 5
+        },
+        {
+          "id": "7:892279082271950646",
+          "name": "remindersAtMs",
+          "type": 30
+        },
+        {
+          "id": "8:2740360960010339317",
+          "name": "goalId",
+          "indexId": "3:5624692292777259727",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "9:7634113128211595513",
+          "name": "custom",
+          "type": 1
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:1790529967904143850",
+      "lastPropertyId": "5:2232988884819504025",
+      "name": "ActionOfGoalEntitiesHolder",
+      "properties": [
+        {
+          "id": "1:5221189080281963511",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1851219928019930391",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:6344934810092291960",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "5:2232988884819504025",
+          "name": "goalId",
+          "indexId": "2:5059702026883926286",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:4532424345809850458",
+      "lastPropertyId": "7:6472905798330148046",
+      "name": "UserEntity",
+      "properties": [
+        {
+          "id": "1:4535878315383243951",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3326317344598018741",
+          "name": "userId",
+          "indexId": "5:1186964254944573439",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:8955064729324171956",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "4:1976923880860375949",
+          "name": "habitId",
+          "type": 9
+        },
+        {
+          "id": "5:548301167482163863",
+          "name": "milestoneId",
+          "type": 9
+        },
+        {
+          "id": "6:4268756860707286236",
+          "name": "goalId",
+          "type": 9
+        },
+        {
+          "id": "7:6472905798330148046",
+          "name": "extraHabits",
+          "type": 30
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:3378584687843120445",
+      "lastPropertyId": "3:5031252250080235000",
+      "name": "UserEntityHolder",
+      "properties": [
+        {
+          "id": "1:4171180902737072486",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5182152937665030267",
+          "name": "userId",
+          "indexId": "6:8146704568316827460",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:5031252250080235000",
+          "name": "dueToInMillis",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:5642797105425754041",
+      "lastPropertyId": "13:5259480093739271843",
+      "name": "HabitEntity",
+      "properties": [
+        {
+          "id": "1:1261210152441871904",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2570779884332345835",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:5375277934068774239",
+          "name": "id",
+          "indexId": "7:40419422467491772",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "4:1356962729568712367",
+          "name": "currentProgress",
+          "type": 5
+        },
+        {
+          "id": "5:7620146499745861096",
+          "name": "defaultProgressFactor",
+          "type": 5
+        },
+        {
+          "id": "6:2381379727407770521",
+          "name": "defaultRemindersMs",
+          "type": 30
+        },
+        {
+          "id": "7:3751161154466330300",
+          "name": "baseIntensity",
+          "type": 5
+        },
+        {
+          "id": "8:1038168411662078981",
+          "name": "desiredIntensity",
+          "type": 5
+        },
+        {
+          "id": "9:1715241441476389373",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "10:3516563301945022139",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "11:1627727397844996645",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "12:976860119239630160",
+          "name": "habitSubject",
+          "type": 9
+        },
+        {
+          "id": "13:5259480093739271843",
+          "name": "settlingFormat",
+          "type": 5
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:5691044738079520659",
+      "lastPropertyId": "4:1546052049435809213",
+      "name": "HabitEntityHolder",
+      "properties": [
+        {
+          "id": "1:2059802020940070271",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8069063532690414664",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:6588942568686935509",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:1546052049435809213",
+          "name": "habitId",
+          "indexId": "8:4975524384784603418",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "7:5691044738079520659",
+  "lastIndexId": "8:4975524384784603418",
+  "lastRelationId": "2:3523845188744509739",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    4404177628123626710
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    7762414669914543237,
+    3524043416970328952,
+    1120836133775428088,
+    8142895953592524759,
+    2125651765535187419,
+    3245260505064365429,
+    6177694818003458126
+  ],
+  "retiredRelationUids": [
+    3025695076431287356,
+    3523845188744509739
+  ],
+  "version": 1
+}

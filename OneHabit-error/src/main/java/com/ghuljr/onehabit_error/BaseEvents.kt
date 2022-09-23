@@ -9,6 +9,6 @@ interface BaseError : BaseEvent
 object NoDataError: BaseError
 object LoggedOutError: BaseError
 
-data class UnknownError(val message: String?): BaseError
+data class UnknownError(val cause: Throwable): BaseError
 
 

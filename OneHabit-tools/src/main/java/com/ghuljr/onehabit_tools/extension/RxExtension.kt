@@ -1,10 +1,8 @@
 package com.ghuljr.onehabit_tools.extension
 
 import arrow.core.*
-import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
-import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
@@ -16,6 +14,37 @@ import io.reactivex.rxjava3.core.Single
 fun <L, R> Flowable<Option<R>>.toEither(onEmptyToLeft: () -> L): Flowable<Either<L, R>> = map {
     it.toEither { onEmptyToLeft() }
 }
+
+// switchMap
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapDefined(onDefined: (OLD_R) -> Flowable<NEW_R>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                ifEmpty = { flowable.map { none() } },
+                ifSome = { some -> onDefined(some).map { it.some() } }
+            )
+        }
+    }
+
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapSingleDefined(onDefined: (OLD_R) -> Single<NEW_R>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapSingle {
+            it.fold(
+                ifEmpty = { Single.just(none()) },
+                ifSome = { some -> onDefined(some).map { it.some() } }
+            )
+        }
+    }
+
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapDefinedWithOption(onDefined: (OLD_R) -> Flowable<Option<NEW_R>>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                ifEmpty = { flowable.map { none() } },
+                ifSome = { some -> onDefined(some) }
+            )
+        }
+    }
 
 /** Either */
 
@@ -47,6 +76,51 @@ fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapSingleRight(onRight: (
         }
     }
 
+fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapMaybeRight(onRight: (OLD_R) -> Maybe<NEW_R>): Flowable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapMaybe {
+            it.fold(
+                { left -> Maybe.just(left.left()) },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRight(onRight: (OLD_R) -> Observable<NEW_R>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                { left -> flowable.map { left.left() } },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapMaybeRightWithEither(onRight: (OLD_R) -> Maybe<Either<L, NEW_R>>): Flowable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapMaybe {
+            it.fold(
+                { left -> Maybe.just(left.left()) },
+                { right -> onRight(right) })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRightWithEither(onRight: (OLD_R) -> Observable<Either<L, NEW_R>>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                { left -> flowable.map { left.left() } },
+                { right -> onRight(right) })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapSingleRight(onRight: (OLD_R) -> Single<NEW_R>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapSingle {
+            it.fold(
+                { left -> Single.just(left.left()) },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
 // flatMap
 fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.flatMapRight(onRight: (OLD_R) -> Single<NEW_R>): Single<Either<L, NEW_R>> =
     compose { single ->
@@ -62,6 +136,24 @@ fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (
         single.flatMap {
             it.fold(
                 { left -> single.map { left.left() } },
+                { right -> onRight(right) })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Maybe<Either<L, OLD_R>>.flatMapRight(onRight: (OLD_R) -> Maybe<NEW_R>): Maybe<Either<L, NEW_R>> =
+    compose { maybe ->
+        maybe.flatMap {
+            it.fold(
+                { left -> maybe.map { left.left() } },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Maybe<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (OLD_R) -> Maybe<Either<L, NEW_R>>): Maybe<Either<L, NEW_R>> =
+    compose { maybe ->
+        maybe.flatMap {
+            it.fold(
+                { left -> maybe.map { left.left() } },
                 { right -> onRight(right) })
         }
     }

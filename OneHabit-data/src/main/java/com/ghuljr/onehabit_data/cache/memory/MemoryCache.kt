@@ -3,8 +3,6 @@ package com.ghuljr.onehabit_data.cache.memory
 import arrow.core.Either
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_tools.base.network.LoggedInUserService
-import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.extension.switchMapSingleRight
@@ -18,7 +16,6 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
-import javax.inject.Inject
 
 /** MemoryCache is responsible for containing and switching different sets of data in memory
  * @param loggedInUserRepository    used to get current logged in user id
@@ -39,9 +36,9 @@ class MemoryCache<K, V> @AssistedInject constructor(
      * @param customKey         optional parameter, that, alongside user id, is used to identify particular set of cached data
      * @return                  flowable, that will emmit either LoggedOutError, if there is no user, or particular set of data
      * */
-    operator fun get(customKey: K? = null): Flowable<Either<LoggedOutError, V>> =
+    operator fun get(customKey: K? = null): Flowable<Either<BaseError, V>> =
         loggedInUserRepository.userIdFlowable
-            .toEither { LoggedOutError }
+            .toEither { LoggedOutError as BaseError }
             .switchMapSingleRight { userId ->
                 Single.fromCallable { this.cache }
                     .subscribeOn(singleThreadScheduler)
@@ -59,7 +56,7 @@ class MemoryCache<K, V> @AssistedInject constructor(
          * @param provider      method, that will create new data, if nothing is cached
          * @return              new instance of MemoryCache
          **/
-        fun create(provider: (ClassKey<K>) -> V): MemoryCache<K, V>
+        fun create  (provider: (ClassKey<K>) -> V): MemoryCache<K, V>
     }
 }
 
