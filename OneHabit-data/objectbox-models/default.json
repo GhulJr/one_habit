@@ -83,10 +83,77 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:4532424345809850458",
+      "lastPropertyId": "6:4268756860707286236",
+      "name": "UserEntity",
+      "properties": [
+        {
+          "id": "1:4535878315383243951",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3326317344598018741",
+          "name": "userId",
+          "indexId": "5:1186964254944573439",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:8955064729324171956",
+          "name": "id",
+          "type": 9
+        },
+        {
+          "id": "4:1976923880860375949",
+          "name": "habitId",
+          "type": 9
+        },
+        {
+          "id": "5:548301167482163863",
+          "name": "milestoneId",
+          "type": 9
+        },
+        {
+          "id": "6:4268756860707286236",
+          "name": "goalId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:3378584687843120445",
+      "lastPropertyId": "3:5031252250080235000",
+      "name": "UserEntityHolder",
+      "properties": [
+        {
+          "id": "1:4171180902737072486",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5182152937665030267",
+          "name": "userId",
+          "indexId": "6:8146704568316827460",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:5031252250080235000",
+          "name": "dueToInMillis",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:1790529967904143850",
-  "lastIndexId": "4:2383593520363173505",
+  "lastEntityId": "5:3378584687843120445",
+  "lastIndexId": "6:8146704568316827460",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

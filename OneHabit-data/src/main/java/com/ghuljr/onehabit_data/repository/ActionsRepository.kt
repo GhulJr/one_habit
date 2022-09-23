@@ -38,7 +38,7 @@ class ActionsRepository @Inject constructor(
             cachedDataFlowable = actionsDb.getActionsByGoalId(key.customKey!!),
             fetch = {
                 actionsService.getActionsFromGoal(key.customKey, key.userId).toSingle()
-                    .mapRight { it.toStorageModel(key.customKey!!, key.userId) }
+                    .mapRight { it.toStorageModel(key.customKey, key.userId) }
             },
             invalidateAndUpdate = { newCache ->
                 actionsDb.replaceActionsForGoal(
