@@ -28,9 +28,9 @@ fun FirebaseAuthException.toError(): BaseError = when (this) {
     is FirebaseAuthUserCollisionException -> when (errorCode) {
         "ERROR_EMAIL_ALREADY_IN_USE" -> AuthError.EmailInUse(message)
         "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> AuthError.InvalidLoginCredentials(message)
-        else -> UnknownError(message ?: "Unknown authorisation error")
+        else -> UnknownError(this)
     }
-    else -> UnknownError(message ?: "Unknown authorisation error")
+    else -> UnknownError(this)
 }
 
 fun FirebaseException.toError(): BaseError = when (this) {
@@ -39,12 +39,12 @@ fun FirebaseException.toError(): BaseError = when (this) {
     is FirebaseNoSignedInUserException -> LoggedOutError
     is FirebaseApiNotAvailableException -> NetworkError.ServerUnavailable(message)
     is FirebaseTooManyRequestsException -> NetworkError.TooManyRequests(message)
-    else -> UnknownError(message ?: "Unknown Firebase error")
+    else -> UnknownError(this)
 }
 
 fun Throwable.toError(): BaseError = when (this) {
     is FirebaseException -> toError()
-    else -> UnknownError(message ?: "Unknown error")
+    else -> UnknownError(this)
 }
 
 fun <L, R> Either<L, R>.orLoggedOutError(): Either<BaseError, R> = mapLeft { LoggedOutError }

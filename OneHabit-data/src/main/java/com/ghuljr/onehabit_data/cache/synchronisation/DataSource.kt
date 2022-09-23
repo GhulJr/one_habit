@@ -9,6 +9,7 @@ import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.processors.PublishProcessor
@@ -36,55 +37,50 @@ class DataSource<V>(
     private val computationScheduler: Scheduler,
     private val networkScheduler: Scheduler,
     private val singleThreadScheduler: Scheduler = Schedulers.from(Executors.newSingleThreadExecutor())
-    ) {
+) {
 
-    private val refreshProcessor = PublishProcessor.create<Unit>()
-
-    // TODO: reduce source calls when subscribing
-    // TODO: cache time, when the data should be treated as invalid
-
-    init { require(refreshInterval >= 0L) }
+    init {
+        require(refreshInterval >= 0L)
+    }
 
     /** Flowable that emits current data, or error when data is not present or fetch failed **/
     val dataFlowable: Flowable<Either<BaseError, V>> = cachedDataFlowable
-        .compose { flowable ->
-            flowable.switchMap { cacheWithTime ->
-                Flowable.merge(
-                    refreshProcessor,
-                    Flowable.interval(
-                        computeDelay(computationScheduler, cacheWithTime.dueToInMillis),
-                        TimeUnit.MILLISECONDS,
-                        computationScheduler
-                    )
-                        .take(1)
-                        .toUnit()
-                )
-                    .debounce(500L, TimeUnit.MILLISECONDS, computationScheduler)
-                    .switchMapSingle {
-                        fetch()
-                            .subscribeOn(networkScheduler)
-                            .flatMapRightWithEither {
-                                updateSingle(it.toOption())
-                                    .map { it.toRight(NoDataError as BaseError) }
-                            }
-                    }
-                    .let {
-                        if (cacheWithTime.value.isDefined())
-                            it.startWithItem(cacheWithTime.value.orNull()!!.right())
-                        else it
-                    }
-            }
+        .switchMap { cacheWithTime ->
+            Flowable.interval(
+                computeDelay(computationScheduler, cacheWithTime.dueToInMillis),
+                TimeUnit.MILLISECONDS,
+                computationScheduler
+            )
+                .take(1)
+                .toUnit()
+                .switchMapSingle { _fetch() }
+                .let {
+                    if (cacheWithTime.value.isDefined())
+                        it.startWithItem(cacheWithTime.value.orNull()!!.right())
+                    else it
+                }
         }
         .subscribeOn(computationScheduler)
         .distinctUntilChanged()
         .replay(1).refCount()
 
+    private fun _fetch() = fetch()
+        .subscribeOn(networkScheduler)
+        .observeOn(singleThreadScheduler)
+        .flatMapRightWithEither {
+            updateSingle(it.toOption())
+                .map { it.toRight(NoDataError as BaseError) }
+        }
+        .observeOn(computationScheduler)
+
     /** Force refresh data
      * @return              single that indicates that refresh was scheduled
      **/
-    fun refresh(): Single<Unit> = Single.fromCallable { refreshProcessor.onNext(Unit) }
+    fun refresh(): Maybe<Either<BaseError, V>> = _fetch()
+        .toMaybe()
         .subscribeOn(singleThreadScheduler)
         .observeOn(computationScheduler)
+
 
     /** Update stored data
      * @param valueOption       option with value or empty if it should be cleared
@@ -94,7 +90,7 @@ class DataSource<V>(
         invalidateAndUpdate(
             CacheWithTime(
                 valueOption,
-                computationScheduler.now(TimeUnit.MILLISECONDS) + refreshIntervalUnit.toMillis(refreshInterval)
+                singleThreadScheduler.now(TimeUnit.MILLISECONDS) + refreshIntervalUnit.toMillis(refreshInterval)
             )
         )
     }

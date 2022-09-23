@@ -70,7 +70,6 @@ class ActionDatabase @AssistedInject constructor(
         dueToInMillis: Long,
         actions: List<ActionEntity>
     ) {
-        removeActionsForGoal(goalId)
         put(*actions.toTypedArray())
         cacheBox.put(
             ActionOfGoalEntitiesHolder(

@@ -25,42 +25,39 @@ import javax.inject.Singleton
 
 @Singleton
 class ActionsFirebaseService @Inject constructor(
-    @NetworkScheduler private val networkScheduler: Scheduler,
-    private val loggedInUserRepository: LoggedInUserRepository
+    @NetworkScheduler private val networkScheduler: Scheduler
 ) : ActionsService {
 
     private val actionDb = Firebase.database.getReference("action")
-    private val actionToGoalDb = Firebase.database.getReference("action_to_goal")
+    private val actionToGoalDb = Firebase.database.getReference("action_of_goal")
 
-    override fun getActionsFromGoal(goalId: String): Maybe<Either<BaseError, List<ActionResponse>>> =
-        loggedInUserRepository.userIdFlowable
-            .toEither { LoggedOutError as BaseError }
-            .firstElement()
-            .flatMapRightWithEither { userId ->
-                getTodayActionsIds(userId, goalId)
-                    .toObservable()
-                    .flatMapIterable { it }
-                    .flatMapSingle { actionId ->
-                        actionDb.child(userId).child(actionId).get()
-                            .toSingle()
-                            .toRx3()
-                            .map {
-                                it.getValue(ParsableActionResponse::class.java)!!
-                                    .toActionResponse(it.key!!)
-                            }
+    override fun getActionsFromGoal(
+        goalId: String,
+        userId: String
+    ): Maybe<Either<BaseError, List<ActionResponse>>> = getTodayActionsIds(userId, goalId)
+            .toObservable()
+            .flatMapIterable { it }
+            .flatMapSingle { actionId ->
+                actionDb.child(userId).child(actionId).get()
+                    .toSingle()
+                    .toRx3()
+                    .map {
+                        it.getValue(ParsableActionResponse::class.java)!!
+                            .toActionResponse(it.key!!)
                     }
-                    .toList()
-                    .leftOnThrow()
-                    .toMaybe()
             }
+            .toList()
+            .leftOnThrow()
+            .toMaybe()
             .subscribeOn(networkScheduler)
 
-    private fun getTodayActionsIds(userId: String, goalId: String): Single<List<String>> = actionToGoalDb.child(userId)
-        .child(goalId)
-        .get()
-        .toSingle()
-        .toRx3()
-        .map { snapshot -> snapshot.children.map { it.key!! } }
+    private fun getTodayActionsIds(userId: String, goalId: String): Single<List<String>> =
+        actionToGoalDb.child(userId)
+            .child(goalId)
+            .get()
+            .toSingle()
+            .toRx3()
+            .map { snapshot -> snapshot.children.map { it.key!! } }
 
 }
 

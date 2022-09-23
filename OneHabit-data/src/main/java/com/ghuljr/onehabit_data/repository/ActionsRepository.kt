@@ -2,7 +2,6 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.Either
 import arrow.core.getOrElse
-import arrow.core.some
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.network.model.ActionResponse
@@ -14,13 +13,13 @@ import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/* TODO: add custom database and add it to datasource */
 @Singleton
 class ActionsRepository @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler,
@@ -34,11 +33,11 @@ class ActionsRepository @Inject constructor(
     private val todayActionCache = memoryCacheFactory.create { key ->
         val actionsDb = actionsDatabaseFactory.create(key.userId)
         DataSource(
-            refreshInterval = 1,
-            refreshIntervalUnit = TimeUnit.DAYS,
+            refreshInterval = 10,
+            refreshIntervalUnit = TimeUnit.SECONDS,
             cachedDataFlowable = actionsDb.getActionsByGoalId(key.customKey!!),
             fetch = {
-                actionsService.getActionsFromGoal(key.customKey).toSingle()
+                actionsService.getActionsFromGoal(key.customKey, key.userId).toSingle()
                     .mapRight { it.toStorageModel(key.customKey!!, key.userId) }
             },
             invalidateAndUpdate = { newCache ->
@@ -55,7 +54,7 @@ class ActionsRepository @Inject constructor(
     }
 
     // TODO: change it to list of domain models
-    private val todayActionObservable: Observable<Either<BaseError, List<ActionEntity>>> = loggedInUserRepository.userIdFlowable
+    val todayActionsObservable: Observable<Either<BaseError, List<ActionEntity>>> = loggedInUserRepository.userIdFlowable
         .toEither { LoggedOutError as BaseError }
         .switchMapRightWithEither { userId ->
             // TODO: handle real goal id
@@ -64,6 +63,15 @@ class ActionsRepository @Inject constructor(
                 .switchMapRightWithEither { source -> source.dataFlowable }
         }
         .toObservable()
+
+    fun refreshTodayActions(): Maybe<Either<BaseError, List<ActionEntity>>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .switchMapRightWithEither { userId ->
+            todayActionCache["-NC_DaicwoCWk5_qQ6Uh"]
+                .mapLeft { it as BaseError }
+                .switchMapMaybeRightWithEither { source -> source.refresh() }
+        }
+        .firstElement()
 }
 
 private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) = map { it.toStorageModel(goalId, userId) }

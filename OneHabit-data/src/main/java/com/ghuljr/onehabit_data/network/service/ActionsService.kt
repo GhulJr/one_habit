@@ -8,5 +8,8 @@ import io.reactivex.rxjava3.core.Single
 
 interface ActionsService {
 
-    fun getActionsFromGoal(goalId: String): Maybe<Either<BaseError, List<ActionResponse>>>
+    fun getActionsFromGoal(
+        goalId: String,
+        userId: String
+    ): Maybe<Either<BaseError, List<ActionResponse>>>
 }

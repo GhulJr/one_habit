@@ -76,12 +76,30 @@ fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapSingleRight(onRight: (
         }
     }
 
+fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapMaybeRight(onRight: (OLD_R) -> Maybe<NEW_R>): Flowable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapMaybe {
+            it.fold(
+                { left -> Maybe.just(left.left()) },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
 fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRight(onRight: (OLD_R) -> Observable<NEW_R>): Observable<Either<L, NEW_R>> =
     compose { flowable ->
         flowable.switchMap {
             it.fold(
                 { left -> flowable.map { left.left() } },
                 { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapMaybeRightWithEither(onRight: (OLD_R) -> Maybe<Either<L, NEW_R>>): Flowable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapMaybe {
+            it.fold(
+                { left -> Maybe.just(left.left()) },
+                { right -> onRight(right) })
         }
     }
 
