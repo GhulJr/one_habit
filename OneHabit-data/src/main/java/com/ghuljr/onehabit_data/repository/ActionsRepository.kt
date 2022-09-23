@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.getOrElse
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
+import com.ghuljr.onehabit_data.domain.Action
 import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
@@ -26,7 +27,7 @@ class ActionsRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
     private val actionsService: ActionsService,
     private val actionsDatabaseFactory: ActionDatabase.Factory,
-    private val loggedInUserRepository: LoggedInUserRepository,
+    private val userRepository: UserRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>
 ) {
 
@@ -53,23 +54,24 @@ class ActionsRepository @Inject constructor(
         )
     }
 
-    // TODO: change it to list of domain models
-    val todayActionsObservable: Observable<Either<BaseError, List<ActionEntity>>> = loggedInUserRepository.userIdFlowable
-        .toEither { LoggedOutError as BaseError }
-        .switchMapRightWithEither { userId ->
-            // TODO: handle real goal id
-            todayActionCache["-NC_DaicwoCWk5_qQ6Uh"]
-                .mapLeft { it as BaseError }
+    val todayActionsObservable: Observable<Either<BaseError, List<Action>>> = userRepository.currentUser
+        .filter { it.map { it.goalId != null }.getOrElse { true } }
+        .switchMapRightWithEither { currentUser ->
+            todayActionCache[currentUser.goalId!!]
                 .switchMapRightWithEither { source -> source.dataFlowable }
+                .toObservable()
+                .mapRight { it.map { it.toDomain() } }
         }
-        .toObservable()
+        .replay(1)
+        .refCount()
 
-    fun refreshTodayActions(): Maybe<Either<BaseError, List<ActionEntity>>> = loggedInUserRepository.userIdFlowable
-        .toEither { LoggedOutError as BaseError }
-        .switchMapRightWithEither { userId ->
-            todayActionCache["-NC_DaicwoCWk5_qQ6Uh"]
-                .mapLeft { it as BaseError }
+    fun refreshTodayActions(): Maybe<Either<BaseError, List<Action>>> = userRepository.currentUser
+        .filter { it.map { it.goalId != null }.getOrElse { true } }
+        .switchMapRightWithEither { currentUser ->
+            todayActionCache[currentUser.goalId!!]
                 .switchMapMaybeRightWithEither { source -> source.refresh() }
+                .toObservable()
+                .mapRight { it.map { it.toDomain() } }
         }
         .firstElement()
 }
@@ -82,5 +84,13 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
     remindersAtMs = remindersAtMs?.map { it.toString() },
     currentRepeat = currentRepeat,
     totalRepeats = totalRepeats,
-    goalId = goalId
+    goalId = goalId,
+    custom = custom
+)
+
+private fun ActionEntity.toDomain() = Action(
+    currentRepeat = if(totalRepeats == 1) null else currentRepeat,
+    repeats = if(totalRepeats == 1) null else totalRepeats,
+    custom = custom,
+    finished = currentRepeat == totalRepeats
 )

@@ -65,13 +65,15 @@ class ActionsFirebaseService @Inject constructor(
 private data class ParsableActionResponse(
     @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindersAtMs: List<Long>? = null,
     @get:PropertyName("repeats_current") @set:PropertyName("repeats_current") var currentRepeat: Int? = null,
-    @get:PropertyName("repeats_max") @set:PropertyName("repeats_max") var totalRepeats: Int? = null
+    @get:PropertyName("repeats_max") @set:PropertyName("repeats_max") var totalRepeats: Int? = null,
+    @get:PropertyName("custom") @set:PropertyName("custom") var custom: Boolean = false
 ) {
 
     fun toActionResponse(id: String) = ActionResponse(
         id = id,
         remindersAtMs = remindersAtMs,
         currentRepeat = currentRepeat!!,
-        totalRepeats = totalRepeats!!
+        totalRepeats = totalRepeats!!,
+        custom = custom
     )
 }

@@ -57,6 +57,9 @@ class UserRepository @Inject constructor(
 
         }
         .toObservable()
+        .replay(1)
+        .refCount()
+
 }
 
 private fun UserMetadataResponse.toUserEntity() = UserEntity(

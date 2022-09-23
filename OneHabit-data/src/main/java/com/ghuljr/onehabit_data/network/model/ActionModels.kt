@@ -4,5 +4,6 @@ data class ActionResponse(
     val id: String,
     val remindersAtMs: List<Long>?,
     val currentRepeat: Int,
-    val totalRepeats: Int
+    val totalRepeats: Int,
+    val custom: Boolean
 )

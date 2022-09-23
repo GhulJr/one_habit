@@ -13,6 +13,7 @@ data class ActionEntity(
     @Unique(onConflict = ConflictStrategy.REPLACE) override var id: String,
     @Index var goalId: String,
     @Index override var userId: String,
+    var custom: Boolean,
     var remindersAtMs: List<String>?,
     var currentRepeat: Int,
     var totalRepeats: Int
