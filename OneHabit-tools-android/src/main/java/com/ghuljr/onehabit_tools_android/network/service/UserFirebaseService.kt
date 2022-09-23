@@ -1,8 +1,6 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
-import com.ghuljr.onehabit_data.domain.UserHabitData
-import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.model.UserMetadataResponse
 import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError

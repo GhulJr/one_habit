@@ -25,17 +25,40 @@ class UserMetadataDatabase @Inject constructor(
 
     override val userId: String = "" // Not required
 
-    fun userMetadata(userId: String): Flowable<DataSource.CacheWithTime<UserEntity>> = RxQuery.observable(
-        box.query().equal(UserEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE).build()
-    ).map {
-       DataSource.CacheWithTime(
-           value = it.firstOrNone(),
-           dueToInMillis = cacheBox.query()
-               .equal(UserEntityHolder_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
-               .build()
-               .findUnique()
-               ?.dueToInMillis ?: 0L
-       )
+    fun userMetadata(userId: String): Flowable<DataSource.CacheWithTime<UserEntity>> =
+        RxQuery.observable(
+            box.query().equal(UserEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+                .build()
+        ).map {
+            DataSource.CacheWithTime(
+                value = it.firstOrNone(),
+                dueToInMillis = cacheBox.query()
+                    .equal(UserEntityHolder_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+                    .build()
+                    .findUnique()
+                    ?.dueToInMillis ?: 0L
+            )
+        }
+            .toFlowable(BackpressureStrategy.BUFFER)
+
+    fun removeUser(userId: String) {
+        box.query()
+            .equal(UserEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .build()
+            .remove()
     }
-        .toFlowable(BackpressureStrategy.BUFFER)
+
+    fun replaceUser(userId: String, userEntity: UserEntity?, dueToMs: Long) {
+        if (userEntity == null)
+            removeUser(userId)
+        else {
+            put()
+            cacheBox.put(
+                UserEntityHolder(
+                    userId = userId,
+                    dueToInMillis = dueToMs
+                )
+            )
+        }
+    }
 }
