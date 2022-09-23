@@ -17,5 +17,5 @@ interface ServicesModule {
 
     @Binds
     @Singleton
-    fun actionsService(impl: ActionsService): ActionsFirebaseService
+    fun actionsService(impl: ActionsFirebaseService): ActionsService
 }
