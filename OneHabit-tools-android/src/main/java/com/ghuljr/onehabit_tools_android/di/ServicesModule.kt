@@ -2,8 +2,10 @@ package com.ghuljr.onehabit_tools_android.di
 
 import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.network.service.LoggedInUserService
+import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_tools_android.network.service.ActionsFirebaseService
 import com.ghuljr.onehabit_tools_android.network.service.LoggedInUserFirebaseService
+import com.ghuljr.onehabit_tools_android.network.service.UserFirebaseService
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -18,4 +20,8 @@ interface ServicesModule {
     @Binds
     @Singleton
     fun actionsService(impl: ActionsFirebaseService): ActionsService
+
+    @Binds
+    @Singleton
+    fun userService(impl: UserFirebaseService): UserService
 }

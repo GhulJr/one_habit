@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_data.repository
 
+import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import io.reactivex.rxjava3.core.Scheduler
@@ -9,7 +10,8 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
-    @NetworkScheduler private val networkScheduler: Scheduler
+    @NetworkScheduler private val networkScheduler: Scheduler,
+    private val userService: UserService
 ) {
 
 }

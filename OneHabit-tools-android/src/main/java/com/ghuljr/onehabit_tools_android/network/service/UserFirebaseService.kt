@@ -20,7 +20,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserFirebaseStorage @Inject constructor(
+class UserFirebaseService @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler
 ): UserService {
 

@@ -32,14 +32,6 @@ class ActionDatabase @AssistedInject constructor(
     @Assisted override val userId: String
 ) : BaseDatabase<ActionEntity>() {
 
-    override val dataFlowable: Flowable<List<ActionEntity>> = RxQuery.observable(
-        box.query()
-            .equal(ActionEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
-            .build()
-    )
-        .toFlowable(BackpressureStrategy.BUFFER)
-        .subscribeOn(computationScheduler)
-
     fun getActionsByGoalId(goalId: String): Flowable<DataSource.CacheWithTime<List<ActionEntity>>> =
         RxQuery.observable(
             box.query().equal(ActionEntity_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
