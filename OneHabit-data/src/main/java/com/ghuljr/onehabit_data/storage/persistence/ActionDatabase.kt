@@ -27,7 +27,7 @@ import io.reactivex.rxjava3.core.Scheduler
 
 class ActionDatabase @AssistedInject constructor(
     override val box: Box<ActionEntity>,
-    val cacheBox: Box<ActionOfGoalEntitiesHolder>,
+    private val cacheBox: Box<ActionOfGoalEntitiesHolder>,
     @ComputationScheduler override val computationScheduler: Scheduler,
     @Assisted override val userId: String
 ) : BaseDatabase<ActionEntity>() {
@@ -41,24 +41,18 @@ class ActionDatabase @AssistedInject constructor(
         .subscribeOn(computationScheduler)
 
     fun getActionsByGoalId(goalId: String): Flowable<Either<NoDataError, DataSource.CacheWithTime<List<ActionEntity>>>> =
-        RxQuery.observable(
-            cacheBox.query()
-                .equal(ActionOfGoalEntitiesHolder_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
-                .build()
-        )
-            .switchMap {
-                if (it.isNullOrEmpty()) {
-                    Observable.just(NoDataError.left())
-                }
-                else {
-                    val holder = it.first()
-                    RxQuery.observable(box.query()
-                        .filter { action -> holder.actionIds.contains(action.id) }
-                        .build()
-                    ).map { actions -> DataSource.CacheWithTime(actions.some(), holder.dueToInMillis).right() }
-                }
+        RxQuery.observable<ActionEntity>(box.query().equal(ActionEntity_.goalId, goalId).build())
+            .map { actions ->
+                if (actions.isEmpty()) NoDataError.left()
+                else DataSource.CacheWithTime(
+                    value = actions.some(),
+                    dueToInMillis = cacheBox.query()
+                        .equal(ActionOfGoalEntitiesHolder_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+                        .build().findUnique()?.dueToInMillis ?: 0L
+                ).right()
             }
             .toFlowable(BackpressureStrategy.BUFFER)
+            .subscribeOn(computationScheduler)
 
 
     @AssistedFactory

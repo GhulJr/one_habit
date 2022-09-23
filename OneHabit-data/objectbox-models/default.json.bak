@@ -73,7 +73,9 @@
         {
           "id": "5:2232988884819504025",
           "name": "goalId",
-          "type": 9
+          "indexId": "2:5059702026883926286",
+          "type": 9,
+          "flags": 2048
         }
       ],
       "relations": [
@@ -86,7 +88,7 @@
     }
   ],
   "lastEntityId": "3:1790529967904143850",
-  "lastIndexId": "1:4024654593842445342",
+  "lastIndexId": "2:5059702026883926286",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

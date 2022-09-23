@@ -9,6 +9,7 @@ import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.persistence.ActionDatabase
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
 import io.reactivex.rxjava3.core.BackpressureStrategy
@@ -25,22 +26,22 @@ class ActionsRepository @Inject constructor(
     private val actionsService: ActionsService,
     private val actionsDatabaseFactory: ActionDatabase.Factory,
     private val loggedInUserRepository: LoggedInUserRepository,
-    memoryCacheFactory: MemoryCache.Factory<Unit, ActionDatabase>
+    private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>
 ) {
 
-    private val todayActionCache = memoryCacheFactory.create { actionsDatabaseFactory.create(it.userId) }
-
-    private val source = DataSource(
-        refreshInterval = 1,
-        refreshIntervalUnit = TimeUnit.DAYS,
-        cachedDataFlowable = todayActionCache.get()
-            .switchMapRight { database ->
-                database.dataFlowable
-                    .map { list -> DataSource.CacheWithTime(list.some(), list.firstOrNull()?.dueToInMillis ?: 0L) }
-            },
-        fetch = { actionsService.getActionsFromGoal().toSingle().map {  } }
-    )
+    private val todayActionCache = memoryCacheFactory.create { key ->
+        val actionsDb = actionsDatabaseFactory.create(key.userId)
+        DataSource(
+            refreshInterval = 1,
+            refreshIntervalUnit = TimeUnit.DAYS,
+            cachedDataFlowable = actionsDb.getActionsByGoalId(key.customKey!!),
+            fetch = { actionsService.getActionsFromGoal(key.customKey).toSingle().mapRight { it.toStorageModel() } },
+            invalidateAndUpdate = { newCache -> }
+        )
+    }
 }
+
+private fun List<ActionResponse>.toStorageModel() = map { it.toStorageModel() }
 
 private fun ActionResponse.toStorageModel() = ActionEntity(
     userId = id,

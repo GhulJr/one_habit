@@ -30,7 +30,7 @@ import kotlin.math.abs
 class DataSource<V>(
     private val refreshInterval: Long = 5L,
     private val refreshIntervalUnit: TimeUnit = TimeUnit.MINUTES,
-    private val cachedDataFlowable: Flowable<Either<LoggedOutError, CacheWithTime<V>>>,
+    private val cachedDataFlowable: Flowable<Either<NoDataError, CacheWithTime<V>>>,
     private val fetch: () -> Single<Either<BaseError, V>>,
     private val invalidateAndUpdate: (CacheWithTime<V>) -> Option<V>,
     private val computationScheduler: Scheduler,
