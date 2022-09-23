@@ -25,7 +25,6 @@ class HabitDatabase @AssistedInject constructor(
     @ComputationScheduler override val computationScheduler: Scheduler
 ) : BaseDatabase<HabitEntity>() {
 
-
     fun getHabit(habitId: String): Flowable<DataSource.CacheWithTime<HabitEntity>> =
         RxQuery.observable(
             box.query().equal(HabitEntity_.id, habitId, QueryBuilder.StringOrder.CASE_SENSITIVE)
@@ -42,6 +41,25 @@ class HabitDatabase @AssistedInject constructor(
         }
             .toFlowable(BackpressureStrategy.BUFFER)
             .subscribeOn(computationScheduler)
+
+    fun removeHabit(habitId: String) {
+        box.query().equal(HabitEntity_.id, habitId, QueryBuilder.StringOrder.CASE_SENSITIVE).build().remove()
+    }
+
+    fun replaceHabit(habitId: String, habit: HabitEntity?, dueToMs: Long) {
+        if(habit == null)
+            removeHabit(habitId)
+        else {
+            put(habit)
+            cacheBox.put(
+                HabitEntityHolder(
+                    habitId = habitId,
+                    userId = habit.userId,
+                    dueToInMillis = dueToMs
+                )
+            )
+        }
+    }
 
     @AssistedFactory
     interface Factory {

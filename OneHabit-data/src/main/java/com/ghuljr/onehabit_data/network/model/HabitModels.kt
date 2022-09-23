@@ -2,6 +2,7 @@ package com.ghuljr.onehabit_data.network.model
 
 data class HabitResponse(
     val userId: String,
+    val id: String,
     val currentProgress: Int,
     val defaultProgressFactor: Int,
     val defaultRemindersMs: List<Long>?,

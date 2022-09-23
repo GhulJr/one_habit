@@ -33,7 +33,7 @@ class HabitFirebaseService @Inject constructor(
         .toSingle()
         .toRx3()
         .toMaybe()
-        .map { it.getValue(ParsableHabitResponse::class.java)!!.toHabitResponse(userId) }
+        .map { it.getValue(ParsableHabitResponse::class.java)!!.toHabitResponse(userId, habitId) }
         .leftOnThrow()
         .subscribeOn(networkScheduler)
 
@@ -57,8 +57,9 @@ private class ParsableHabitResponse(
     @get:PropertyName("what") @set:PropertyName("what") var habitSubject: String? = null,
     @get:PropertyName("which_days") @set:PropertyName("which_days") var settlingFormat: Int = 0
 ) {
-    fun toHabitResponse(userId: String) = HabitResponse(
+    fun toHabitResponse(userId: String, habitId: String) = HabitResponse(
         userId = userId,
+        id = habitId,
         currentProgress = currentProgress,
         defaultProgressFactor = defaultProgressFactor,
         defaultRemindersMs = defaultRemindersMs,
