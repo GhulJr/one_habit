@@ -30,9 +30,9 @@ import kotlin.math.abs
 class DataSource<V>(
     private val refreshInterval: Long = 5L,
     private val refreshIntervalUnit: TimeUnit = TimeUnit.MINUTES,
-    private val cachedDataFlowable: Flowable<Either<NoDataError, CacheWithTime<V>>>,
+    private val cachedDataFlowable: Flowable<CacheWithTime<V>>,
     private val fetch: () -> Single<Either<BaseError, V>>,
-    private val invalidateAndUpdate: (CacheWithTime<V>) -> Option<V>,
+    private val invalidateAndUpdate: (CacheWithTime<V>) -> Unit,
     private val computationScheduler: Scheduler,
     private val networkScheduler: Scheduler,
     private val singleThreadScheduler: Scheduler = Schedulers.from(Executors.newSingleThreadExecutor())
@@ -47,9 +47,8 @@ class DataSource<V>(
 
     /** Flowable that emits current data, or error when data is not present or fetch failed **/
     val dataFlowable: Flowable<Either<BaseError, V>> = cachedDataFlowable
-        .mapLeft { it as BaseError }
         .compose { flowable ->
-            flowable.switchMapRightWithEither { cacheWithTime ->
+            flowable.switchMap { cacheWithTime ->
                 Flowable.merge(
                     refreshProcessor,
                     Flowable.interval(
@@ -99,6 +98,7 @@ class DataSource<V>(
             )
         )
     }
+        .map { valueOption }
         .subscribeOn(singleThreadScheduler)
         .observeOn(computationScheduler)
 

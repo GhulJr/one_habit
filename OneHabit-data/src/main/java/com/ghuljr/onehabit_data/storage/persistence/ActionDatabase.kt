@@ -40,20 +40,46 @@ class ActionDatabase @AssistedInject constructor(
         .toFlowable(BackpressureStrategy.BUFFER)
         .subscribeOn(computationScheduler)
 
-    fun getActionsByGoalId(goalId: String): Flowable<Either<NoDataError, DataSource.CacheWithTime<List<ActionEntity>>>> =
-        RxQuery.observable<ActionEntity>(box.query().equal(ActionEntity_.goalId, goalId).build())
+    fun getActionsByGoalId(goalId: String): Flowable<DataSource.CacheWithTime<List<ActionEntity>>> =
+        RxQuery.observable(
+            box.query().equal(ActionEntity_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+                .build()
+        )
             .map { actions ->
-                if (actions.isEmpty()) NoDataError.left()
-                else DataSource.CacheWithTime(
+                DataSource.CacheWithTime(
                     value = actions.some(),
                     dueToInMillis = cacheBox.query()
                         .equal(ActionOfGoalEntitiesHolder_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
                         .build().findUnique()?.dueToInMillis ?: 0L
-                ).right()
+                )
             }
             .toFlowable(BackpressureStrategy.BUFFER)
             .subscribeOn(computationScheduler)
 
+    fun removeActionsForGoal(goalId: String) {
+        box.query().equal(ActionEntity_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .build().remove()
+        cacheBox.query()
+            .equal(ActionOfGoalEntitiesHolder_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .build().remove()
+    }
+
+    fun replaceActionsForGoal(
+        goalId: String,
+        userId: String,
+        dueToInMillis: Long,
+        actions: List<ActionEntity>
+    ) {
+        removeActionsForGoal(goalId)
+        put(*actions.toTypedArray())
+        cacheBox.put(
+            ActionOfGoalEntitiesHolder(
+                userId = userId,
+                goalId = goalId,
+                dueToInMillis = dueToInMillis
+            )
+        )
+    }
 
     @AssistedFactory
     interface Factory {
