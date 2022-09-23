@@ -86,7 +86,7 @@
     },
     {
       "id": "4:4532424345809850458",
-      "lastPropertyId": "6:4268756860707286236",
+      "lastPropertyId": "7:6472905798330148046",
       "name": "UserEntity",
       "properties": [
         {
@@ -121,6 +121,11 @@
           "id": "6:4268756860707286236",
           "name": "goalId",
           "type": 9
+        },
+        {
+          "id": "7:6472905798330148046",
+          "name": "extraHabits",
+          "type": 30
         }
       ],
       "relations": []
@@ -150,10 +155,117 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:5642797105425754041",
+      "lastPropertyId": "13:5259480093739271843",
+      "name": "HabitEntity",
+      "properties": [
+        {
+          "id": "1:1261210152441871904",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2570779884332345835",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:5375277934068774239",
+          "name": "id",
+          "indexId": "7:40419422467491772",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "4:1356962729568712367",
+          "name": "currentProgress",
+          "type": 5
+        },
+        {
+          "id": "5:7620146499745861096",
+          "name": "defaultProgressFactor",
+          "type": 5
+        },
+        {
+          "id": "6:2381379727407770521",
+          "name": "defaultRemindersMs",
+          "type": 30
+        },
+        {
+          "id": "7:3751161154466330300",
+          "name": "baseIntensity",
+          "type": 5
+        },
+        {
+          "id": "8:1038168411662078981",
+          "name": "desiredIntensity",
+          "type": 5
+        },
+        {
+          "id": "9:1715241441476389373",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "10:3516563301945022139",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "11:1627727397844996645",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "12:976860119239630160",
+          "name": "habitSubject",
+          "type": 9
+        },
+        {
+          "id": "13:5259480093739271843",
+          "name": "settlingFormat",
+          "type": 5
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:5691044738079520659",
+      "lastPropertyId": "4:1546052049435809213",
+      "name": "HabitEntityHolder",
+      "properties": [
+        {
+          "id": "1:2059802020940070271",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8069063532690414664",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:6588942568686935509",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:1546052049435809213",
+          "name": "habitId",
+          "indexId": "8:4975524384784603418",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:3378584687843120445",
-  "lastIndexId": "6:8146704568316827460",
+  "lastEntityId": "7:5691044738079520659",
+  "lastIndexId": "8:4975524384784603418",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

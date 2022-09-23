@@ -40,6 +40,7 @@ class UserMetadataDatabase @Inject constructor(
             )
         }
             .toFlowable(BackpressureStrategy.BUFFER)
+            .subscribeOn(computationScheduler)
 
     fun removeUser(userId: String) {
         box.query()
