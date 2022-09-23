@@ -15,11 +15,6 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "junit:junit:$junit_version"
 
-    // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-jackson:$retrofit_version"
-    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:$rxjava3retrofit_version"
-
     // ObjectBox
     implementation "io.objectbox:objectbox-kotlin:$objectbox_version"
     implementation "io.objectbox:objectbox-rxjava3:$objectbox_version"

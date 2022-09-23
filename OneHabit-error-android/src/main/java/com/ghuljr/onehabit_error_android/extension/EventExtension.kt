@@ -32,8 +32,6 @@ fun BaseEvent.drawableForEvent(context: Context): Drawable? = when (this) {
     else -> null
 }
 
-fun <L, R> Either<L, R>.orLoggedOutError(): Either<BaseError, R> = mapLeft { LoggedOutError }
-
 fun NetworkError.textForNetworkError(resources: Resources): String = when (this) {
     is NetworkError.NoNetwork -> resources.getString(R.string.error_no_network)
     is NetworkError.ServerUnavailable -> resources.getString(R.string.error_server_unavailable)

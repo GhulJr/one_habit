@@ -66,6 +66,24 @@ fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (
         }
     }
 
+fun <L, OLD_R, NEW_R> Maybe<Either<L, OLD_R>>.flatMapRight(onRight: (OLD_R) -> Maybe<NEW_R>): Maybe<Either<L, NEW_R>> =
+    compose { maybe ->
+        maybe.flatMap {
+            it.fold(
+                { left -> maybe.map { left.left() } },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Maybe<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (OLD_R) -> Maybe<Either<L, NEW_R>>): Maybe<Either<L, NEW_R>> =
+    compose { maybe ->
+        maybe.flatMap {
+            it.fold(
+                { left -> maybe.map { left.left() } },
+                { right -> onRight(right) })
+        }
+    }
+
 // map
 fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.mapRight(onRight: (OLD_R) -> NEW_R): Single<Either<L, NEW_R>> = map {
     it.map { right -> onRight(right) }
