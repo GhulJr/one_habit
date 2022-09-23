@@ -33,8 +33,8 @@ class ActionsRepository @Inject constructor(
     private val todayActionCache = memoryCacheFactory.create { key ->
         val actionsDb = actionsDatabaseFactory.create(key.userId)
         DataSource(
-            refreshInterval = 10,
-            refreshIntervalUnit = TimeUnit.SECONDS,
+            refreshInterval = 1,
+            refreshIntervalUnit = TimeUnit.HOURS,
             cachedDataFlowable = actionsDb.getActionsByGoalId(key.customKey!!),
             fetch = {
                 actionsService.getActionsFromGoal(key.customKey, key.userId).toSingle()
