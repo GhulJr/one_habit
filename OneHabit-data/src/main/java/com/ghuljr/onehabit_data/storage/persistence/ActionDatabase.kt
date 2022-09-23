@@ -1,8 +1,8 @@
 package com.ghuljr.onehabit_data.storage.persistence
 
 import com.ghuljr.onehabit_data.base.storage.BaseDatabase
-import com.ghuljr.onehabit_data.storage.model.ActionEntity
-import com.ghuljr.onehabit_data.storage.model.ActionEntity_
+import com.ghuljr.onehabit_data.storage.model.ActionOfGoalEntitiesHolder
+import com.ghuljr.onehabit_data.storage.model.ActionOfGoalEntitiesHolder_
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -12,20 +12,18 @@ import io.objectbox.query.QueryBuilder
 import io.objectbox.rx3.RxQuery
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import javax.inject.Inject
 
 
 class ActionDatabase @AssistedInject constructor(
-    override val box: Box<ActionEntity>,
+    override val box: Box<ActionOfGoalEntitiesHolder>,
     @ComputationScheduler override val computationScheduler: Scheduler,
     @Assisted override val userId: String
-) : BaseDatabase<ActionEntity>() {
+) : BaseDatabase<ActionOfGoalEntitiesHolder>() {
 
-    override val dataFlowable: Flowable<List<ActionEntity>> = RxQuery.observable(
+    override val dataFlowable: Flowable<List<ActionOfGoalEntitiesHolder>> = RxQuery.observable(
         box.query()
-            .equal(ActionEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .equal(ActionOfGoalEntitiesHolder_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
             .build()
     )
         .toFlowable(BackpressureStrategy.BUFFER)

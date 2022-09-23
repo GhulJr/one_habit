@@ -1,11 +1,8 @@
 package com.ghuljr.onehabit_data.base.storage
 
 import io.objectbox.Box
-import io.objectbox.rx3.RxQuery
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.internal.schedulers.ComputationScheduler
 
 abstract class BaseDatabase<ENTITY : BaseEntity> {
 

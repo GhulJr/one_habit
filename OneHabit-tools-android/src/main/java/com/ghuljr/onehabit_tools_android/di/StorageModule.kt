@@ -1,12 +1,12 @@
 package com.ghuljr.onehabit_tools_android.di
 
 import android.content.Context
+import com.ghuljr.onehabit_data.storage.model.ActionOfGoalEntitiesHolder
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.model.MyObjectBox
 import com.ghuljr.onehabit_data.storage.persistence.Preferences
 import com.ghuljr.onehabit_tools.di.ForApplication
 import com.ghuljr.onehabit_tools_android.base.storage.persistence.PreferencesImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import io.objectbox.Box
@@ -30,4 +30,8 @@ class StorageModule {
     @Provides
     @Singleton
     fun actionBox(boxStore: BoxStore): Box<ActionEntity> = boxStore.boxFor(ActionEntity::class.java)
+
+    @Provides
+    @Singleton
+    fun actionHolderBox(boxStore: BoxStore): Box<ActionOfGoalEntitiesHolder> = boxStore.boxFor(ActionOfGoalEntitiesHolder::class.java)
 }

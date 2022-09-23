@@ -17,17 +17,14 @@
         {
           "id": "2:3389447004492817083",
           "name": "id",
-          "type": 9
+          "indexId": "1:4024654593842445342",
+          "type": 9,
+          "flags": 2048
         },
         {
           "id": "3:120234604359481557",
           "name": "userId",
           "type": 9
-        },
-        {
-          "id": "4:7762414669914543237",
-          "name": "dueToInMillis",
-          "type": 6
         },
         {
           "id": "5:9206139248513794813",
@@ -46,17 +43,59 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "2:4404177628123626710",
+      "lastPropertyId": "5:3245260505064365429",
+      "name": "ActionEntitiesHolder",
+      "properties": [
+        {
+          "id": "1:3524043416970328952",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1120836133775428088",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:8142895953592524759",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:2125651765535187419",
+          "name": "goalId",
+          "type": 9
+        },
+        {
+          "id": "5:3245260505064365429",
+          "name": "actionIds",
+          "type": 30
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:3025695076431287356",
+          "name": "actions",
+          "targetId": "1:9044374626221534936"
+        }
+      ]
     }
   ],
-  "lastEntityId": "1:9044374626221534936",
-  "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastEntityId": "2:4404177628123626710",
+  "lastIndexId": "1:4024654593842445342",
+  "lastRelationId": "1:3025695076431287356",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    7762414669914543237
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

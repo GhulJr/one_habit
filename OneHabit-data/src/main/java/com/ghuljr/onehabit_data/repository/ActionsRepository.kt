@@ -25,12 +25,12 @@ class ActionsRepository @Inject constructor(
     private val actionsService: ActionsService,
     private val actionsDatabaseFactory: ActionDatabase.Factory,
     private val loggedInUserRepository: LoggedInUserRepository,
-    memoryCacheFactory: MemoryCache.Factory // TODO: by default the key should be day id. Actions might be separated, though
+    memoryCacheFactory: MemoryCache.Factory<Unit, ActionDatabase>
 ) {
 
-    private val todayActionCache = memoryCacheFactory.create<Unit, ActionDatabase> { actionsDatabaseFactory.create(it.userId) }
+    private val todayActionCache = memoryCacheFactory.create { actionsDatabaseFactory.create(it.userId) }
 
-    private val source = DataSource(
+/*    private val source = DataSource(
         refreshInterval = 1,
         refreshIntervalUnit = TimeUnit.DAYS,
         cachedDataFlowable = todayActionCache.get()
@@ -41,9 +41,13 @@ class ActionsRepository @Inject constructor(
                     }
             },
         fetch = () -> { actionsService.getActionsFromGoal().toSingle().map {  } }
-    )
+    )*/
 }
 
-private fun ActionResponse.toStorageModel(dueToInMs: ) = ActionEntity(
+/*
+private fun ActionResponse.toStorageModel() = ActionEntity(
     userId = id,
-)
+    remindersAtMs = remindersAtMs?.map { it.toString() },
+    currentRepeat = currentRepeat,
+    totalRepeats = totalRepeats
+)*/
