@@ -11,7 +11,9 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.internal.api.FirebaseNoSignedInUserException
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 fun FirebaseAuthException.toError(): BaseError = when (this) {
@@ -54,6 +56,18 @@ fun <R: Any> Single<R>.leftOnThrow(): Single<Either<BaseError, R>> = map { it.ri
         }
 
 fun <R: Any> Maybe<R>.leftOnThrow(): Maybe<Either<BaseError, R>> = map { it.right() as Either<BaseError, R> }
+    .onErrorReturn {
+        Log.e("Handled exception", "", it)
+        it.toError().left()
+    }
+
+fun <R: Any> Flowable<R>.leftOnThrow(): Flowable<Either<BaseError, R>> = map { it.right() as Either<BaseError, R> }
+    .onErrorReturn {
+        Log.e("Handled exception", "", it)
+        it.toError().left()
+    }
+
+fun <R: Any> Observable<R>.leftOnThrow(): Observable<Either<BaseError, R>> = map { it.right() as Either<BaseError, R> }
     .onErrorReturn {
         Log.e("Handled exception", "", it)
         it.toError().left()

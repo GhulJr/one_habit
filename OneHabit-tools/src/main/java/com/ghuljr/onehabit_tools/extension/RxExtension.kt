@@ -76,6 +76,33 @@ fun <L, OLD_R, NEW_R> Flowable<Either<L, OLD_R>>.switchMapSingleRight(onRight: (
         }
     }
 
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRight(onRight: (OLD_R) -> Observable<NEW_R>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                { left -> flowable.map { left.left() } },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRightWithEither(onRight: (OLD_R) -> Observable<Either<L, NEW_R>>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                { left -> flowable.map { left.left() } },
+                { right -> onRight(right) })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapSingleRight(onRight: (OLD_R) -> Single<NEW_R>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapSingle {
+            it.fold(
+                { left -> Single.just(left.left()) },
+                { right -> onRight(right).map { it.right() } })
+        }
+    }
+
 // flatMap
 fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.flatMapRight(onRight: (OLD_R) -> Single<NEW_R>): Single<Either<L, NEW_R>> =
     compose { single ->

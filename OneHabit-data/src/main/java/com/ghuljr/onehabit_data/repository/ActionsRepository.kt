@@ -30,24 +30,21 @@ class ActionsRepository @Inject constructor(
 
     private val todayActionCache = memoryCacheFactory.create { actionsDatabaseFactory.create(it.userId) }
 
-/*    private val source = DataSource(
+    private val source = DataSource(
         refreshInterval = 1,
         refreshIntervalUnit = TimeUnit.DAYS,
         cachedDataFlowable = todayActionCache.get()
             .switchMapRight { database ->
                 database.dataFlowable
-                    .map { list ->
-                        DataSource.CacheWithTime(list.some(), list.firstOrNull()?.dueToInMillis ?: 0L)
-                    }
+                    .map { list -> DataSource.CacheWithTime(list.some(), list.firstOrNull()?.dueToInMillis ?: 0L) }
             },
-        fetch = () -> { actionsService.getActionsFromGoal().toSingle().map {  } }
-    )*/
+        fetch = { actionsService.getActionsFromGoal().toSingle().map {  } }
+    )
 }
 
-/*
 private fun ActionResponse.toStorageModel() = ActionEntity(
     userId = id,
     remindersAtMs = remindersAtMs?.map { it.toString() },
     currentRepeat = currentRepeat,
     totalRepeats = totalRepeats
-)*/
+)
