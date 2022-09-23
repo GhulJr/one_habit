@@ -53,7 +53,7 @@ class UserMetadataDatabase @Inject constructor(
         if (userEntity == null)
             removeUser(userId)
         else {
-            put()
+            put(userEntity)
             cacheBox.put(
                 UserEntityHolder(
                     userId = userId,

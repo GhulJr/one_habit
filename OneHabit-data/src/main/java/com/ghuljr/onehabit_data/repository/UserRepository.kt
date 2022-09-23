@@ -12,9 +12,11 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.toEither
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import java.util.concurrent.TimeUnit
@@ -28,7 +30,6 @@ class UserRepository @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler,
     private val userService: UserService,
     private val userMetadataDatabase: UserMetadataDatabase,
-    private val loggedInUserRepository: LoggedInUserRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<UserEntity>>
 ) {
 
@@ -38,28 +39,28 @@ class UserRepository @Inject constructor(
             refreshIntervalUnit = TimeUnit.DAYS,
             cachedDataFlowable = userMetadataDatabase.userMetadata(key.userId),
             fetch = {
-                userService.getUserMetadata(key.userId).toSingle().mapRight { it.toUserEntity() }
+                userService.getUserMetadata(key.userId)
+                    .toSingle()
+                    .mapRight { it.toUserEntity() }
             },
-            invalidateAndUpdate = { data -> userMetadataDatabase.replaceUser(key.userId, data.value.orNull(), data.dueToInMillis) },
+            invalidateAndUpdate = { data ->
+                userMetadataDatabase.replaceUser(key.userId, data.value.orNull(), data.dueToInMillis)
+            },
             networkScheduler = networkScheduler,
             computationScheduler = computationScheduler
         )
     }
 
-    val currentUser: Observable<Either<BaseError, UserMetadata>> = loggedInUserRepository.userIdFlowable
-        .toEither { LoggedOutError as BaseError }
-        .switchMapRightWithEither {
-            cache.get()
-                .switchMapRightWithEither {
-                    it.dataFlowable
-                        .mapRight { it.toDomain() }
-                }
-
-        }
+    val currentUser: Observable<Either<BaseError, UserMetadata>> = cache.get()
+        .switchMapRightWithEither { it.dataFlowable.mapRight { it.toDomain() } }
         .toObservable()
         .replay(1)
         .refCount()
 
+    fun refreshUser(): Maybe<Either<BaseError, UserMetadata>> = cache.get()
+        .firstElement()
+        .flatMapRightWithEither { it.refresh() }
+        .mapRight { it.toDomain() }
 }
 
 private fun UserMetadataResponse.toUserEntity() = UserEntity(
