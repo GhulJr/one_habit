@@ -49,13 +49,13 @@ class MemoryCache<K, V> @AssistedInject constructor(
             .observeOn(computationScheduler)
 
     @AssistedFactory
-    interface Factory<K, V> {
+    interface Factory {
 
         /** Used to inject required arguments and implement provider manually
          * @param provider      method, that will create new data, if nothing is cached
          * @return              new instance of MemoryCache
          **/
-        fun create(provider: (ClassKey<K>) -> V): MemoryCache<K, V>
+        fun <K, V> create  (provider: (ClassKey<K>) -> V): MemoryCache<K, V>
     }
 }
 

@@ -1,11 +1,14 @@
 package com.ghuljr.onehabit_data.base.storage
 
-import io.objectbox.annotation.BaseEntity
-import io.objectbox.annotation.Id
 
-interface BaseEntity{
+interface BaseEntity {
     var objectBoxId: Long
+    var userId: String
     var id: String
+}
+
+interface BaseEntityHolder {
+    var objectBoxId: Long
     var userId: String
     var dueToInMillis: Long
 }

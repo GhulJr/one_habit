@@ -1,10 +1,8 @@
 package com.ghuljr.onehabit_tools.extension
 
 import arrow.core.*
-import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
-import io.reactivex.rxjava3.annotations.NonNull
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
@@ -16,6 +14,37 @@ import io.reactivex.rxjava3.core.Single
 fun <L, R> Flowable<Option<R>>.toEither(onEmptyToLeft: () -> L): Flowable<Either<L, R>> = map {
     it.toEither { onEmptyToLeft() }
 }
+
+// switchMap
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapDefined(onDefined: (OLD_R) -> Flowable<NEW_R>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                ifEmpty = { flowable.map { none() } },
+                ifSome = { some -> onDefined(some).map { it.some() } }
+            )
+        }
+    }
+
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapSingleDefined(onDefined: (OLD_R) -> Single<NEW_R>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMapSingle {
+            it.fold(
+                ifEmpty = { Single.just(none()) },
+                ifSome = { some -> onDefined(some).map { it.some() } }
+            )
+        }
+    }
+
+fun <OLD_R, NEW_R> Flowable<Option<OLD_R>>.switchMapDefinedWithOption(onDefined: (OLD_R) -> Flowable<Option<NEW_R>>): Flowable<Option<NEW_R>> =
+    compose { flowable ->
+        flowable.switchMap {
+            it.fold(
+                ifEmpty = { flowable.map { none() } },
+                ifSome = { some -> onDefined(some) }
+            )
+        }
+    }
 
 /** Either */
 

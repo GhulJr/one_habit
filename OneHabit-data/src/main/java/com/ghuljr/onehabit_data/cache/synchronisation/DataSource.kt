@@ -5,6 +5,7 @@ import arrow.core.Option
 import arrow.core.right
 import arrow.core.toOption
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Flowable
@@ -29,7 +30,7 @@ import kotlin.math.abs
 class DataSource<V>(
     private val refreshInterval: Long = 5L,
     private val refreshIntervalUnit: TimeUnit = TimeUnit.MINUTES,
-    private val cachedDataFlowable: Flowable<CacheWithTime<V>>,
+    private val cachedDataFlowable: Flowable<Either<LoggedOutError, CacheWithTime<V>>>,
     private val fetch: () -> Single<Either<BaseError, V>>,
     private val invalidateAndUpdate: (CacheWithTime<V>) -> Option<V>,
     private val computationScheduler: Scheduler,
@@ -46,8 +47,9 @@ class DataSource<V>(
 
     /** Flowable that emits current data, or error when data is not present or fetch failed **/
     val dataFlowable: Flowable<Either<BaseError, V>> = cachedDataFlowable
+        .mapLeft { it as BaseError }
         .compose { flowable ->
-            flowable.switchMap { cacheWithTime ->
+            flowable.switchMapRightWithEither { cacheWithTime ->
                 Flowable.merge(
                     refreshProcessor,
                     Flowable.interval(
