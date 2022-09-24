@@ -10,7 +10,6 @@ import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.persistence.ActionDatabase
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -90,8 +89,8 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
 
 private fun ActionEntity.toDomain() = Action(
     id = id,
-    currentRepeat = if(totalRepeats == 1) null else currentRepeat,
-    repeats = if(totalRepeats == 1) null else totalRepeats,
+    repeatCount = if(totalRepeats == 1) null else currentRepeat,
+    totalRepeats = if(totalRepeats == 1) null else totalRepeats,
     custom = custom,
     finished = currentRepeat == totalRepeats,
     reminders = remindersAtMs?.map { it.toLong() }

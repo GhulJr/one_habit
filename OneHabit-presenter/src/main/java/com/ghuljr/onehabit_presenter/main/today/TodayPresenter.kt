@@ -21,7 +21,6 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -94,18 +93,19 @@ class TodayPresenter @Inject constructor(
 
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
         id = id,
-        time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+        time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
             ?.timeToString(TIME_FORMAT),
-        quantity = currentRepeat?.let { current -> repeats?.let { max -> current to max } },
+        quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(habit.settlingFormat <= 0) to max } },
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject,
-        type = if (habit.settlingFormat <= 0) TodayActionItem.Type.WEEKLY else TodayActionItem.Type.DAILY
+        type = if (habit.settlingFormat <= 0) TodayActionItem.Type.WEEKLY else TodayActionItem.Type.DAILY,
+        exceeded = repeatCount != null && totalRepeats != null && repeatCount!! >= totalRepeats!!
     )
 
     private fun Action.toCustomActionItem(habit: Habit) = CustomActionItem(
         id = id,
-        time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+        time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
             ?.timeToString(TIME_FORMAT),
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
@@ -115,15 +115,15 @@ class TodayPresenter @Inject constructor(
     private fun Action.toFinishedActionItem(habit: Habit) =
         TodayActionFinishedItem(
             id = id,
-            time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+            time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
                 ?.timeToString(TIME_FORMAT),
-            quantity = currentRepeat?.let { current -> repeats?.let { max -> calculateCurrentRepeat(current) to max } },
+            quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(false) to max } },
             onActionClick = { selectItem(id) },
             habitTopic = habit.type,
             habitSubject = habit.habitSubject
         )
 
-    private fun calculateCurrentRepeat(currentRepeat: Int) = currentRepeat + 1
+    private fun Int.calculateCurrentRepeat(weekly: Boolean) = if(weekly) this else this + 1
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

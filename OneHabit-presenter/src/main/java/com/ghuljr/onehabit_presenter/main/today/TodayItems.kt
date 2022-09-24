@@ -20,7 +20,8 @@ data class TodayActionItem(
     override val onActionClick: () -> Unit,
     val habitTopic: HabitTopic,
     val habitSubject: String,
-    val type: Type
+    val type: Type,
+    val exceeded: Boolean
 ) : TodayItem.Action() {
 
     override fun theSame(item: UniqueItem): Boolean = compareTo(item)
