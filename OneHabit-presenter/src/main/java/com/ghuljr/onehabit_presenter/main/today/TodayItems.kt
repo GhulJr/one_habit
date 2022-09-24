@@ -1,39 +1,51 @@
 package com.ghuljr.onehabit_presenter.main.today
 
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
+import com.ghuljr.onehabit_tools.model.HabitTopic
 
 sealed interface TodayItem : UniqueItem {
 
     sealed class Action : TodayItem {
-        abstract val title: String
+        abstract val id: String
         abstract val time: String?
         abstract val quantity: Quantity?
         protected abstract val onActionClick: () -> Unit
     }
 }
 
-/*TODO: use ids to distinct items?*/
 data class TodayActionItem(
-    override val title: String,
+    override val id: String,
     override val time: String?,
     override val quantity: Quantity?,
-    override val onActionClick: () -> Unit
+    override val onActionClick: () -> Unit,
+    val habitTopic: HabitTopic,
+    val habitSubject: String,
+    val type: Type
 ) : TodayItem.Action() {
 
     override fun theSame(item: UniqueItem): Boolean = compareTo(item)
     override fun matches(item: UniqueItem): Boolean = compareTo(item)
 
     private fun compareTo(item: UniqueItem) = (item as? TodayActionItem)?.let {
-        it.title == title && it.time == time && it.quantity?.first == quantity?.first
+        it.id == id && it.time == time && it.quantity?.first == quantity?.first
     } ?: false
 
     fun openActionDetails() = onActionClick()
+    /*
+    * DAILY - if current == max repeat, then mark it as done
+    * WEEKLY - display a little bit different info, when current == max repeat, then change task name and label to Overflow: 0
+    * */
+    enum class Type {
+        DAILY, WEEKLY
+    }
 }
 
 data class CustomActionItem(
-    override val title: String,
+    override val id: String,
     override val time: String?,
-    override val onActionClick: () -> Unit
+    override val onActionClick: () -> Unit,
+    val habitTopic: HabitTopic,
+    val habitSubject: String
 ) : TodayItem.Action() {
 
     override val quantity: Quantity? = null
@@ -42,24 +54,26 @@ data class CustomActionItem(
     override fun matches(item: UniqueItem): Boolean = compareTo(item)
 
     private fun compareTo(item: UniqueItem) = (item as? CustomActionItem)?.let {
-        it.title == title && it.time == time
+        it.id == id && it.time == time
     } ?: false
 
     fun openActionDetails() = onActionClick()
 }
 
 data class TodayActionFinishedItem(
-    override val title: String,
+    override val id: String,
     override val time: String?,
     override val quantity: Quantity?,
-    override val onActionClick: () -> Unit
+    override val onActionClick: () -> Unit,
+    val habitTopic: HabitTopic,
+    val habitSubject: String
 ) : TodayItem.Action() {
 
     override fun theSame(item: UniqueItem): Boolean = compareTo(item)
     override fun matches(item: UniqueItem): Boolean = compareTo(item)
 
     private fun compareTo(item: UniqueItem) = (item as? TodayActionFinishedItem)?.let {
-        it.title == title && it.time == time && it.quantity?.first == quantity?.first
+        it.id == id && it.time == time && it.quantity?.first == quantity?.first
     } ?: false
 
     fun openActionDetails() = onActionClick()

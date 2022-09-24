@@ -89,6 +89,7 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
 )
 
 private fun ActionEntity.toDomain() = Action(
+    id = id,
     currentRepeat = if(totalRepeats == 1) null else currentRepeat,
     repeats = if(totalRepeats == 1) null else totalRepeats,
     custom = custom,
