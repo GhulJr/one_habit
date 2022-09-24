@@ -10,6 +10,7 @@ import com.ghuljr.onehabit.databinding.FragmentTodayBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.list.*
+import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_presenter.main.MainStep
 import com.ghuljr.onehabit_presenter.main.today.TodayItem
 import com.ghuljr.onehabit_presenter.main.today.TodayPresenter
@@ -58,5 +59,9 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
 
     override fun submitItems(items: List<TodayItem>) {
         todayAdapter.submitList(items)
+    }
+
+    override fun handleItemsError(error: BaseError) {
+        //TODO("Not yet implemented")
     }
 }
