@@ -6,5 +6,6 @@ data class Action(
     val currentRepeat: Int?,
     val repeats: Int?,
     val custom: Boolean,
-    val finished: Boolean
+    val finished: Boolean,
+    val reminders: List<Long>?
 )

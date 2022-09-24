@@ -15,14 +15,21 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.timeToString
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+// TODO: list finished items, that are on done state
+// TODO: make swipe refresh
+// TODO: handle loading and error
+// TODO: handle displaying details and confirming
+// TODO: handle adding and editing custom action
 // TODO: Add option to schedule/change reminder notification for specific task on go.
 @FragmentScope
 class TodayPresenter @Inject constructor(
@@ -56,7 +63,7 @@ class TodayPresenter @Inject constructor(
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (extraActions.isEmpty()) it else it.plus(AddActionItem { view.addCustomAction() }) }
+                    .let { if (extraActions.isEmpty()) it.plus(AddActionItem { view.addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
@@ -87,7 +94,8 @@ class TodayPresenter @Inject constructor(
 
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
         id = id,
-        time = null, // TODO: handle time,
+        time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+            ?.timeToString(TIME_FORMAT),
         quantity = currentRepeat?.let { current -> repeats?.let { max -> current to max } },
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
@@ -97,7 +105,8 @@ class TodayPresenter @Inject constructor(
 
     private fun Action.toCustomActionItem(habit: Habit) = CustomActionItem(
         id = id,
-        time = null, // TODO: handle time,
+        time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+            ?.timeToString(TIME_FORMAT),
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject
@@ -106,10 +115,17 @@ class TodayPresenter @Inject constructor(
     private fun Action.toFinishedActionItem(habit: Habit) =
         TodayActionFinishedItem(
             id = id,
-            time = null, // TODO: handle time,
-            quantity = currentRepeat?.let { current -> repeats?.let { max -> current to max } },
+            time = reminders?.getOrNull(maxOf((currentRepeat ?: Int.MAX_VALUE) - 1, 0))
+                ?.timeToString(TIME_FORMAT),
+            quantity = currentRepeat?.let { current -> repeats?.let { max -> calculateCurrentRepeat(current) to max } },
             onActionClick = { selectItem(id) },
             habitTopic = habit.type,
             habitSubject = habit.habitSubject
         )
+
+    private fun calculateCurrentRepeat(currentRepeat: Int) = currentRepeat + 1
+
+    companion object {
+        private const val TIME_FORMAT = "HH:mm"
+    }
 }

@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_tools.extension
 import com.ghuljr.onehabit_tools.extension.TimeConstants.getCurrentTimeInSeconds
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -20,6 +21,15 @@ fun Long.getRemainingTimeInSeconds(timeZone: TimeZone = Calendar.getInstance().t
 
 fun Long.isTimeReached(): Boolean = this - getCurrentTimeInSeconds() < 0
 
+fun Long.timeToString(format: String = "hh:mm", timeZone: TimeZone = TimeZone.getTimeZone("GMT")): String {
+    val formatter = SimpleDateFormat(format, Locale.getDefault()).apply { setTimeZone(timeZone) }
+    return formatter.format(Date(this))
+}
+
+fun Date.formatString(format: String = "hh:mm"): String {
+    val formatter = SimpleDateFormat(format, Locale.getDefault())
+    return formatter.format(this)
+}
 fun <T> Observable<T>.toCountdownTimer(startingValue: Long, scheduler: Scheduler): Observable<Long> = this.switchMap {
     if (startingValue < 0) Observable.just(0)
     else Observable.interval(1, TimeUnit.SECONDS, scheduler)
