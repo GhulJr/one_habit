@@ -19,6 +19,7 @@ import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.tool.ItemDivider
 
 /*TODO: add view, when all items are done, that will allow to edit finished items :) */
+// TODO: add loading
 class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresenter>(), TodayView {
 
     private val todayAdapter = ItemListAdapter(
@@ -49,7 +50,8 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
 
     override fun getPresenterView(): TodayView = this
 
-    override fun openDetails() {
+    // TODO: use action id
+    override fun openDetails(actionId: String) {
         ActionInfoBottomSheetDialog().show(childFragmentManager, null)
     }
 
@@ -62,6 +64,10 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     }
 
     override fun handleItemsError(error: BaseError) {
+        //TODO("Not yet implemented")
+    }
+
+    override fun handleLoading(loading: Boolean) {
         //TODO("Not yet implemented")
     }
 }
