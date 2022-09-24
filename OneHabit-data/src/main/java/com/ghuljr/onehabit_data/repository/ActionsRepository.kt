@@ -92,6 +92,6 @@ private fun ActionEntity.toDomain() = Action(
     repeatCount = if(totalRepeats == 1) null else currentRepeat,
     totalRepeats = if(totalRepeats == 1) null else totalRepeats,
     custom = custom,
-    finished = currentRepeat == totalRepeats,
+    finished = currentRepeat >= totalRepeats,
     reminders = remindersAtMs?.map { it.toLong() }
 )

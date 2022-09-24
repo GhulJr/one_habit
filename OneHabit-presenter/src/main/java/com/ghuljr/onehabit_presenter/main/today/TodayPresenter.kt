@@ -24,8 +24,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: list finished items, that are on done state
-// TODO: make swipe refresh
 // TODO: handle loading and error
 // TODO: handle displaying details and confirming
 // TODO: handle adding and editing custom action
@@ -37,28 +35,25 @@ class TodayPresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler
 ) : BasePresenter<TodayView>() {
 
-    private val retrySubject = PublishSubject.create<Unit>()
+    private val refreshSubject = PublishSubject.create<Unit>()
     private val selectItemSubject = PublishSubject.create<String>()
 
     private fun todayActionsItemsObservable(view: TodayView): Observable<Either<BaseEvent, List<TodayItem>>> =
-        retrySubject
-            .startWithItem(Unit)
-            .switchMap {
-                Observable.combineLatest(
-                    actionsRepository.todayActionsObservable,
-                    habitRepository.todayHabitObservable
-                ) { actionsEither, habitEither -> actionsEither.zip(habitEither) }
-            }
+        Observable.combineLatest(
+            actionsRepository.todayActionsObservable,
+            habitRepository.todayHabitObservable
+        ) { actionsEither, habitEither -> actionsEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
             .mapRight { (actions, habit) ->
                 val regularActions = actions
-                    .filterNot { it.finished || it.custom }
+                    .filterNot { it.finished && habit.settlingFormat != 0 }
+                    .filterNot { it.custom }
                     .map { it.toRegularActionItem(habit) as TodayItem }
                 val extraActions = actions
                     .filter { it.custom && !it.finished }
                     .map { it.toCustomActionItem(habit) as TodayItem }
                 val finishedActions = actions
-                    .filter { it.finished }
+                    .filter { it.finished && habit.settlingFormat != 0 }
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
@@ -86,8 +81,25 @@ class TodayPresenter @Inject constructor(
             },
         selectItemSubject
             .throttleFirst(500L, TimeUnit.MILLISECONDS, uiScheduler)
-            .subscribe { actionId -> view.openDetails(actionId) }
+            .subscribe { actionId -> view.openDetails(actionId) },
+        refreshSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, uiScheduler)
+            .switchMapMaybe { actionsRepository.refreshTodayActions() }
+            .mapLeft { it as BaseEvent }
+            .startWithItem(LoadingEvent.left())
+            .observeOn(uiScheduler)
+            .subscribe {
+                view.handleLoading(it.swap().orNull() is LoadingEvent)
+                it.tapLeft { event ->
+                    if (event is BaseError)
+                        view.handleItemsError(event)
+                }
+            }
+
+
     )
+
+    fun refresh() = refreshSubject.onNext(Unit)
 
     private fun selectItem(actionId: String) = selectItemSubject.onNext(actionId)
 
@@ -117,13 +129,13 @@ class TodayPresenter @Inject constructor(
             id = id,
             time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
                 ?.timeToString(TIME_FORMAT),
-            quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(false) to max } },
+            quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(true) to max } },
             onActionClick = { selectItem(id) },
             habitTopic = habit.type,
             habitSubject = habit.habitSubject
         )
 
-    private fun Int.calculateCurrentRepeat(weekly: Boolean) = if(weekly) this else this + 1
+    private fun Int.calculateCurrentRepeat(exeeded: Boolean) = if (exeeded) this else this + 1
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

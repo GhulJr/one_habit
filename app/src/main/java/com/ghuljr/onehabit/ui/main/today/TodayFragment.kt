@@ -40,6 +40,7 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
                 adapter = todayAdapter
                 addItemDecoration(ItemDivider(spanCount = 1, resources.getDimension(R.dimen.default_margin).toInt()))
             }
+            swipeRefresh.setOnRefreshListener { presenter.refresh() }
         }
     }
 
@@ -68,6 +69,6 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     }
 
     override fun handleLoading(loading: Boolean) {
-        //TODO("Not yet implemented")
+        viewBind.swipeRefresh.isRefreshing = loading
     }
 }

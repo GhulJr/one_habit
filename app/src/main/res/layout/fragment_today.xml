@@ -5,14 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.today.TodayFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/today_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:padding="@dimen/default_margin"
-        tools:itemCount="100"
-        tools:listitem="@layout/item_today_action" />
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:id="@+id/swipe_refresh"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/today_recycler_view"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:clipChildren="false"
+          android:clipToPadding="false"
+          android:padding="@dimen/default_margin"
+          tools:itemCount="100"
+          tools:listitem="@layout/item_today_action" />
+
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>
