@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.toEither
 import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 import com.google.firebase.database.ServerValue
@@ -58,8 +59,7 @@ class ActionsFirebaseService @Inject constructor(
         .child(userId)
         .child(actionId)
         .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(1)))
-        .toSingle()
-        .toRx3()
+        .asUnitSingle()
         .toMaybe()
         .leftOnThrow()
         .flatMapRightWithEither { getActionById(actionId, userId) }
@@ -71,8 +71,7 @@ class ActionsFirebaseService @Inject constructor(
         .child(userId)
         .child(actionId)
         .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(-1)))
-        .toSingle()
-        .toRx3()
+        .asUnitSingle()
         .toMaybe()
         .leftOnThrow()
         .flatMapRightWithEither { getActionById(actionId, userId) }

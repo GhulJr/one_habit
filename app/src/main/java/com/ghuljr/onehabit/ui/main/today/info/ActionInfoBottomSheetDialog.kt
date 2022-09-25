@@ -86,7 +86,7 @@ class ActionInfoBottomSheetDialog(
             nextTimes.apply {
                 val stringBuilder = SpannableStringBuilder()
                 item.reminders?.forEachIndexed { index, time ->
-                    if (index <= (item.quantity?.first ?: Int.MIN_VALUE))
+                    if (index + 1 <= (item.quantity?.first ?: Int.MIN_VALUE))
                         stringBuilder.append("-$time-", StrikethroughSpan(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else
                         stringBuilder.append("-$time-")
