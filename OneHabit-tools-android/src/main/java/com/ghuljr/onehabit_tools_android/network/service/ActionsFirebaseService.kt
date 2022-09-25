@@ -1,15 +1,14 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import com.ghuljr.onehabit_data.network.model.ActionRequest
 import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
-import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.toEither
+import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
@@ -21,7 +20,6 @@ import io.ashdavies.rx.rxtasks.toSingle
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,25 +35,27 @@ class ActionsFirebaseService @Inject constructor(
         goalId: String,
         userId: String
     ): Maybe<Either<BaseError, List<ActionResponse>>> = getTodayActionsIds(userId, goalId)
-            .toObservable()
-            .flatMapIterable { it }
-            .flatMapSingle { actionId ->
-                actionDb.child(userId).child(actionId).get()
-                    .toSingle()
-                    .toRx3()
-                    .map {
-                        it.getValue(ParsableActionResponse::class.java)!!
-                            .toActionResponse(it.key!!)
-                    }
-            }
-            .toList()
-            .leftOnThrow()
-            .toMaybe()
-            .subscribeOn(networkScheduler)
+        .toObservable()
+        .flatMapIterable { it }
+        .flatMapSingle { actionId ->
+            actionDb.child(userId).child(actionId).get()
+                .toSingle()
+                .toRx3()
+                .map {
+                    it.getValue(ParsableActionResponse::class.java)!!
+                        .toActionResponse(it.key!!)
+                }
+        }
+        .toList()
+        .leftOnThrow()
+        .toMaybe()
+        .subscribeOn(networkScheduler)
 
 
-
-    override fun completeActionStep(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+    override fun completeActionStep(
+        actionId: String,
+        userId: String
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb
         .child(userId)
         .child(actionId)
         .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(1)))
@@ -66,8 +66,10 @@ class ActionsFirebaseService @Inject constructor(
         .subscribeOn(networkScheduler)
 
 
-
-    override fun revertCompleteActionStep(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+    override fun revertCompleteActionStep(
+        actionId: String,
+        userId: String
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb
         .child(userId)
         .child(actionId)
         .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(-1)))
@@ -77,6 +79,27 @@ class ActionsFirebaseService @Inject constructor(
         .flatMapRightWithEither { getActionById(actionId, userId) }
         .subscribeOn(networkScheduler)
 
+    override fun putAction(
+        actionRequest: ActionRequest
+    ): Maybe<Either<BaseError, ActionResponse>> {
+        val actionsReference = actionDb.child(actionRequest.userId)
+        val key = actionsReference.push().key!!
+
+        return actionsReference.child(key)
+            .setValue(ParsableActionRequest.fromActionRequest(actionRequest, key))
+            .asUnitSingle()
+            .flatMap {
+                actionToGoalDb.child(actionRequest.userId)
+                    .child(actionRequest.goalId)
+                    .child(key)
+                    .setValue(true)
+                    .asUnitSingle()
+            }
+            .toMaybe()
+            .leftOnThrow()
+            .mapRight { actionRequest.toActionResponse(key) }
+            .subscribeOn(networkScheduler)
+    }
 
     private fun getTodayActionsIds(userId: String, goalId: String): Single<List<String>> =
         actionToGoalDb.child(userId)
@@ -86,7 +109,10 @@ class ActionsFirebaseService @Inject constructor(
             .toRx3()
             .map { snapshot -> snapshot.children.map { it.key!! } }
 
-    private fun getActionById(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+    private fun getActionById(
+        actionId: String,
+        userId: String
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb
         .child(userId)
         .child(actionId)
         .get()
@@ -104,7 +130,7 @@ private data class ParsableActionResponse(
     @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindersAtMs: List<Long>? = null,
     @get:PropertyName("repeats_current") @set:PropertyName("repeats_current") var currentRepeat: Int? = null,
     @get:PropertyName("repeats_max") @set:PropertyName("repeats_max") var totalRepeats: Int? = null,
-    @get:PropertyName("custom") @set:PropertyName("custom") var custom: Boolean = false
+    @get:PropertyName("custom_title") @set:PropertyName("custom_title") var customTitle: String? = null
 ) {
 
     fun toActionResponse(id: String) = ActionResponse(
@@ -112,6 +138,27 @@ private data class ParsableActionResponse(
         remindersAtMs = remindersAtMs,
         currentRepeat = currentRepeat!!,
         totalRepeats = totalRepeats!!,
-        custom = custom
+        customTitle = customTitle
     )
+}
+
+@IgnoreExtraProperties
+private data class ParsableActionRequest(
+    @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindersAtMs: List<Long>? = null,
+    @get:PropertyName("repeats_current") @set:PropertyName("repeats_current") var currentRepeat: Int? = null,
+    @get:PropertyName("repeats_max") @set:PropertyName("repeats_max") var totalRepeats: Int? = null,
+    @get:PropertyName("custom_title") @set:PropertyName("custom_title") var customTitle: String? = null
+) {
+
+    companion object {
+
+        fun fromActionRequest(actionRequest: ActionRequest, id: String) = actionRequest.run {
+            ParsableActionRequest(
+                remindersAtMs = remindersAtMs,
+                currentRepeat = currentRepeat,
+                totalRepeats = totalRepeats,
+                customTitle = customTitle
+            )
+        }
+    }
 }

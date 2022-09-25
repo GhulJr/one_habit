@@ -42,7 +42,7 @@ class ActionInfoPresenter @Inject constructor(
                 val type =  if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
                 val exceeded = action.run { repeatCount >= totalRepeats }
                 ActionInfoItem(
-                    editable = action.custom,
+                    editable = action.customTitle != null,
                     habitTopic = habit.type,
                     quantity = if(action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
                     habitSubject = habit.habitSubject,

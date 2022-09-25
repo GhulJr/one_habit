@@ -6,6 +6,6 @@ data class Action(
     val goalId: String,
     val repeatCount: Int,
     val totalRepeats: Int,
-    val custom: Boolean,
+    val customTitle: String?,
     val reminders: List<Long>?
 )

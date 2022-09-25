@@ -10,7 +10,6 @@ import com.ghuljr.onehabit_data.repository.HabitRepository
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
-import com.ghuljr.onehabit_error.UnknownError
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
@@ -23,7 +22,6 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -93,18 +91,18 @@ class TodayPresenter @Inject constructor(
             .mapLeft { it as BaseEvent }
             .mapRight { (actions, habit) ->
                 val regularActions = actions
-                    .filterNot { it.custom }
+                    .filter { it.customTitle == null }
                     .filter { it.repeatCount < it.totalRepeats || habit.settlingFormat == 0 }
                     .map { it.toRegularActionItem(habit) as TodayItem }
                 val extraActions = actions
-                    .filter { it.custom && it.repeatCount < it.totalRepeats }
+                    .filter { it.customTitle != null  && it.repeatCount < it.totalRepeats }
                     .map { it.toCustomActionItem(habit) as TodayItem }
                 val finishedActions = actions
-                    .filter { it.repeatCount >= it.totalRepeats && (habit.settlingFormat != 0 || it.custom) }
+                    .filter { it.repeatCount >= it.totalRepeats && (habit.settlingFormat != 0 || it.customTitle != null) }
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (extraActions.isEmpty()) it.plus(AddActionItem { addCustomAction() }) else it }
+                    .let { if (actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
@@ -135,7 +133,8 @@ class TodayPresenter @Inject constructor(
         time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
-        habitSubject = habit.habitSubject
+        habitSubject = habit.habitSubject,
+        title = customTitle!!
     )
 
     private fun Action.toFinishedActionItem(habit: Habit) =
@@ -145,7 +144,8 @@ class TodayPresenter @Inject constructor(
             quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(false) to totalRepeats,
             onActionClick = { selectItem(id) },
             habitTopic = habit.type,
-            habitSubject = habit.habitSubject
+            habitSubject = habit.habitSubject,
+            customTitle = customTitle
         )
 
     private fun Int.calculateCurrentRepeat(isWeekly: Boolean) = if (isWeekly) this else this + 1

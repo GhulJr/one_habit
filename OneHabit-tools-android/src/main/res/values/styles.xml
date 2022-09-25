@@ -124,6 +124,12 @@
         <item name="hintTextAppearance">@style/OneHabit.TextAppearance.Primary.Bold</item>
     </style>
 
+    <style name="OneHabit.TextInputLayout.Underline" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/primary_white</item>
+        <item name="android:textColorHint">@color/primary_black</item>
+        <item name="boxStrokeColor">@color/primary_black</item>
+        <item name="counterMaxLength">50</item>
+    </style>
     <style name="OneHabit.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="titleTextAppearance">@style/OneHabit.TextAppearance.Primary.Title.Toolbar</item>
         <item name="background">@color/primary_white</item>

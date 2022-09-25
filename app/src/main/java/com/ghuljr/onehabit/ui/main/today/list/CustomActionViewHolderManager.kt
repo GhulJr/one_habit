@@ -20,7 +20,7 @@ class CustomActionViewHolderManager : ViewHolderManager(R.layout.item_today_acti
 
         override fun bind(item: CustomActionItem) {
             viewBind.apply {
-                title.text = item.habitTopic.generateTitle(view.resources, item.habitSubject)
+                title.text = item.title
                 time.text = item.time ?: view.resources.getString(R.string.today)
                 quantity.apply {
                     isVisible = item.quantity != null

@@ -3,7 +3,6 @@ package com.ghuljr.onehabit.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.ghuljr.onehabit.R

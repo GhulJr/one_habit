@@ -42,6 +42,7 @@ data class CustomActionItem(
     override val id: String,
     override val time: String?,
     override val onActionClick: () -> Unit,
+    val title: String,
     val habitTopic: HabitTopic,
     val habitSubject: String
 ) : TodayItem.Action() {
@@ -63,6 +64,7 @@ data class TodayActionFinishedItem(
     override val time: String?,
     override val quantity: Quantity?,
     override val onActionClick: () -> Unit,
+    val customTitle: String?,
     val habitTopic: HabitTopic,
     val habitSubject: String
 ) : TodayItem.Action() {

@@ -11,9 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
-            android:name=".ui.intro.change_data.FillUserDataActivity"
-            android:launchMode="singleTop"
+            android:name=".AddActionActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.intro.change_data.FillUserDataActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.intro.launch.LaunchActivity"
             android:exported="true">

@@ -5,5 +5,23 @@ data class ActionResponse(
     val remindersAtMs: List<Long>?,
     val currentRepeat: Int,
     val totalRepeats: Int,
-    val custom: Boolean
+    val customTitle: String?
 )
+
+data class ActionRequest(
+    val userId: String,
+    val goalId: String,
+    val remindersAtMs: List<Long>?,
+    val currentRepeat: Int,
+    val totalRepeats: Int,
+    val customTitle: String?
+) {
+
+    fun toActionResponse(id: String) = ActionResponse(
+        id = id,
+        remindersAtMs = remindersAtMs,
+        currentRepeat = currentRepeat,
+        totalRepeats = totalRepeats,
+        customTitle = customTitle
+    )
+}

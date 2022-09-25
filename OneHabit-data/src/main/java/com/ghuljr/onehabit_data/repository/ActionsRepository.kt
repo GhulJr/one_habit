@@ -5,6 +5,7 @@ import arrow.core.getOrElse
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.Action
+import com.ghuljr.onehabit_data.network.model.ActionRequest
 import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
@@ -98,18 +99,43 @@ class ActionsRepository @Inject constructor(
             }
 
 
-    fun revertCompleteAction(actionId: String, goalId: String): Maybe<Either<BaseError, Action>> =  loggedInUserRepository.userIdFlowable
+    fun revertCompleteAction(actionId: String, goalId: String): Maybe<Either<BaseError, Action>> =
+        loggedInUserRepository.userIdFlowable
+            .toEither { NoDataError as BaseError }
+            .firstElement()
+            .flatMapRightWithEither { userId ->
+                actionsService.revertCompleteActionStep(actionId, userId)
+                    .mapRight {
+                        val storageModel = it.toStorageModel(goalId, userId)
+                        actionsDatabase.put(storageModel)
+                        storageModel.toDomain()
+                    }
+            }
+
+    fun createCustomAction(
+        actionName: String,
+        goalId: String,
+        finished: Boolean
+    ): Maybe<Either<BaseError, Action>> = loggedInUserRepository.userIdFlowable
         .toEither { NoDataError as BaseError }
         .firstElement()
         .flatMapRightWithEither { userId ->
-            actionsService.revertCompleteActionStep(actionId, userId)
-                .mapRight {
-                    val storageModel = it.toStorageModel(goalId, userId)
-                    actionsDatabase.put(storageModel)
-                    storageModel.toDomain()
+            actionsService.putAction(
+                ActionRequest(
+                    userId = userId,
+                    goalId = goalId,
+                    remindersAtMs = null, //TODO: for now
+                    currentRepeat = if (finished) 1 else 0,
+                    totalRepeats = 1,
+                    customTitle = actionName
+                )
+            )
+                .mapRight { response ->
+                    val entity = response.toStorageModel(goalId, userId)
+                    actionsDatabase.put(entity)
+                    entity.toDomain()
                 }
         }
-
 }
 
 private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) =
@@ -122,7 +148,7 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
     currentRepeat = currentRepeat,
     totalRepeats = totalRepeats,
     goalId = goalId,
-    custom = custom
+    customTitle = customTitle
 )
 
 private fun ActionEntity.toDomain() = Action(
@@ -130,6 +156,6 @@ private fun ActionEntity.toDomain() = Action(
     goalId = goalId,
     repeatCount = currentRepeat,
     totalRepeats = totalRepeats,
-    custom = custom,
+    customTitle = customTitle,
     reminders = remindersAtMs?.map { it.toLong() }
 )
