@@ -17,9 +17,9 @@ import io.objectbox.rx3.RxQuery
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Scheduler
+import javax.inject.Inject
 
-class HabitDatabase @AssistedInject constructor(
-    @Assisted override val userId: String,
+class HabitDatabase @Inject constructor(
     override val box: Box<HabitEntity>,
     val cacheBox: Box<HabitEntityHolder>,
     @ComputationScheduler override val computationScheduler: Scheduler
@@ -59,10 +59,5 @@ class HabitDatabase @AssistedInject constructor(
                 )
             )
         }
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(userId: String): HabitDatabase
     }
 }

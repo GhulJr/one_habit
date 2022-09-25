@@ -6,7 +6,6 @@ import io.reactivex.rxjava3.core.Scheduler
 
 abstract class BaseDatabase<ENTITY : BaseEntity> {
 
-    protected abstract val userId: String
     protected abstract val box: Box<ENTITY>
     protected abstract val computationScheduler: Scheduler
 

@@ -27,6 +27,7 @@ import javax.inject.Inject
 // TODO: handle loading and error
 // TODO: handle displaying details and confirming
 // TODO: handle adding and editing custom action
+// TODO: make loading as the progress bar below today action!!!
 // TODO: Add option to schedule/change reminder notification for specific task on go.
 @FragmentScope
 class TodayPresenter @Inject constructor(
@@ -57,7 +58,7 @@ class TodayPresenter @Inject constructor(
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (extraActions.isEmpty()) it.plus(AddActionItem { view.addCustomAction() }) else it }
+                    .let { if (extraActions.isEmpty()) it.plus(AddActionItem { addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
@@ -101,6 +102,8 @@ class TodayPresenter @Inject constructor(
 
     fun refresh() = refreshSubject.onNext(Unit)
 
+    private fun addCustomAction() {}
+
     private fun selectItem(actionId: String) = selectItemSubject.onNext(actionId)
 
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
@@ -111,7 +114,7 @@ class TodayPresenter @Inject constructor(
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject,
-        type = if (habit.settlingFormat <= 0) TodayActionItem.Type.WEEKLY else TodayActionItem.Type.DAILY,
+        actionType = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY,
         exceeded = repeatCount != null && totalRepeats != null && repeatCount!! >= totalRepeats!!
     )
 
@@ -135,7 +138,7 @@ class TodayPresenter @Inject constructor(
             habitSubject = habit.habitSubject
         )
 
-    private fun Int.calculateCurrentRepeat(exeeded: Boolean) = if (exeeded) this else this + 1
+    private fun Int.calculateCurrentRepeat(exceeded: Boolean) = if (exceeded) this else this + 1
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

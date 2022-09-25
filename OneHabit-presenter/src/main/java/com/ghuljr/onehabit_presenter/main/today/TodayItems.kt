@@ -20,7 +20,7 @@ data class TodayActionItem(
     override val onActionClick: () -> Unit,
     val habitTopic: HabitTopic,
     val habitSubject: String,
-    val type: Type,
+    val actionType: ActionType,
     val exceeded: Boolean
 ) : TodayItem.Action() {
 
@@ -36,9 +36,6 @@ data class TodayActionItem(
     * DAILY - if current == max repeat, then mark it as done
     * WEEKLY - display a little bit different info, when current == max repeat, then change task name and label to Overflow: 0
     * */
-    enum class Type {
-        DAILY, WEEKLY
-    }
 }
 
 data class CustomActionItem(
@@ -92,6 +89,20 @@ data class AddActionItem(
     override fun matches(item: UniqueItem): Boolean = item == this
 
     fun addAction() = onActionClick()
+}
+
+data class ActionInfoItem(
+    val editable: Boolean,
+    val habitTopic: HabitTopic,
+    val quantity: Quantity?,
+    val habitSubject: String,
+    val type: ActionType,
+    val reminders: List<String>?,
+    val exceeded: Boolean
+)
+
+enum class ActionType {
+    DAILY, WEEKLY
 }
 
 typealias Quantity = Pair<Int, Int>

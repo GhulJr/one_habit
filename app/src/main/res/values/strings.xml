@@ -84,4 +84,5 @@
     <string name="start_doing_opposite">You don\'t have to do %1$s</string>
     <string name="stop_doing">Do not do %1$s</string>
     <string name="stop_doing_opposite">You can do %1$s</string>
+    <string name="no_reminders">No reminders set</string>
 </resources>

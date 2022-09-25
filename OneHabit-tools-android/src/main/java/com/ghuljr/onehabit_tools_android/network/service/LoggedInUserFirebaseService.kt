@@ -9,7 +9,7 @@ import com.ghuljr.onehabit_error_android.extension.resumeWithBaseError
 import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.emptyToOption
+import com.ghuljr.onehabit_tools.extension.blankToOption
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.auth.AuthResult
@@ -124,7 +124,7 @@ class LoggedInUserFirebaseService @Inject constructor(
     private fun FirebaseUser.toUserResponse(): UserAuthResponse = UserAuthResponse(
         userId = uid,
         email = email!!,    // Right now we got only on auth method
-        username = displayName.emptyToOption(),
+        username = displayName.blankToOption(),
         isEmailVerified = isEmailVerified
     )
 

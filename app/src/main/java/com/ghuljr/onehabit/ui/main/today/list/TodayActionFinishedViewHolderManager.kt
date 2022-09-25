@@ -21,7 +21,7 @@ class TodayActionFinishedViewHolderManager : ViewHolderManager(R.layout.item_tod
                 viewBind.apply {
                     title.apply {
                         paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                        title.text = view.resources.generateTitle(item.habitTopic, item.habitSubject)
+                        title.text = item.habitTopic.generateTitle(view.resources, item.habitSubject)
                     }
                     time.apply {
                         paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG

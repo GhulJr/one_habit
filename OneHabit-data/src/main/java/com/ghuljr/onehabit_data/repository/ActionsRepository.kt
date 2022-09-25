@@ -10,6 +10,7 @@ import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.persistence.ActionDatabase
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -25,23 +26,22 @@ class ActionsRepository @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler,
     private val actionsService: ActionsService,
-    private val actionsDatabaseFactory: ActionDatabase.Factory,
+    private val actionsDatabase: ActionDatabase,
     private val userRepository: UserRepository,
-    private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>
+    private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>,
 ) {
 
     private val todayActionCache = memoryCacheFactory.create { key ->
-        val actionsDb = actionsDatabaseFactory.create(key.userId)
         DataSource(
             refreshInterval = 1,
             refreshIntervalUnit = TimeUnit.HOURS,
-            cachedDataFlowable = actionsDb.getActionsByGoalId(key.customKey!!),
+            cachedDataFlowable = actionsDatabase.getActionsByGoalId(key.customKey!!),
             fetch = {
                 actionsService.getActionsFromGoal(key.customKey, key.userId).toSingle()
                     .mapRight { it.toStorageModel(key.customKey, key.userId) }
             },
             invalidateAndUpdate = { newCache ->
-                actionsDb.replaceActionsForGoal(
+                actionsDatabase.replaceActionsForGoal(
                     goalId = key.customKey,
                     userId = key.userId,
                     actions = newCache.value.getOrElse { listOf() },
@@ -73,6 +73,13 @@ class ActionsRepository @Inject constructor(
                 .mapRight { it.map { it.toDomain() } }
         }
         .firstElement()
+
+    fun getActionObservable(actionId: String) : Observable<Either<BaseError, Action>> = actionsDatabase.getActionById(actionId)
+        .toObservable()
+        .map { it.toEither { NoDataError as BaseError } }
+        .mapRight { it.toDomain() }
+        .replay(1)
+        .refCount()
 }
 
 private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) = map { it.toStorageModel(goalId, userId) }

@@ -23,8 +23,6 @@ class UserMetadataDatabase @Inject constructor(
     @ComputationScheduler override val computationScheduler: Scheduler
 ) : BaseDatabase<UserEntity>() {
 
-    override val userId: String = "" // Not required
-
     fun userMetadata(userId: String): Flowable<DataSource.CacheWithTime<UserEntity>> =
         RxQuery.observable(
             box.query().equal(UserEntity_.userId, userId, QueryBuilder.StringOrder.CASE_SENSITIVE)
