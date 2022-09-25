@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
-            android:name=".AddActionActivity"
+            android:name=".ui.add_action.AddActionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.intro.change_data.FillUserDataActivity"

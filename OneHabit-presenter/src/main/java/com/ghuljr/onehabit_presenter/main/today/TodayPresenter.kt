@@ -7,9 +7,11 @@ import com.ghuljr.onehabit_data.domain.Action
 import com.ghuljr.onehabit_data.domain.Habit
 import com.ghuljr.onehabit_data.repository.ActionsRepository
 import com.ghuljr.onehabit_data.repository.HabitRepository
+import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
+import com.ghuljr.onehabit_error.UnknownError
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
@@ -31,15 +33,17 @@ import javax.inject.Inject
 class TodayPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository,
     private val habitRepository: HabitRepository,
+    private val userMetadataRepository: UserMetadataRepository,
     @UiScheduler private val uiScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler
 ) : BasePresenter<TodayView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
     private val selectItemSubject = PublishSubject.create<String>()
+    private val addCustomActionSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: TodayView): Disposable = CompositeDisposable(
-        todayActionsItemsObservable(view)
+        todayActionsItemsObservable
             .subscribe {
                 view.handleLoading(it.swap().orNull() is LoadingEvent)
                 it.fold(
@@ -80,10 +84,20 @@ class TodayPresenter @Inject constructor(
                             view.handleItemsError(null)
                     }
                 )
+            },
+        addCustomActionSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .switchMapMaybe { userMetadataRepository.currentUser.firstElement() }
+            .observeOn(uiScheduler)
+            .subscribe {
+                it.fold(
+                    ifRight = { user -> view.openCreateCustomAction(user.goalId!!) },
+                    ifLeft = { error -> view.handleItemsError(error) }
+                )
             }
     )
 
-    private fun todayActionsItemsObservable(view: TodayView): Observable<Either<BaseEvent, List<TodayItem>>> =
+    private val todayActionsItemsObservable: Observable<Either<BaseEvent, List<TodayItem>>> =
         Observable.combineLatest(
             actionsRepository.todayActionsObservable,
             habitRepository.todayHabitObservable
@@ -95,14 +109,14 @@ class TodayPresenter @Inject constructor(
                     .filter { it.repeatCount < it.totalRepeats || habit.settlingFormat == 0 }
                     .map { it.toRegularActionItem(habit) as TodayItem }
                 val extraActions = actions
-                    .filter { it.customTitle != null  && it.repeatCount < it.totalRepeats }
+                    .filter { it.customTitle != null && it.repeatCount < it.totalRepeats }
                     .map { it.toCustomActionItem(habit) as TodayItem }
                 val finishedActions = actions
                     .filter { it.repeatCount >= it.totalRepeats && (habit.settlingFormat != 0 || it.customTitle != null) }
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
+                    .let { if (actions.isNotEmpty() && actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
@@ -113,7 +127,7 @@ class TodayPresenter @Inject constructor(
 
     fun refresh() = refreshSubject.onNext(Unit)
 
-    private fun addCustomAction() {}
+    private fun addCustomAction() = addCustomActionSubject.onNext(Unit)
 
     private fun selectItem(actionId: String) = selectItemSubject.onNext(actionId)
 

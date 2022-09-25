@@ -69,7 +69,7 @@ class ActionInfoBottomSheetDialog(
     override fun displayActionInfo(item: ActionInfoItem) {
         viewBind.apply {
             toolbar.apply {
-                title = item.habitTopic.generateTitle(resources, item.habitSubject, item.exceeded)
+                title = item.customTitle ?: item.habitTopic.generateTitle(resources, item.habitSubject, item.exceeded)
                 subtitle =
                     if (item.quantity == null)
                         ""

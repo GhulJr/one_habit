@@ -8,4 +8,5 @@ interface TodayView : BaseView<TodayPresenter> {
     fun submitItems(items: List<TodayItem>)
     fun handleItemsError(error: BaseError?)
     fun handleLoading(loading: Boolean)
+    fun openCreateCustomAction(goalId: String)
 }

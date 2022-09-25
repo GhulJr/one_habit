@@ -6,13 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import arrow.core.toOption
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTodayBinding
+import com.ghuljr.onehabit.ui.add_action.AddActionActivity
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.info.ActionInfoBottomSheetDialog
 import com.ghuljr.onehabit.ui.main.today.list.*
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error_android.event_handler.EventHandler
+import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_error_android.extension.textForError
 import com.ghuljr.onehabit_presenter.main.MainStep
 import com.ghuljr.onehabit_presenter.main.today.TodayItem
@@ -24,8 +28,6 @@ import com.ghuljr.onehabit_tools_android.tool.ItemDivider
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-/*TODO: add view, when all items are done, that will allow to edit finished items :) */
-// TODO: add loading
 class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresenter>(), TodayView {
 
     @Inject lateinit var actionInfoPresenter: ActionInfoPresenter
@@ -41,12 +43,15 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TODAY)
-
         viewBind.apply {
             todayRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
                 adapter = todayAdapter
-                addItemDecoration(ItemDivider(spanCount = 1, resources.getDimension(R.dimen.default_margin).toInt()))
+                addItemDecoration(
+                    ItemDivider(
+                        spanCount = 1, resources.getDimension(R.dimen.default_margin).toInt()
+                    )
+                )
             }
             swipeRefresh.setOnRefreshListener { presenter.refresh() }
             errorWidget.setOnRetryClickListener { presenter.refresh() }
@@ -69,12 +74,15 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     }
 
     override fun handleItemsError(error: BaseError?) {
-        if(todayAdapter.currentList.isEmpty())
+        val snackbarErrorManager = SnackbarEventManager(
+            eventView = viewBind.root,
+            duration = Snackbar.LENGTH_INDEFINITE,
+            actionWithName = { } to getString(R.string.ok),
+            anchorView = viewBind.container
+        )
+        if (todayAdapter.currentList.isEmpty())
             viewBind.errorWidget.handleError(error)
-        else if(error != null) Snackbar.make(viewBind.root, error.textForError(resources), Snackbar.LENGTH_INDEFINITE)
-            .setAnchorView(viewBind.container)
-            .setAction(R.string.ok) {  }
-            .show()
+        else if (error != null) snackbarErrorManager.handleEvent(error.toOption())
     }
 
     override fun handleLoading(loading: Boolean) {
@@ -82,5 +90,9 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
             swipeRefresh.isRefreshing = false
             loadingIndicator.isVisible = loading
         }
+    }
+
+    override fun openCreateCustomAction(goalId: String) {
+        startActivity(AddActionActivity.intent(requireContext(), goalId))
     }
 }

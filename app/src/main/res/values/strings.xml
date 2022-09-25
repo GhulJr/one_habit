@@ -85,6 +85,6 @@
     <string name="stop_doing">Do not do %1$s</string>
     <string name="stop_doing_opposite">You can do %1$s</string>
     <string name="no_reminders">No reminders set</string>
-    <string name="add_action">Action panel</string>
+    <string name="add_action">Add action</string>
     <string name="action_input_hint">What do you want to do?</string>
 </resources>

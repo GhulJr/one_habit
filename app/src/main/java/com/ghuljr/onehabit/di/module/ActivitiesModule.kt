@@ -47,7 +47,6 @@ interface ActivitiesModule {
     fun forgotPasswordActivity(): ForgotPasswordActivity
 
     @ActivityScope
-
     @ContributesAndroidInjector
     fun addActionActivity(): AddActionActivity
 }

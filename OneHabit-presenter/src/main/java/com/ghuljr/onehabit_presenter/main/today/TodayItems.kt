@@ -94,6 +94,7 @@ data class AddActionItem(
 }
 
 data class ActionInfoItem(
+    val customTitle: String?,
     val editable: Boolean,
     val habitTopic: HabitTopic,
     val quantity: Quantity?,

@@ -42,14 +42,15 @@ class ActionInfoPresenter @Inject constructor(
                 val type =  if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
                 val exceeded = action.run { repeatCount >= totalRepeats }
                 ActionInfoItem(
-                    editable = action.customTitle != null,
+                    customTitle = action.customTitle,
+                    editable = action.customTitle != null && action.repeatCount < action.totalRepeats,
                     habitTopic = habit.type,
                     quantity = if(action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
                     habitSubject = habit.habitSubject,
                     type = type,
                     reminders = action.reminders?.map { it.timeToString(TIME_FORMAT) },
                     exceeded = exceeded,
-                    confirmAvailable = type == ActionType.WEEKLY || !exceeded,
+                    confirmAvailable = type == ActionType.WEEKLY && action.customTitle == null || !exceeded,
                     declineAvailable = action.repeatCount > 0
                 )
             }
