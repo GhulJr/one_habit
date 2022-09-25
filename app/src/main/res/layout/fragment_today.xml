@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.today.TodayFragment">
 
-  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-      android:id="@+id/swipe_refresh"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/today_recycler_view"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:clipChildren="false"
-          android:clipToPadding="false"
-          android:padding="@dimen/default_margin"
-          tools:itemCount="100"
-          tools:listitem="@layout/item_today_action" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/today_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:padding="@dimen/default_margin"
+            tools:itemCount="100"
+            tools:listitem="@layout/item_today_action" />
 
-  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:indeterminate="true"
+        app:indeterminateAnimationType="disjoint"
+        app:indicatorColor="@color/primary_black"
+        app:trackCornerRadius="@dimen/default_corner_radius"
+        app:trackThickness="@dimen/default_stroke_width" />
+
+    <com.ghuljr.onehabit_tools_android.widget.ErrorWidget
+        android:id="@+id/error_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 </FrameLayout>

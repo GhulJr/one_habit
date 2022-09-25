@@ -1,8 +1,13 @@
 package com.ghuljr.onehabit_tools_android.extension
 
 import android.content.Intent
+import android.content.res.Resources
+import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
+import android.util.AttributeSet
 import android.view.View
 import android.widget.EditText
+import androidx.annotation.AttrRes
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -39,3 +44,14 @@ fun<V> NavController.onDestinationChangedObservable(onChange: (NavDestination) -
     }
 }
 
+fun <T> Resources.Theme.getFromTheme(@AttrRes res: Int, getValue: TypedArray.() -> T): T =  with(obtainStyledAttributes(intArrayOf(res))) { getValue(this@with).also { recycle() } }
+fun <T> Resources.Theme.getFromAttr(@AttrRes res: Int, attrs: AttributeSet?, getValue: TypedArray.() -> T): T =  with(obtainStyledAttributes(attrs, intArrayOf(res), 0, 0)) { getValue(this@with).also { recycle() } }
+
+fun  Resources.Theme.getColorFromTheme(@AttrRes res: Int): Int = getFromTheme(res) { getColor(0, 0) }
+fun  Resources.Theme.getIntFromTheme(@AttrRes res: Int, defValue: Int): Int = getFromTheme(res) { getInt(0, defValue) }
+fun  Resources.Theme.getResIdFromTheme(@AttrRes res: Int): Int = getFromTheme(res) { getResourceId(0, 0) }
+fun  Resources.Theme.getIntFromAttr(@AttrRes res: Int, defValue: Int, attrs: AttributeSet?): Int = getFromAttr(res, attrs) { getInt(0, defValue) }
+fun  Resources.Theme.getColorFromAttr(@AttrRes res: Int, attrs: AttributeSet?): Int = getFromAttr(res, attrs) { getColor(0, 0) }
+fun  Resources.Theme.getStringFromAttr(@AttrRes res: Int, attrs: AttributeSet?): String? = getFromAttr(res, attrs) { getString(0) }
+fun  Resources.Theme.getIntFromAttr(@AttrRes res: Int, attrs: AttributeSet?): Int = getFromAttr(res, attrs) { getInt(0, 0) }
+fun  Resources.Theme.getDrawableFromAttr(@AttrRes res: Int, attrs: AttributeSet?): Drawable? = getFromAttr(res, attrs) { getDrawable(0) }

@@ -10,6 +10,7 @@ import com.ghuljr.onehabit_data.repository.HabitRepository
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
+import com.ghuljr.onehabit_error.UnknownError
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
@@ -22,13 +23,11 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.lang.RuntimeException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: handle loading and error
-// TODO: handle displaying details and confirming
 // TODO: handle adding and editing custom action
-// TODO: make loading as the progress bar below today action!!!
 // TODO: Add option to schedule/change reminder notification for specific task on go.
 @FragmentScope
 class TodayPresenter @Inject constructor(
@@ -44,11 +43,17 @@ class TodayPresenter @Inject constructor(
     override fun subscribeToView(view: TodayView): Disposable = CompositeDisposable(
         todayActionsItemsObservable(view)
             .subscribe {
+                view.handleLoading(it.swap().orNull() is LoadingEvent)
                 it.fold(
-                    ifRight = { items -> view.submitItems(items) },
+                    ifRight = { items ->
+                        view.submitItems(items)
+                        view.handleItemsError(null)
+                    },
                     ifLeft = { event ->
                         if (event is BaseError)
                             view.handleItemsError(event)
+                        else
+                            view.handleItemsError(null)
                     }
                 )
                 view.handleLoading(it.swap().orNull() is LoadingEvent)
@@ -68,10 +73,15 @@ class TodayPresenter @Inject constructor(
             .observeOn(uiScheduler)
             .subscribe {
                 view.handleLoading(it.swap().orNull() is LoadingEvent)
-                it.tapLeft { event ->
-                    if (event is BaseError)
-                        view.handleItemsError(event)
-                }
+                it.fold(
+                    ifRight = { view.handleItemsError(null) },
+                    ifLeft = { event ->
+                        if (event is BaseError)
+                            view.handleItemsError(event)
+                        else
+                            view.handleItemsError(null)
+                    }
+                )
             }
     )
 

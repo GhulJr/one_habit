@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTodayBinding
@@ -12,6 +13,7 @@ import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.info.ActionInfoBottomSheetDialog
 import com.ghuljr.onehabit.ui.main.today.list.*
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error_android.extension.textForError
 import com.ghuljr.onehabit_presenter.main.MainStep
 import com.ghuljr.onehabit_presenter.main.today.TodayItem
 import com.ghuljr.onehabit_presenter.main.today.TodayPresenter
@@ -19,6 +21,7 @@ import com.ghuljr.onehabit_presenter.main.today.TodayView
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.tool.ItemDivider
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 /*TODO: add view, when all items are done, that will allow to edit finished items :) */
@@ -46,6 +49,7 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
                 addItemDecoration(ItemDivider(spanCount = 1, resources.getDimension(R.dimen.default_margin).toInt()))
             }
             swipeRefresh.setOnRefreshListener { presenter.refresh() }
+            errorWidget.setOnRetryClickListener { presenter.refresh() }
         }
     }
 
@@ -64,11 +68,19 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
         todayAdapter.submitList(items)
     }
 
-    override fun handleItemsError(error: BaseError) {
-        //TODO("Not yet implemented")
+    override fun handleItemsError(error: BaseError?) {
+        if(todayAdapter.currentList.isEmpty())
+            viewBind.errorWidget.handleError(error)
+        else if(error != null) Snackbar.make(viewBind.root, error.textForError(resources), Snackbar.LENGTH_INDEFINITE)
+            .setAnchorView(viewBind.container)
+            .setAction(R.string.ok) {  }
+            .show()
     }
 
     override fun handleLoading(loading: Boolean) {
-        viewBind.swipeRefresh.isRefreshing = loading
+        viewBind.apply {
+            swipeRefresh.isRefreshing = false
+            loadingIndicator.isVisible = loading
+        }
     }
 }
