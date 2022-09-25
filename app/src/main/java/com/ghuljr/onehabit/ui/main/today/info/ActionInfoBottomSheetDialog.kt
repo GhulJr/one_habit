@@ -39,6 +39,13 @@ class ActionInfoBottomSheetDialog(
         return viewBind.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewBind.apply {
+            confirm.setOnClickListener { presenter.completeActionStep() }
+            decline.setOnClickListener { presenter.revertCompleteActionStep() }
+        }
+    }
 
     @CallSuper
     override fun onStart() {

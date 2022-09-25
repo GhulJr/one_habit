@@ -13,6 +13,7 @@ import com.ghuljr.onehabit_tools.extension.toEither
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
+import com.google.firebase.database.ServerValue
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.ashdavies.rx.rxtasks.toSingle
@@ -51,6 +52,33 @@ class ActionsFirebaseService @Inject constructor(
             .toMaybe()
             .subscribeOn(networkScheduler)
 
+
+
+    override fun completeActionStep(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+        .child(userId)
+        .child(actionId)
+        .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(1)))
+        .toSingle()
+        .toRx3()
+        .toMaybe()
+        .leftOnThrow()
+        .flatMapRightWithEither { getActionById(actionId, userId) }
+        .subscribeOn(networkScheduler)
+
+
+
+    override fun revertCompleteActionStep(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+        .child(userId)
+        .child(actionId)
+        .updateChildren(hashMapOf("repeats_current" to ServerValue.increment(-1)))
+        .toSingle()
+        .toRx3()
+        .toMaybe()
+        .leftOnThrow()
+        .flatMapRightWithEither { getActionById(actionId, userId) }
+        .subscribeOn(networkScheduler)
+
+
     private fun getTodayActionsIds(userId: String, goalId: String): Single<List<String>> =
         actionToGoalDb.child(userId)
             .child(goalId)
@@ -58,6 +86,17 @@ class ActionsFirebaseService @Inject constructor(
             .toSingle()
             .toRx3()
             .map { snapshot -> snapshot.children.map { it.key!! } }
+
+    private fun getActionById(actionId: String, userId: String): Maybe<Either<BaseError, ActionResponse>> = actionDb
+        .child(userId)
+        .child(actionId)
+        .get()
+        .toSingle()
+        .toRx3()
+        .toMaybe()
+        .map { it.getValue(ParsableActionResponse::class.java)!!.toActionResponse(it.key!!) }
+        .leftOnThrow()
+        .subscribeOn(networkScheduler)
 
 }
 

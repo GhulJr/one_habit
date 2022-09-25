@@ -27,7 +27,8 @@ class ActionsRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
     private val actionsService: ActionsService,
     private val actionsDatabase: ActionDatabase,
-    private val userRepository: UserRepository,
+    private val userMetadataRepository: UserMetadataRepository,
+    private val loggedInUserRepository: LoggedInUserRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>,
 ) {
 
@@ -53,7 +54,7 @@ class ActionsRepository @Inject constructor(
         )
     }
 
-    val todayActionsObservable: Observable<Either<BaseError, List<Action>>> = userRepository.currentUser
+    val todayActionsObservable: Observable<Either<BaseError, List<Action>>> = userMetadataRepository.currentUser
         .filter { it.map { it.goalId != null }.getOrElse { true } }
         .switchMapRightWithEither { currentUser ->
             todayActionCache[currentUser.goalId!!]
@@ -64,25 +65,55 @@ class ActionsRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    fun refreshTodayActions(): Maybe<Either<BaseError, List<Action>>> = userRepository.currentUser
-        .filter { it.map { it.goalId != null }.getOrElse { true } }
-        .switchMapRightWithEither { currentUser ->
-            todayActionCache[currentUser.goalId!!]
-                .switchMapMaybeRightWithEither { source -> source.refresh() }
-                .toObservable()
-                .mapRight { it.map { it.toDomain() } }
-        }
-        .firstElement()
+    fun refreshTodayActions(): Maybe<Either<BaseError, List<Action>>> =
+        userMetadataRepository.currentUser
+            .filter { it.map { it.goalId != null }.getOrElse { true } }
+            .switchMapRightWithEither { currentUser ->
+                todayActionCache[currentUser.goalId!!]
+                    .switchMapMaybeRightWithEither { source -> source.refresh() }
+                    .toObservable()
+                    .mapRight { it.map { it.toDomain() } }
+            }
+            .firstElement()
 
-    fun getActionObservable(actionId: String) : Observable<Either<BaseError, Action>> = actionsDatabase.getActionById(actionId)
-        .toObservable()
-        .map { it.toEither { NoDataError as BaseError } }
-        .mapRight { it.toDomain() }
-        .replay(1)
-        .refCount()
+    fun getActionObservable(actionId: String): Observable<Either<BaseError, Action>> =
+        actionsDatabase.getActionById(actionId)
+            .toObservable()
+            .map { it.toEither { NoDataError as BaseError } }
+            .mapRight { it.toDomain() }
+            .replay(1)
+            .refCount()
+
+    fun completeAction(actionId: String, goalId: String): Maybe<Either<BaseError, Action>> =
+        loggedInUserRepository.userIdFlowable
+            .toEither { NoDataError as BaseError }
+            .firstElement()
+            .flatMapRightWithEither { userId ->
+                actionsService.completeActionStep(actionId, userId)
+                    .mapRight {
+                        val storageModel = it.toStorageModel(goalId, userId)
+                        actionsDatabase.put(storageModel)
+                        storageModel.toDomain()
+                    }
+            }
+
+
+    fun revertCompleteAction(actionId: String, goalId: String): Maybe<Either<BaseError, Action>> =  loggedInUserRepository.userIdFlowable
+        .toEither { NoDataError as BaseError }
+        .firstElement()
+        .flatMapRightWithEither { userId ->
+            actionsService.revertCompleteActionStep(actionId, userId)
+                .mapRight {
+                    val storageModel = it.toStorageModel(goalId, userId)
+                    actionsDatabase.put(storageModel)
+                    storageModel.toDomain()
+                }
+        }
+
 }
 
-private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) = map { it.toStorageModel(goalId, userId) }
+private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) =
+    map { it.toStorageModel(goalId, userId) }
 
 private fun ActionResponse.toStorageModel(goalId: String, userId: String) = ActionEntity(
     id = id,
@@ -96,8 +127,9 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
 
 private fun ActionEntity.toDomain() = Action(
     id = id,
-    repeatCount = if(totalRepeats == 1) null else currentRepeat,
-    totalRepeats = if(totalRepeats == 1) null else totalRepeats,
+    goalId = goalId,
+    repeatCount = if (totalRepeats == 1) null else currentRepeat,
+    totalRepeats = if (totalRepeats == 1) null else totalRepeats,
     custom = custom,
     finished = currentRepeat >= totalRepeats,
     reminders = remindersAtMs?.map { it.toLong() }

@@ -25,7 +25,7 @@ import javax.inject.Singleton
 
 // TODO: add mechanics to ask user to select at least one habit
 @Singleton
-class UserRepository @Inject constructor(
+class UserMetadataRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
     @NetworkScheduler private val networkScheduler: Scheduler,
     private val userService: UserService,

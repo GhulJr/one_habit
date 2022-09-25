@@ -12,4 +12,14 @@ interface ActionsService {
         goalId: String,
         userId: String
     ): Maybe<Either<BaseError, List<ActionResponse>>>
+
+    fun completeActionStep(
+        actionId: String,
+        userId: String
+    ): Maybe<Either<BaseError, ActionResponse>>
+
+    fun revertCompleteActionStep(
+        actionId: String,
+        userId: String
+    ): Maybe<Either<BaseError, ActionResponse>>
 }

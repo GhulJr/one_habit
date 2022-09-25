@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
+import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
@@ -33,11 +34,46 @@ import javax.inject.Inject
 class TodayPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository,
     private val habitRepository: HabitRepository,
-    @UiScheduler private val uiScheduler: Scheduler
+    @UiScheduler private val uiScheduler: Scheduler,
+    @ComputationScheduler private val computationScheduler: Scheduler
 ) : BasePresenter<TodayView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
     private val selectItemSubject = PublishSubject.create<String>()
+
+    override fun subscribeToView(view: TodayView): Disposable = CompositeDisposable(
+        todayActionsItemsObservable(view)
+            .subscribe {
+                it.fold(
+                    ifRight = { items -> view.submitItems(items) },
+                    ifLeft = { event ->
+                        if (event is BaseError)
+                            view.handleItemsError(event)
+                    }
+                )
+                view.handleLoading(it.swap().orNull() is LoadingEvent)
+            },
+        selectItemSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .observeOn(uiScheduler)
+            .subscribe { actionId -> view.openDetails(actionId) },
+        refreshSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .switchMap {
+                actionsRepository.refreshTodayActions()
+                    .toObservable()
+                    .mapLeft { it as BaseEvent }
+                    .startWithItem(LoadingEvent.left())
+            }
+            .observeOn(uiScheduler)
+            .subscribe {
+                view.handleLoading(it.swap().orNull() is LoadingEvent)
+                it.tapLeft { event ->
+                    if (event is BaseError)
+                        view.handleItemsError(event)
+                }
+            }
+    )
 
     private fun todayActionsItemsObservable(view: TodayView): Observable<Either<BaseEvent, List<TodayItem>>> =
         Observable.combineLatest(
@@ -66,39 +102,6 @@ class TodayPresenter @Inject constructor(
             .startWithItem(LoadingEvent.left())
             .observeOn(uiScheduler)
             .share()
-
-
-    override fun subscribeToView(view: TodayView): Disposable = CompositeDisposable(
-        todayActionsItemsObservable(view)
-            .subscribe {
-                it.fold(
-                    ifRight = { items -> view.submitItems(items) },
-                    ifLeft = { event ->
-                        if (event is BaseError)
-                            view.handleItemsError(event)
-                    }
-                )
-                view.handleLoading(it.swap().orNull() is LoadingEvent)
-            },
-        selectItemSubject
-            .throttleFirst(500L, TimeUnit.MILLISECONDS, uiScheduler)
-            .subscribe { actionId -> view.openDetails(actionId) },
-        refreshSubject
-            .throttleFirst(500L, TimeUnit.MILLISECONDS, uiScheduler)
-            .switchMapMaybe { actionsRepository.refreshTodayActions() }
-            .mapLeft { it as BaseEvent }
-            .startWithItem(LoadingEvent.left())
-            .observeOn(uiScheduler)
-            .subscribe {
-                view.handleLoading(it.swap().orNull() is LoadingEvent)
-                it.tapLeft { event ->
-                    if (event is BaseError)
-                        view.handleItemsError(event)
-                }
-            }
-
-
-    )
 
     fun refresh() = refreshSubject.onNext(Unit)
 

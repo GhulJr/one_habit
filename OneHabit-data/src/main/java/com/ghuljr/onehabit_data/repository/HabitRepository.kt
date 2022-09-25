@@ -27,7 +27,7 @@ class HabitRepository @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler,
     private val habitDatabase: HabitDatabase,
     private val habitService: HabitService,
-    private val userRepository: UserRepository,
+    private val userMetadataRepository: UserMetadataRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<HabitEntity>>
 ) {
 
@@ -53,7 +53,7 @@ class HabitRepository @Inject constructor(
         )
     }
 
-    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userRepository.currentUser
+    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
         .filter { it.map { it.habitId != null }.getOrElse { true } }
         .switchMapRightWithEither { currentUser ->
             cache[currentUser.habitId!!]
