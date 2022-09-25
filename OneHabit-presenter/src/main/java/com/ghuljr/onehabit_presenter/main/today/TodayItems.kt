@@ -98,7 +98,9 @@ data class ActionInfoItem(
     val habitSubject: String,
     val type: ActionType,
     val reminders: List<String>?,
-    val exceeded: Boolean
+    val exceeded: Boolean,
+    val declineAvailable: Boolean,
+    val confirmAvailable: Boolean
 )
 
 enum class ActionType {

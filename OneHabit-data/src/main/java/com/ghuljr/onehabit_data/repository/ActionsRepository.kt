@@ -128,9 +128,8 @@ private fun ActionResponse.toStorageModel(goalId: String, userId: String) = Acti
 private fun ActionEntity.toDomain() = Action(
     id = id,
     goalId = goalId,
-    repeatCount = if (totalRepeats == 1) null else currentRepeat,
-    totalRepeats = if (totalRepeats == 1) null else totalRepeats,
+    repeatCount = currentRepeat,
+    totalRepeats = totalRepeats,
     custom = custom,
-    finished = currentRepeat >= totalRepeats,
     reminders = remindersAtMs?.map { it.toLong() }
 )

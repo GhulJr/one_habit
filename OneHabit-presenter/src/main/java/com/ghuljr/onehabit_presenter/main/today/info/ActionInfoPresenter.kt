@@ -39,14 +39,18 @@ class ActionInfoPresenter @Inject constructor(
         ) { actionEither, habitEither -> actionEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
             .mapRight { (action, habit) ->
+                val type =  if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
+                val exceeded = action.run { repeatCount >= totalRepeats }
                 ActionInfoItem(
                     editable = action.custom,
                     habitTopic = habit.type,
-                    quantity = action.repeatCount?.let { current -> action.totalRepeats?.let { max -> current.calculateCurrentRepeat(habit.settlingFormat <= 0) to max } },
+                    quantity = if(action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
                     habitSubject = habit.habitSubject,
-                    type = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY,
+                    type = type,
                     reminders = action.reminders?.map { it.timeToString(TIME_FORMAT) },
-                    exceeded = action.run { repeatCount != null && totalRepeats != null && repeatCount!! >= totalRepeats!! }
+                    exceeded = exceeded,
+                    confirmAvailable = type == ActionType.WEEKLY || !exceeded,
+                    declineAvailable = action.repeatCount > 0
                 )
             }
 

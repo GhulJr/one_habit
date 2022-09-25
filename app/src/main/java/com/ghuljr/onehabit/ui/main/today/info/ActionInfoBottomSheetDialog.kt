@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.core.view.isVisible
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.DialogActionInfoBinding
 import com.ghuljr.onehabit.ui.main.today.list.generateTitle
@@ -95,6 +96,8 @@ class ActionInfoBottomSheetDialog(
                 }
                 text = stringBuilder.ifBlank { getString(R.string.no_reminders) }
             }
+            confirm.isVisible = item.confirmAvailable
+            decline.isVisible = item.declineAvailable
         }
     }
 }

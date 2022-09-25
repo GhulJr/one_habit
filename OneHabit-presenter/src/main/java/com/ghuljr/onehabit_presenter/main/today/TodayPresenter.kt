@@ -83,14 +83,14 @@ class TodayPresenter @Inject constructor(
             .mapLeft { it as BaseEvent }
             .mapRight { (actions, habit) ->
                 val regularActions = actions
-                    .filterNot { it.finished && habit.settlingFormat != 0 }
                     .filterNot { it.custom }
+                    .filter { it.repeatCount < it.totalRepeats || habit.settlingFormat == 0 }
                     .map { it.toRegularActionItem(habit) as TodayItem }
                 val extraActions = actions
-                    .filter { it.custom && !it.finished }
+                    .filter { it.custom && it.repeatCount < it.totalRepeats }
                     .map { it.toCustomActionItem(habit) as TodayItem }
                 val finishedActions = actions
-                    .filter { it.finished && habit.settlingFormat != 0 }
+                    .filter { it.repeatCount >= it.totalRepeats && (habit.settlingFormat != 0 || it.custom) }
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
@@ -111,20 +111,18 @@ class TodayPresenter @Inject constructor(
 
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
         id = id,
-        time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
-            ?.timeToString(TIME_FORMAT),
-        quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(habit.settlingFormat <= 0) to max } },
+        time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
+        quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.settlingFormat <= 0) to totalRepeats,
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject,
         actionType = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY,
-        exceeded = repeatCount != null && totalRepeats != null && repeatCount!! >= totalRepeats!!
+        exceeded = repeatCount >= totalRepeats
     )
 
     private fun Action.toCustomActionItem(habit: Habit) = CustomActionItem(
         id = id,
-        time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
-            ?.timeToString(TIME_FORMAT),
+        time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject
@@ -133,15 +131,14 @@ class TodayPresenter @Inject constructor(
     private fun Action.toFinishedActionItem(habit: Habit) =
         TodayActionFinishedItem(
             id = id,
-            time = reminders?.getOrNull(repeatCount ?: Int.MAX_VALUE)
-                ?.timeToString(TIME_FORMAT),
-            quantity = repeatCount?.let { current -> totalRepeats?.let { max -> current.calculateCurrentRepeat(true) to max } },
+            time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
+            quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(false) to totalRepeats,
             onActionClick = { selectItem(id) },
             habitTopic = habit.type,
             habitSubject = habit.habitSubject
         )
 
-    private fun Int.calculateCurrentRepeat(exceeded: Boolean) = if (exceeded) this else this + 1
+    private fun Int.calculateCurrentRepeat(isWeekly: Boolean) = if (isWeekly) this else this + 1
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"
