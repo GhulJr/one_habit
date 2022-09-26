@@ -87,4 +87,8 @@
     <string name="no_reminders">No reminders set</string>
     <string name="add_action">Add action</string>
     <string name="action_input_hint">What do you want to do?</string>
+
+    <!-- Handling habit changes -->
+    <string name="select_habit_title">Select habit</string>
+    <string name="select_habit_message">It seems like you don\'t have any habit active. Please, select one.</string>
 </resources>

@@ -2,10 +2,12 @@ package com.ghuljr.onehabit_presenter.main
 
 import arrow.core.getOrElse
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
+import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.onlyDefined
+import com.ghuljr.onehabit_tools.extension.onlyRight
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @ActivityScope
 class MainPresenter @Inject constructor(
     private val loggedInUserRepository: LoggedInUserRepository,
+    private val userMetadataRepository: UserMetadataRepository,
     @UiScheduler private val uiScheduler: Scheduler
 ) : BasePresenter<MainView>() {
 
@@ -37,6 +40,13 @@ class MainPresenter @Inject constructor(
                         setSubtitle(user.email)
                     }
                 }
+            },
+        userMetadataRepository.currentUser
+            .onlyRight()
+            .observeOn(uiScheduler)
+            .subscribe {
+                if(it.habitId == null)
+                    view.askForChoosingHabit()
             }
     )
 
