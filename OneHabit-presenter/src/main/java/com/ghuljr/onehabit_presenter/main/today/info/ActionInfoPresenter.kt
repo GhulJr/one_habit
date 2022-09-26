@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @FragmentScope
-// TODO: Allow to display specific buttons based on amount of items and type
 class ActionInfoPresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler,
