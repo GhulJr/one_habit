@@ -35,4 +35,15 @@ class GoalDatabase @Inject constructor(
         ) }
         .toFlowable(BackpressureStrategy.BUFFER)
         .subscribeOn(computationScheduler)
+
+    fun replaceGoalsForMilestone(userId: String, milestoneId: String, dueToMs: Long, goals: List<GoalEntity>) {
+        put(*goals.toTypedArray())
+        goalHolderBox.put(
+            GoalEntityHolder(
+                userId = userId,
+                milestoneId = milestoneId,
+                dueToInMillis = dueToMs
+            )
+        )
+    }
 }

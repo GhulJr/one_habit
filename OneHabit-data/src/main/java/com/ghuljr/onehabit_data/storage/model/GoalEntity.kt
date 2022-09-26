@@ -10,7 +10,7 @@ data class GoalEntity(
     @Unique(onConflict = ConflictStrategy.REPLACE) override var id: String,
     @Index override var userId: String,
     @Index var milestoneId: String,
-    var remindersAtMs: Long
+    var remindersAtMs: Long?
 ) : IndexedEntity
 
 @Entity
