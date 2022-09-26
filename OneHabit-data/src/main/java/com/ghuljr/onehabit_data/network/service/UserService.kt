@@ -9,4 +9,6 @@ import io.reactivex.rxjava3.core.Maybe
 interface UserService {
 
     fun getUserMetadata(userId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+
+    fun setCurrentGoal(userId: String, goalId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
 }

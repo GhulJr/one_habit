@@ -6,7 +6,9 @@ import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 import com.google.firebase.database.ktx.database
@@ -37,6 +39,16 @@ class UserFirebaseService @Inject constructor(
             .leftOnThrow()
             .subscribeOn(networkScheduler)
 
+    override fun setCurrentGoal(
+        userId: String,
+        goalId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
+        .updateChildren(mapOf("goal" to goalId))
+        .asUnitSingle()
+        .leftOnThrow()
+        .toMaybe()
+        .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
 }
 
 @IgnoreExtraProperties
