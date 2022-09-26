@@ -24,8 +24,10 @@ class GoalDatabase @Inject constructor(
     private val goalHolderBox: Box<GoalEntityHolder>
 ): BaseDatabase<GoalEntity>() {
 
-    fun goalsForMilestone(milestoneId: String): Flowable<DataSource.CacheWithTime<List<GoalEntity>>> = RxQuery.observable(
-        box.query().equal(GoalEntity_.milestoneId, milestoneId, QueryBuilder.StringOrder.CASE_SENSITIVE).build()
+    fun goalsForMilestoneSorted(milestoneId: String): Flowable<DataSource.CacheWithTime<List<GoalEntity>>> = RxQuery.observable(
+        box.query().equal(GoalEntity_.milestoneId, milestoneId, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .order(GoalEntity_.dayNumber)
+            .build()
     )
         .map { goals -> DataSource.CacheWithTime(
             value = goals.some(),

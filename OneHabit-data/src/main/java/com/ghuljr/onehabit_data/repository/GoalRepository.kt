@@ -31,7 +31,7 @@ class GoalRepository @Inject constructor(
         DataSource(
             refreshInterval = 1,
             refreshIntervalUnit = TimeUnit.DAYS,
-            cachedDataFlowable = goalsDatabase.goalsForMilestone(key.customKey!!),
+            cachedDataFlowable = goalsDatabase.goalsForMilestoneSorted(key.customKey!!),
             fetch = { goalsService.getGoalsForMilestone(key.customKey, key.userId).mapRight { it.toEntity() }.toSingle() },
             invalidateAndUpdate = { cacheWithTime -> goalsDatabase.replaceGoalsForMilestone(key.userId, key.customKey, cacheWithTime.dueToInMillis, cacheWithTime.value.orNull() ?: emptyList()) },
             networkScheduler = networkScheduler,
@@ -46,5 +46,6 @@ private fun GoalResponse.toEntity() = GoalEntity(
     id = goalId,
     userId = userId,
     milestoneId = milestoneId,
-    remindersAtMs = remindAtMs
+    remindersAtMs = remindAtMs,
+    dayNumber = dayNumber
 )

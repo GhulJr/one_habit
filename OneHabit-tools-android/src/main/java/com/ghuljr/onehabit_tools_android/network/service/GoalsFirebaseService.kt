@@ -35,8 +35,8 @@ class GoalsFirebaseService @Inject constructor(
         .toRx3()
         .map { snapshot -> snapshot.children.map { it.key!! }  }
         .toObservable()
-        .concatMapIterable { it }
-        .concatMapSingle { goalId ->
+        .flatMapIterable { it }
+        .flatMapSingle { goalId ->
             goalsDb.child(userId)
                 .child(goalId)
                 .get()
@@ -52,12 +52,14 @@ class GoalsFirebaseService @Inject constructor(
 
 @IgnoreExtraProperties
 private data class ParsableGoalResponse(
-   @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindAt: Long? = null
+   @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindAt: Long? = null,
+   @get:PropertyName("day_number") @set:PropertyName("day_number") var dayNumber: Long? = null
 ) {
     fun toGoalResponse(userId: String, goalId: String, milestoneId: String) = GoalResponse(
         userId = userId,
         goalId =  goalId,
         milestoneId = milestoneId,
-        remindAtMs = remindAt
+        remindAtMs = remindAt,
+        dayNumber = dayNumber!!
     )
 }

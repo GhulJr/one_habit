@@ -4,5 +4,6 @@ data class GoalResponse(
     val goalId: String,
     val userId: String,
     val milestoneId: String,
-    val remindAtMs: Long?
+    val remindAtMs: Long?,
+    val dayNumber: Long
 )
