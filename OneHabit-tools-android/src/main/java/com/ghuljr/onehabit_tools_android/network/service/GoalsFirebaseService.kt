@@ -28,7 +28,7 @@ class GoalsFirebaseService @Inject constructor(
     override fun getGoalsForMilestone(
         milestoneId: String,
         userId: String
-    ): Maybe<Either<BaseError, List<GoalResponse>>> = goalsToMilestonesDb.child("userId")
+    ): Maybe<Either<BaseError, List<GoalResponse>>> = goalsToMilestonesDb.child(userId)
         .child(milestoneId)
         .get()
         .toSingle()
@@ -53,13 +53,13 @@ class GoalsFirebaseService @Inject constructor(
 @IgnoreExtraProperties
 private data class ParsableGoalResponse(
    @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindAt: Long? = null,
-   @get:PropertyName("day_number") @set:PropertyName("day_number") var dayNumber: Long? = null
+   @get:PropertyName("day_number") @set:PropertyName("day_number") var dayNumber: Int? = null
 ) {
     fun toGoalResponse(userId: String, goalId: String, milestoneId: String) = GoalResponse(
         userId = userId,
         goalId =  goalId,
         milestoneId = milestoneId,
         remindAtMs = remindAt,
-        dayNumber = dayNumber!!
+        dayNumber = dayNumber!!.toLong()
     )
 }

@@ -15,6 +15,7 @@ import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
+import com.ghuljr.onehabit_tools.extension.toUnit
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import java.util.*
@@ -61,7 +62,7 @@ class GoalRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    fun keepTrackOfCurrentGoal(milestoneId: String): Observable<Either<BaseError, UserMetadata>> = userMetadataRepository.currentUser
+    val keepTrackOfCurrentGoal: Observable<Unit> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
             cache[user.milestoneId!!]
                 .switchMapRightWithEither { source ->
@@ -73,13 +74,14 @@ class GoalRepository @Inject constructor(
                 .switchMapRightWithEither { goals ->
                     // TODO: how to handle if the new milestone should be assigned
                     val todayDayNumber = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) % 7 - 1
-                    val newGoal = goals[todayDayNumber]
-                    if(newGoal.id == user.goalId)
+                    val newGoal = goals.getOrNull(todayDayNumber)
+                    if(newGoal == null || newGoal.id == user.goalId)
                         Observable.just(user.right())
                     else
                         userMetadataRepository.setCurrentGoal(newGoal.id).toObservable()
                 }
         }
+        .toUnit()
 }
 
 private fun List<GoalResponse>.toEntity() = map { it.toEntity() }

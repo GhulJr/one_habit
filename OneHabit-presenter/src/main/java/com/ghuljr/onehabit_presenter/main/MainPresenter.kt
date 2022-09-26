@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_presenter.main
 
 import arrow.core.getOrElse
+import com.ghuljr.onehabit_data.repository.GoalRepository
 import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class MainPresenter @Inject constructor(
     private val loggedInUserRepository: LoggedInUserRepository,
     private val userMetadataRepository: UserMetadataRepository,
+    private val goalRepository: GoalRepository,
     @UiScheduler private val uiScheduler: Scheduler
 ) : BasePresenter<MainView>() {
 
@@ -47,7 +49,8 @@ class MainPresenter @Inject constructor(
             .subscribe {
                 if(it.habitId == null)
                     view.askForChoosingHabit()
-            }
+            },
+        goalRepository.keepTrackOfCurrentGoal.subscribe()
     )
 
     fun setCurrentStep(currentStep: MainStep): Unit = currentStepSubject.onNext(currentStep)
