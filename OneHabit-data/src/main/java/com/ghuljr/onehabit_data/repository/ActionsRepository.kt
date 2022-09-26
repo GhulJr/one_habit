@@ -33,7 +33,7 @@ class ActionsRepository @Inject constructor(
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<List<ActionEntity>>>,
 ) {
 
-    private val todayActionCache = memoryCacheFactory.create { key ->
+    private val actionForGoalCache = memoryCacheFactory.create { key ->
         DataSource(
             refreshInterval = 1,
             refreshIntervalUnit = TimeUnit.HOURS,
@@ -58,7 +58,7 @@ class ActionsRepository @Inject constructor(
     val todayActionsObservable: Observable<Either<BaseError, List<Action>>> = userMetadataRepository.currentUser
         .filter { it.map { it.goalId != null }.getOrElse { true } }
         .switchMapRightWithEither { currentUser ->
-            todayActionCache[currentUser.goalId!!]
+            actionForGoalCache[currentUser.goalId!!]
                 .switchMapRightWithEither { source -> source.dataFlowable }
                 .toObservable()
                 .mapRight { it.map { it.toDomain() } }
@@ -70,7 +70,7 @@ class ActionsRepository @Inject constructor(
         userMetadataRepository.currentUser
             .filter { it.map { it.goalId != null }.getOrElse { true } }
             .switchMapRightWithEither { currentUser ->
-                todayActionCache[currentUser.goalId!!]
+                actionForGoalCache[currentUser.goalId!!]
                     .switchMapMaybeRightWithEither { source -> source.refresh() }
                     .toObservable()
                     .mapRight { it.map { it.toDomain() } }
