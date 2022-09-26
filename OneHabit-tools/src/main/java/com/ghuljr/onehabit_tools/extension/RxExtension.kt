@@ -107,7 +107,7 @@ fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.switchMapRightWithEither(onRi
     compose { flowable ->
         flowable.switchMap {
             it.fold(
-                { left -> flowable.map { left.left() } },
+                { left -> Observable.just(left.left()) },
                 { right -> onRight(right) })
         }
     }

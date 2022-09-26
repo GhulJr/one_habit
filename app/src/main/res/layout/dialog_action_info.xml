@@ -44,15 +44,15 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="Eat vegetables"
-                        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header" />
+                        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
+                        tools:text="Eat vegetables" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)"
                         android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        tools:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)" />
 
                 </LinearLayout>
 
@@ -80,9 +80,9 @@
             android:gravity="center"
             android:paddingStart="@dimen/default_margin"
             android:paddingEnd="@dimen/default_margin"
-            tools:text="-10:30-\n-20:22-\n-23:59-"
             android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            tools:text="-10:30-\n-20:22-\n-23:59-" />
 
         <com.ghuljr.onehabit_tools_android.widget.TextDivider
             android:id="@+id/divider_actions"
@@ -109,7 +109,8 @@
                 style="@style/OneHabit.Button.Primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/default_margin"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:text="@string/decline"
                 android:textColor="@color/primary_white"
@@ -120,6 +121,9 @@
                 style="@style/OneHabit.Button.Primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:text="@string/confirm"
                 android:textColor="@color/primary_white"

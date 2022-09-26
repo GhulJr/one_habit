@@ -14,6 +14,7 @@ fun BaseError.textForError(resources: Resources): String = when (this) {
     is LoggedOutError -> resources.getString(R.string.error_logged_out_error)
     is NoDataError -> resources.getString(R.string.error_no_data)
     is UnknownError -> cause.message ?: resources.getString(R.string.error_unknown)
+    is ValidationError -> this.textForError(resources)
     else -> resources.getString(R.string.error_unknown)
 }
 

@@ -37,6 +37,7 @@
     <!-- Main -->
     <string name="timeline">Timeline</string>
     <string name="today">Today</string>
+    <string name="week">This week</string>
     <string name="profile">Profile</string>
 
     <!-- Timeline -->
@@ -49,6 +50,8 @@
 
     <!-- Today -->
     <string name="today_quantity">%1$s of %2$s</string>
+    <string name="today_quantity_remaining">Remaining: %1$s</string>
+    <string name="today_quantity_exceeded">Overflow: %1$s</string>
     <string name="finished_items">Finished items</string>
     <string name="add">+ Add</string>
 
@@ -70,4 +73,18 @@
     <string name="logout">Logout</string>
     <string name="app_version_1_s">App version %1$s</string>
 
+    <!-- Actions -->
+    <string name="eat">Eat %1$s!</string>
+    <string name="eat_opposite">You don\'t have to eat %1$s!</string>
+    <string name="not_eat">Do not eat %1$s</string>
+    <string name="not_eat_opposite">You can eat %1$s</string>
+    <string name="train">Make %1$s</string>
+    <string name="train_opposite">You don\t have to make %1$s</string>
+    <string name="start_doing">Do %1$s</string>
+    <string name="start_doing_opposite">You don\'t have to do %1$s</string>
+    <string name="stop_doing">Do not do %1$s</string>
+    <string name="stop_doing_opposite">You can do %1$s</string>
+    <string name="no_reminders">No reminders set</string>
+    <string name="add_action">Add action</string>
+    <string name="action_input_hint">What do you want to do?</string>
 </resources>

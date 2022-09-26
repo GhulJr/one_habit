@@ -1,9 +1,6 @@
 package com.ghuljr.onehabit_data.storage.persistence
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.right
-import arrow.core.some
+import arrow.core.*
 import com.ghuljr.onehabit_data.base.storage.BaseDatabase
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
@@ -23,14 +20,24 @@ import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
+import javax.inject.Inject
+import javax.inject.Singleton
 
 
-class ActionDatabase @AssistedInject constructor(
+@Singleton
+class ActionDatabase @Inject constructor(
     override val box: Box<ActionEntity>,
     private val cacheBox: Box<ActionOfGoalEntitiesHolder>,
     @ComputationScheduler override val computationScheduler: Scheduler,
-    @Assisted override val userId: String
 ) : BaseDatabase<ActionEntity>() {
+
+    fun getActionById(actionId: String): Flowable<Option<ActionEntity>> = RxQuery.observable(
+        box.query().equal(ActionEntity_.id, actionId, QueryBuilder.StringOrder.CASE_SENSITIVE).build()
+    )
+        .map { it.firstOrNone() }
+        .toFlowable(BackpressureStrategy.BUFFER)
+        .subscribeOn(computationScheduler)
+        .share()
 
     fun getActionsByGoalId(goalId: String): Flowable<DataSource.CacheWithTime<List<ActionEntity>>> =
         RxQuery.observable(
@@ -47,6 +54,7 @@ class ActionDatabase @AssistedInject constructor(
             }
             .toFlowable(BackpressureStrategy.BUFFER)
             .subscribeOn(computationScheduler)
+            .share()
 
     fun removeActionsForGoal(goalId: String) {
         box.query().equal(ActionEntity_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)
@@ -70,10 +78,5 @@ class ActionDatabase @AssistedInject constructor(
                 dueToInMillis = dueToInMillis
             )
         )
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(userId: String): ActionDatabase
     }
 }

@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit.di.module
 
+import com.ghuljr.onehabit.ui.add_action.AddActionActivity
 import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataFragmentsModule
@@ -44,4 +45,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector
     fun forgotPasswordActivity(): ForgotPasswordActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun addActionActivity(): AddActionActivity
 }

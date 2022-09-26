@@ -25,25 +25,24 @@ import javax.inject.Singleton
 class HabitRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
     @NetworkScheduler private val networkScheduler: Scheduler,
-    private val databaseFactory: HabitDatabase.Factory,
+    private val habitDatabase: HabitDatabase,
     private val habitService: HabitService,
-    private val userRepository: UserRepository,
+    private val userMetadataRepository: UserMetadataRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<HabitEntity>>
 ) {
 
     private val cache = memoryCacheFactory.create { key ->
-        val habitDb = databaseFactory.create(key.userId)
         DataSource(
             refreshInterval = 1,
             refreshIntervalUnit = TimeUnit.DAYS,
-            cachedDataFlowable = habitDb.getHabit(key.customKey!!),
+            cachedDataFlowable = habitDatabase.getHabit(key.customKey!!),
             fetch = {
                 habitService.getHabit(userId = key.userId, habitId = key.customKey)
                     .toSingle()
                     .mapRight { it.toEntity() }
             },
             invalidateAndUpdate = { habit ->
-                habitDb.replaceHabit(
+                habitDatabase.replaceHabit(
                     habitId = key.customKey!!,
                     habit = habit.value.orNull(),
                     dueToMs = habit.dueToInMillis
@@ -54,7 +53,7 @@ class HabitRepository @Inject constructor(
         )
     }
 
-    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userRepository.currentUser
+    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
         .filter { it.map { it.habitId != null }.getOrElse { true } }
         .switchMapRightWithEither { currentUser ->
             cache[currentUser.habitId!!]
