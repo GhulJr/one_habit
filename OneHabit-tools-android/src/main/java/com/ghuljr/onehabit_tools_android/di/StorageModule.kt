@@ -48,5 +48,14 @@ class StorageModule {
     @Provides
     @Singleton
     fun habitHolderBox(boxStore: BoxStore): Box<HabitEntityHolder> = boxStore.boxFor(HabitEntityHolder::class.java)
+
+    @Provides
+    @Singleton
+    fun goalBox(boxStore: BoxStore): Box<GoalEntity> = boxStore.boxFor(GoalEntity::class.java)
+
+    @Provides
+    @Singleton
+    fun goalHolderBox(boxStore: BoxStore): Box<GoalEntityHolder> = boxStore.boxFor(GoalEntityHolder::class.java)
+
 }
 
