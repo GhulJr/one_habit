@@ -4,20 +4,20 @@ import com.ghuljr.onehabit_tools.base.list.UniqueItem
 
 sealed interface TimelineItem : UniqueItem
 
-data class HeaderItem(val title: String) : TimelineItem {
+object HeaderItem : TimelineItem {
 
     override fun theSame(item: UniqueItem): Boolean = item is HeaderItem
     override fun matches(item: UniqueItem): Boolean = this == item
 }
 
 /*TODO: use ids to distinct items?*/
-data class BehaviourItem(
-    val title: String,
+data class GoalItem(
+    private val id: String,
     val dayNumber: Int,
     val state: State
 ) : TimelineItem {
 
-    override fun theSame(item: UniqueItem): Boolean = dayNumber == (item as? BehaviourItem)?.dayNumber
+    override fun theSame(item: UniqueItem): Boolean = id == (item as? GoalItem)?.id
     override fun matches(item: UniqueItem): Boolean = this == item
 
     sealed interface State {
@@ -27,7 +27,7 @@ data class BehaviourItem(
         sealed interface Past : State {
             object Success : Past
             object Failure : Past
-            object NotSubmitted : Past
+            object Partially : Past
         }
     }
 }

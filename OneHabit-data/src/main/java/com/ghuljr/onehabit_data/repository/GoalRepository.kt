@@ -49,7 +49,7 @@ class GoalRepository @Inject constructor(
         )
     }
 
-    fun goalsForMilestone(milestoneId: String): Observable<Either<BaseError, List<Goal>>> = userMetadataRepository.currentUser
+    val currentGoals: Observable<Either<BaseError, List<Goal>>> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
             cache[user.milestoneId!!]
                 .switchMapRightWithEither { source ->
