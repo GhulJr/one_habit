@@ -104,29 +104,34 @@ class ActionsFirebaseService @Inject constructor(
     override fun editAction(
         actionName: String,
         userId: String,
-        goalId: String,
         actionId: String
-    ): Maybe<Either<BaseError, ActionResponse>> {
-        TODO("Not yet implemented")
-    }
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
+        .child(actionId)
+        .updateChildren(mapOf("customTitle" to actionName))
+        .asUnitSingle()
+        .toMaybe()
+        .leftOnThrow()
+        .flatMapRightWithEither { getActionById(actionId, userId) }
+        .subscribeOn(networkScheduler)
 
-    override fun removeAction(actionId: String,
-                              userId: String,
-                              goalId: String
+    override fun removeAction(
+        actionId: String,
+        userId: String,
+        goalId: String
     ): Maybe<Either<BaseError, Unit>> = actionDb.child(userId)
-            .child(actionId)
-            .removeValue()
-            .asUnitSingle()
-            .flatMap {
-                actionToGoalDb.child(userId)
-                    .child(goalId)
-                    .child(actionId)
-                    .removeValue()
-                    .asUnitSingle()
-            }
-            .toMaybe()
-            .leftOnThrow()
-            .subscribeOn(networkScheduler)
+        .child(actionId)
+        .removeValue()
+        .asUnitSingle()
+        .flatMap {
+            actionToGoalDb.child(userId)
+                .child(goalId)
+                .child(actionId)
+                .removeValue()
+                .asUnitSingle()
+        }
+        .toMaybe()
+        .leftOnThrow()
+        .subscribeOn(networkScheduler)
 
     private fun getTodayActionsIds(userId: String, goalId: String): Single<List<String>> =
         actionToGoalDb.child(userId)

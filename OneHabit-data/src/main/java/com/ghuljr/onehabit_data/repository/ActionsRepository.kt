@@ -156,8 +156,7 @@ class ActionsRepository @Inject constructor(
             actionsService.editAction(
                 actionName = actionName,
                 userId = userId,
-                actionId = actionId,
-                goalId = goalId
+                actionId = actionId
             )
                 .mapRight { response ->
                     val entity = response.toStorageModel(goalId, userId)

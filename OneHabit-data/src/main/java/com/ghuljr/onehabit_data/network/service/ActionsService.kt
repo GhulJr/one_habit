@@ -31,7 +31,6 @@ interface ActionsService {
     fun editAction(
         actionName: String,
         userId: String,
-        goalId: String,
         actionId: String
     ): Maybe<Either<BaseError, ActionResponse>>
 
