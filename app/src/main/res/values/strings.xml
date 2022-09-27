@@ -41,7 +41,7 @@
     <string name="profile">Profile</string>
 
     <!-- Timeline -->
-    <string name="timeline_day_header">Day %1$s</string>
+    <string name="day_header">Day %1$s</string>
     <string name="edit">Edit</string>
     <string name="actions">Actions</string>
     <string name="when">When</string>
@@ -91,4 +91,5 @@
     <!-- Handling habit changes -->
     <string name="select_habit_title">Select habit</string>
     <string name="select_habit_message">It seems like you don\'t have any habit active. Please, select one.</string>
+    <string name="goal_details">Goal details</string>
 </resources>

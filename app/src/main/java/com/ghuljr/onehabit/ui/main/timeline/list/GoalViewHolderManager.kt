@@ -38,7 +38,7 @@ class GoalViewHolderManager : ViewHolderManager(R.layout.item_timeline_goal) {
                     }
                 )
 
-                header.text = view.resources.getString(R.string.timeline_day_header, item.dayNumber.toString())
+                header.text = view.resources.getString(R.string.day_header, item.dayNumber.toString())
                 stateIcon.setImageResource(iconRes)
                 stateIcon.imageTintList = iconTint
 

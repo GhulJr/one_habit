@@ -66,6 +66,13 @@ class ActionsRepository @Inject constructor(
         .replay(1)
         .refCount()
 
+    fun actionsByGoalId(goalId: String): Observable<Either<BaseError, List<Action>>> =  actionForGoalCache[goalId]
+        .switchMapRightWithEither { source -> source.dataFlowable }
+        .toObservable()
+        .mapRight { it.map { it.toDomain() } }
+        .replay(1)
+        .refCount()
+
     fun refreshTodayActions(): Maybe<Either<BaseError, List<Action>>> =
         userMetadataRepository.currentUser
             .filter { it.map { it.goalId != null }.getOrElse { true } }

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/todayFragment"
-        android:name="com.ghuljr.onehabit.ui.main.today.TodayFragment"
+        android:name="com.ghuljr.onehabit.ui.main.today.ActionsFragment"
         android:label="@string/today"
         tools:layout="@layout/fragment_today">
         <action
