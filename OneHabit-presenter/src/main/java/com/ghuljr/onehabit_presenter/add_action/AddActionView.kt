@@ -10,4 +10,5 @@ interface AddActionView : BaseView<AddActionPresenter> {
     fun actionNameChangedObservable(): Observable<String>
     fun handleEvent(event: Option<BaseEvent>)
     fun close()
+    fun setActionTitle(title: String)
 }

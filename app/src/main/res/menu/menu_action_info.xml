@@ -5,6 +5,12 @@
     <item
         android:id="@+id/edit"
         android:icon="@drawable/ic_edit"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        android:title="@string/edit" />
+
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_remove"
+        app:showAsAction="ifRoom"
         android:title="@string/edit" />
 </menu>

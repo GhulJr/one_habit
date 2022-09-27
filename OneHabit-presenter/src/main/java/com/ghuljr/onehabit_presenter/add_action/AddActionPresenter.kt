@@ -1,11 +1,7 @@
 package com.ghuljr.onehabit_presenter.add_action
 
-import arrow.core.left
-import arrow.core.none
-import arrow.core.right
-import arrow.core.some
+import arrow.core.*
 import com.ghuljr.onehabit_data.repository.ActionsRepository
-import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_error.ValidationError
@@ -14,6 +10,8 @@ import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
+import com.ghuljr.onehabit_tools.extension.onlyDefined
+import com.ghuljr.onehabit_tools.extension.onlyRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -30,25 +28,26 @@ class AddActionPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository
 ) : BasePresenter<AddActionView>() {
 
-    private val goalIdSubject = BehaviorSubject.createDefault("")
+    private val credentialsSubject = BehaviorSubject.createDefault("" to none<String>())
     private val createActionSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: AddActionView): Disposable {
         val actionNameObservable = view.actionNameChangedObservable().replay(1).refCount()
         return CompositeDisposable(
             createActionSubject
-                .map { println("TestClick1") }
                 .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-                .withLatestFrom(actionNameObservable, goalIdSubject) { _, name, goalId -> if (name.isBlank()) (ValidationError.EmptyField as BaseEvent).left() else (name to goalId).right() }
-                .switchMapRightWithEither { (name, goalId) ->
-                    actionsRepository.createCustomAction(name, goalId)
+                .withLatestFrom(actionNameObservable, credentialsSubject) { _, name, initData -> if (name.isBlank()) (ValidationError.EmptyField as BaseEvent).left() else Triple(name, initData.first, initData.second).right() }
+                .switchMapRightWithEither { (name, goalId, actionOption) ->
+                    actionOption.fold(
+                        ifSome = { actionsRepository.editCustomAction(name, goalId, it) },
+                        ifEmpty = { actionsRepository.createCustomAction(name, goalId) }
+                    )
                         .toObservable()
                         .mapLeft { it as BaseEvent }
                         .startWithItem(LoadingEvent.left())
                 }
                 .observeOn(uiScheduler)
                 .subscribe {
-                    println("TestClick4")
                     it.fold(
                         ifRight = {
                             view.handleEvent(none())
@@ -57,11 +56,19 @@ class AddActionPresenter @Inject constructor(
                         ifLeft = { event -> view.handleEvent(event.some()) }
                     )
                 },
+            credentialsSubject
+                .map { it.second }
+                .take(1)
+                .onlyDefined()
+                .switchMapMaybe { actionsRepository.getActionObservable(it).firstElement() }
+                .observeOn(uiScheduler)
+                .onlyRight()
+                .subscribe { view.setActionTitle(it.customTitle ?: "") },
             actionNameObservable.subscribe(),
         )
 
     }
 
     fun createAction() = createActionSubject.onNext(Unit)
-    fun setGoalId(goalId: String) = goalIdSubject.onNext(goalId)
+    fun init(initData: Pair<String, Option<String>>) = credentialsSubject.onNext(initData)
 }

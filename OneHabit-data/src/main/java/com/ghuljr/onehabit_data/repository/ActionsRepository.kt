@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.persistence.ActionDatabase
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
@@ -66,12 +67,13 @@ class ActionsRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    fun actionsByGoalId(goalId: String): Observable<Either<BaseError, List<Action>>> =  actionForGoalCache[goalId]
-        .switchMapRightWithEither { source -> source.dataFlowable }
-        .toObservable()
-        .mapRight { it.map { it.toDomain() } }
-        .replay(1)
-        .refCount()
+    fun actionsByGoalId(goalId: String): Observable<Either<BaseError, List<Action>>> =
+        actionForGoalCache[goalId]
+            .switchMapRightWithEither { source -> source.dataFlowable }
+            .toObservable()
+            .mapRight { it.map { it.toDomain() } }
+            .replay(1)
+            .refCount()
 
     fun refreshTodayActions(): Maybe<Either<BaseError, List<Action>>> =
         userMetadataRepository.currentUser
@@ -142,6 +144,35 @@ class ActionsRepository @Inject constructor(
                     entity.toDomain()
                 }
         }
+
+    fun editCustomAction(
+        actionName: String,
+        goalId: String,
+        actionId: String
+    ): Maybe<Either<BaseError, Action>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .firstElement()
+        .flatMapRightWithEither { userId ->
+            actionsService.editAction(
+                actionName = actionName,
+                userId = userId,
+                actionId = actionId,
+                goalId = goalId
+            )
+                .mapRight { response ->
+                    val entity = response.toStorageModel(goalId, userId)
+                    actionsDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
+
+    fun removeAction(action: Action): Maybe<Either<BaseError, Unit>> =
+        loggedInUserRepository.userIdFlowable
+            .toEither { LoggedOutError as BaseError }
+            .firstElement()
+            .flatMapRightWithEither { userId -> actionsService.removeAction(action.id, userId, action.goalId) }
+            .mapRight { actionsDatabase.removeAction(action.id) }
+
 }
 
 private fun List<ActionResponse>.toStorageModel(goalId: String, userId: String) =

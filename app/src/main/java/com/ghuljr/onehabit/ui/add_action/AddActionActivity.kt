@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import com.ghuljr.onehabit.databinding.ActivityAddActionBinding
 import android.os.Bundle
-import android.widget.Toast
 import arrow.core.Option
+import arrow.core.toOption
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.ui.base.BaseActivity
 import com.ghuljr.onehabit_error.BaseEvent
@@ -22,7 +22,7 @@ class AddActionActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.setGoalId(intent.getStringExtra(EXTRA_GOAL_ID)!!)
+        presenter.init(intent.getStringExtra(EXTRA_GOAL_ID)!! to intent.getStringExtra(EXTRA_ACTION_ID).toOption())
         viewBind.apply {
             addActionButton.setOnClickListener { presenter.createAction() }
         }
@@ -50,12 +50,18 @@ class AddActionActivity :
         finish()
     }
 
+    override fun setActionTitle(title: String) {
+        viewBind.actionNameInput.setText(title)
+    }
+
     companion object {
         private const val EXTRA_GOAL_ID = "extra_goal_id"
+        private const val EXTRA_ACTION_ID = "extra_action_id"
 
-        fun intent(from: Context, goalId: String) =
+        fun intent(from: Context, goalId: String, actionId: String? = null) =
             Intent(from, AddActionActivity::class.java).apply {
                 putExtra(EXTRA_GOAL_ID, goalId)
+                putExtra(EXTRA_ACTION_ID, actionId)
             }
     }
 }
