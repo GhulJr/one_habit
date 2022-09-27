@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/ripple_button_click_black">
 
     <View
         style="@style/OneHabit.Timeline.Line"
@@ -46,25 +47,10 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
+        app:layout_constraintBottom_toBottomOf="@id/state_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/state_icon"
         app:layout_constraintTop_toTopOf="@id/state_icon"
         tools:text="Day 1" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_margin_small"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/OneHabit.TextAppearance.Primary"
-        app:layout_constraintBottom_toBottomOf="@id/state_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/state_icon"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintVertical_bias="1.0"
-        tools:text="Do not eat choclate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

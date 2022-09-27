@@ -12,10 +12,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.toEither
+import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -61,6 +58,19 @@ class UserMetadataRepository @Inject constructor(
         .firstElement()
         .flatMapRightWithEither { it.refresh() }
         .mapRight { it.toDomain() }
+
+    fun setCurrentGoal(goalId: String): Maybe<Either<BaseError, UserMetadata>> = cache.get()
+        .firstElement()
+        .flatMapRightWithEither {
+            it.dataFlowable
+                .firstElement()
+                .flatMapRightWithEither { user -> userService.setCurrentGoal(user.id, goalId) }
+                .mapRight { userResponse ->
+                    val entity = userResponse.toUserEntity()
+                    userMetadataDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
 }
 
 private fun UserMetadataResponse.toUserEntity() = UserEntity(
@@ -72,6 +82,7 @@ private fun UserMetadataResponse.toUserEntity() = UserEntity(
 )
 
 private fun UserEntity.toDomain() = UserMetadata(
+    id = id,
     habitId = habitId,
     milestoneId = milestoneId,
     goalId = goalId,

@@ -24,18 +24,10 @@ data class TodayActionItem(
     val exceeded: Boolean
 ) : TodayItem.Action() {
 
-    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
-    override fun matches(item: UniqueItem): Boolean = compareTo(item)
-
-    private fun compareTo(item: UniqueItem) = (item as? TodayActionItem)?.let {
-        it.id == id && it.time == time && it.quantity?.first == quantity?.first
-    } ?: false
+    override fun theSame(item: UniqueItem): Boolean = (item as? TodayActionItem)?.id == id
+    override fun matches(item: UniqueItem): Boolean = item == this
 
     fun openActionDetails() = onActionClick()
-    /*
-    * DAILY - if current == max repeat, then mark it as done
-    * WEEKLY - display a little bit different info, when current == max repeat, then change task name and label to Overflow: 0
-    * */
 }
 
 data class CustomActionItem(
@@ -49,12 +41,8 @@ data class CustomActionItem(
 
     override val quantity: Quantity? = null
 
-    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
-    override fun matches(item: UniqueItem): Boolean = compareTo(item)
-
-    private fun compareTo(item: UniqueItem) = (item as? CustomActionItem)?.let {
-        it.id == id && it.time == time
-    } ?: false
+    override fun theSame(item: UniqueItem): Boolean = (item as? CustomActionItem)?.id == id
+    override fun matches(item: UniqueItem): Boolean = item == this
 
     fun openActionDetails() = onActionClick()
 }
@@ -69,12 +57,8 @@ data class TodayActionFinishedItem(
     val habitSubject: String
 ) : TodayItem.Action() {
 
-    override fun theSame(item: UniqueItem): Boolean = compareTo(item)
-    override fun matches(item: UniqueItem): Boolean = compareTo(item)
-
-    private fun compareTo(item: UniqueItem) = (item as? TodayActionFinishedItem)?.let {
-        it.id == id && it.time == time && it.quantity?.first == quantity?.first
-    } ?: false
+    override fun theSame(item: UniqueItem): Boolean = (item as? TodayActionFinishedItem)?.id == id
+    override fun matches(item: UniqueItem): Boolean = item == this
 
     fun openActionDetails() = onActionClick()
 }

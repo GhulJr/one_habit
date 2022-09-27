@@ -30,6 +30,8 @@ class ActionInfoPresenter @Inject constructor(
     private val actionInfoSubject = PublishSubject.create<String>()
     private val completeActionStep = PublishSubject.create<Unit>()
     private val revertCompleteActionStep = PublishSubject.create<Unit>()
+    private val removeActionSubject = PublishSubject.create<Unit>()
+    private val editActionSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: ActionInfoView): Disposable = CompositeDisposable(
         Observable.combineLatest(
@@ -38,13 +40,13 @@ class ActionInfoPresenter @Inject constructor(
         ) { actionEither, habitEither -> actionEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
             .mapRight { (action, habit) ->
-                val type =  if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
+                val type = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
                 val exceeded = action.run { repeatCount >= totalRepeats }
                 ActionInfoItem(
                     customTitle = action.customTitle,
                     editable = action.customTitle != null && action.repeatCount < action.totalRepeats,
                     habitTopic = habit.type,
-                    quantity = if(action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
+                    quantity = if (action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
                     habitSubject = habit.habitSubject,
                     type = type,
                     reminders = action.reminders?.map { it.timeToString(TIME_FORMAT) },
@@ -53,11 +55,9 @@ class ActionInfoPresenter @Inject constructor(
                     declineAvailable = action.repeatCount > 0
                 )
             }
-
             .onlyRight()
             .observeOn(uiScheduler)
             .subscribe { actionInfo -> view.displayActionInfo(actionInfo) },
-
         Observable.merge(
             completeActionStep
                 .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
@@ -75,12 +75,18 @@ class ActionInfoPresenter @Inject constructor(
                 }
         )
             .observeOn(uiScheduler)
-            .subscribe {
-                it.fold(
-                    ifRight = { /* TODO: is any action required here? */ },
-                    ifLeft = { /* TODO: handle error and loading */ }
-                )
-            }
+            .subscribe(),
+        removeActionSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .withLatestFrom(actionObservable) { _, action -> action }
+            .switchMapRightWithEither { actionsRepository.removeAction(it).toObservable() }
+            .observeOn(uiScheduler)
+            .subscribe { view.close() },
+        editActionSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .withLatestFrom(actionObservable) { _, action -> action }
+            .observeOn(uiScheduler)
+            .subscribe { it.tap { view.editAction(it.goalId, it.id) } }
 
     )
 
@@ -93,6 +99,9 @@ class ActionInfoPresenter @Inject constructor(
 
     fun completeActionStep() = completeActionStep.onNext(Unit)
     fun revertCompleteActionStep() = revertCompleteActionStep.onNext(Unit)
+
+    fun removeAction() = removeActionSubject.onNext(Unit)
+    fun editAction() = editActionSubject.onNext(Unit)
 
     fun displayAction(actionId: String) = actionInfoSubject.onNext(actionId)
 

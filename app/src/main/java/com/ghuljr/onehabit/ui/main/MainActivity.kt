@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit.ui.main
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -51,6 +52,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
 
     override fun setSubtitle(subtitle: String) {
         viewBind.toolbar.subtitle = subtitle
+    }
+
+    override fun askForChoosingHabit() {
+        AlertDialog.Builder(this)
+            .setTitle(R.string.select_habit_title)
+            .setMessage(R.string.select_habit_message)
+            .setPositiveButton(R.string.ok) { _,_ -> /* TODO: open activity with the list of habits */ }
+            .setCancelable(true)
+            .show()
+    }
+
+    override fun displayMilestoneSummary() {
+        /* TODO: open summary screen */
     }
 
     fun setCurrentStep(currentStep: MainStep) {

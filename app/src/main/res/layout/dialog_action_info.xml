@@ -32,31 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:menu="@menu/menu_action_info"
-                app:titleTextAppearance="@style/OneHabit.TextAppearance.Primary.Header">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="14dp"
-                    android:paddingEnd="@dimen/default_margin">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header"
-                        tools:text="Eat vegetables" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
-                        android:textStyle="italic"
-                        tools:text="Vegetables are very good, q w e r to p o r e m e m b e r that ;)" />
-
-                </LinearLayout>
-
-            </androidx.appcompat.widget.Toolbar>
+                tools:title="Title"
+                app:titleTextAppearance="@style/OneHabit.TextAppearance.Primary.Header"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

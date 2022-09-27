@@ -15,20 +15,18 @@ import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.info.ActionInfoBottomSheetDialog
 import com.ghuljr.onehabit.ui.main.today.list.*
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
-import com.ghuljr.onehabit_error_android.extension.textForError
 import com.ghuljr.onehabit_presenter.main.MainStep
 import com.ghuljr.onehabit_presenter.main.today.TodayItem
-import com.ghuljr.onehabit_presenter.main.today.TodayPresenter
-import com.ghuljr.onehabit_presenter.main.today.TodayView
+import com.ghuljr.onehabit_presenter.main.today.ActionsPresenter
+import com.ghuljr.onehabit_presenter.main.today.ActionsView
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.tool.ItemDivider
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresenter>(), TodayView {
+class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsPresenter>(), ActionsView {
 
     @Inject lateinit var actionInfoPresenter: ActionInfoPresenter
 
@@ -43,6 +41,9 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TODAY)
+
+        presenter.init(arguments?.getString(EXTRA_GOAL_ID).toOption())
+
         viewBind.apply {
             todayRecyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -63,7 +64,7 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
         container: ViewGroup?
     ): FragmentTodayBinding = FragmentTodayBinding.inflate(layoutInflater, container, false)
 
-    override fun getPresenterView(): TodayView = this
+    override fun getPresenterView(): ActionsView = this
 
     override fun openDetails(actionId: String) {
         ActionInfoBottomSheetDialog(actionInfoPresenter, actionId).show(childFragmentManager, null)
@@ -94,5 +95,16 @@ class TodayFragment : BaseFragment<FragmentTodayBinding, TodayView, TodayPresent
 
     override fun openCreateCustomAction(goalId: String) {
         startActivity(AddActionActivity.intent(requireContext(), goalId))
+    }
+
+    companion object {
+
+        private const val EXTRA_GOAL_ID = "extra_goal_id"
+
+        fun instance(goalId: String?) = ActionsFragment().apply {
+            arguments = Bundle().apply {
+                putString(EXTRA_GOAL_ID, goalId)
+            }
+        }
     }
 }

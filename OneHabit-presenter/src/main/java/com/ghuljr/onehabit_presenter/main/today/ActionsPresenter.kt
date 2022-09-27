@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_presenter.main.today
 
 import arrow.core.Either
+import arrow.core.Option
 import arrow.core.left
 import arrow.core.zip
 import com.ghuljr.onehabit_data.domain.Action
@@ -11,7 +12,6 @@ import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
-import com.ghuljr.onehabit_error.UnknownError
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
@@ -23,27 +23,38 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: handle adding and editing custom action
 // TODO: Add option to schedule/change reminder notification for specific task on go.
+// TODO: display placeholder when there are no actions displayed
 @FragmentScope
-class TodayPresenter @Inject constructor(
+class ActionsPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository,
     private val habitRepository: HabitRepository,
     private val userMetadataRepository: UserMetadataRepository,
     @UiScheduler private val uiScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler
-) : BasePresenter<TodayView>() {
+) : BasePresenter<ActionsView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
     private val selectItemSubject = PublishSubject.create<String>()
     private val addCustomActionSubject = PublishSubject.create<Unit>()
+    private val initSubject = BehaviorSubject.create<Option<String>>()
 
-    override fun subscribeToView(view: TodayView): Disposable = CompositeDisposable(
-        todayActionsItemsObservable
+    override fun subscribeToView(view: ActionsView): Disposable = CompositeDisposable(
+        initSubject
+            .take(1)
+            .switchMap {
+                actionsObservable(
+                    it.fold(
+                        ifSome = { actionsRepository.actionsByGoalId(it) },
+                        ifEmpty = { actionsRepository.todayActionsObservable }
+                    )
+                )
+            }
             .subscribe {
                 view.handleLoading(it.swap().orNull() is LoadingEvent)
                 it.fold(
@@ -94,12 +105,12 @@ class TodayPresenter @Inject constructor(
                     ifRight = { user -> view.openCreateCustomAction(user.goalId!!) },
                     ifLeft = { error -> view.handleItemsError(error) }
                 )
-            }
+            },
     )
 
-    private val todayActionsItemsObservable: Observable<Either<BaseEvent, List<TodayItem>>> =
+    private fun actionsObservable(actionsSourceObservable: Observable<Either<BaseError, List<Action>>>): Observable<Either<BaseEvent, List<TodayItem>>> =
         Observable.combineLatest(
-            actionsRepository.todayActionsObservable,
+            actionsSourceObservable,
             habitRepository.todayHabitObservable
         ) { actionsEither, habitEither -> actionsEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
@@ -116,7 +127,7 @@ class TodayPresenter @Inject constructor(
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (actions.isNotEmpty() && actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
+                    .let { if (actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
@@ -126,6 +137,7 @@ class TodayPresenter @Inject constructor(
             .share()
 
     fun refresh() = refreshSubject.onNext(Unit)
+    fun init(goalId: Option<String>) = initSubject.onNext(goalId)
 
     private fun addCustomAction() = addCustomActionSubject.onNext(Unit)
 

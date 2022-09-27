@@ -27,4 +27,16 @@ interface ActionsService {
     fun putAction(
         actionRequest: ActionRequest
     ): Maybe<Either<BaseError, ActionResponse>>
+
+    fun editAction(
+        actionName: String,
+        userId: String,
+        actionId: String
+    ): Maybe<Either<BaseError, ActionResponse>>
+
+    fun removeAction(
+        actionId: String,
+        userId: String,
+        goalId: String
+    ): Maybe<Either<BaseError, Unit>>
 }

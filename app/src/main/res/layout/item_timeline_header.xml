@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="?actionBarSize">
 
     <View
         style="@style/OneHabit.Timeline.Line"
@@ -25,23 +26,5 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintStart_toStartOf="parent"/>
-
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/header_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_margin_small"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAppearance="@style/OneHabit.TextAppearance.Primary.Title.Small"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/timeline_start"
-        app:layout_constraintTop_toTopOf="@id/timeline_start"
-        app:layout_constraintBottom_toBottomOf="@id/timeline_start"
-        tools:text="Fight chocolate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

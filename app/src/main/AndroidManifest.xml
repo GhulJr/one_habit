@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
+            android:name=".ui.goal_details.GoalDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.add_action.AddActionActivity"
             android:exported="false" />
         <activity

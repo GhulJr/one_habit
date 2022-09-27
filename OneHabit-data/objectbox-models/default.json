@@ -267,10 +267,86 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:7481785625492220139",
+      "lastPropertyId": "6:5940666338139476341",
+      "name": "GoalEntity",
+      "properties": [
+        {
+          "id": "1:8969193571789318133",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2380817123447990763",
+          "name": "id",
+          "indexId": "9:4511290381726209845",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:6858671721155229861",
+          "name": "userId",
+          "indexId": "10:1022088781395155595",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "4:8835694016390010767",
+          "name": "milestoneId",
+          "indexId": "11:1268394365547372304",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "5:5659520299913043765",
+          "name": "remindersAtMs",
+          "type": 6
+        },
+        {
+          "id": "6:5940666338139476341",
+          "name": "dayNumber",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:7033204050790402043",
+      "lastPropertyId": "4:7298659391139143054",
+      "name": "GoalEntityHolder",
+      "properties": [
+        {
+          "id": "1:6482173570926276681",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6126770514554021876",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:5258444999050162045",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:7298659391139143054",
+          "name": "milestoneId",
+          "indexId": "12:5590053610497117405",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "7:5691044738079520659",
-  "lastIndexId": "8:4975524384784603418",
+  "lastEntityId": "9:7033204050790402043",
+  "lastIndexId": "12:5590053610497117405",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

@@ -15,8 +15,6 @@ class HeaderViewHolderManager : ViewHolderManager(R.layout.item_timeline_header)
 
         private val viewBind = ItemTimelineHeaderBinding.bind(view)
 
-        override fun bind(item: HeaderItem) {
-           viewBind.headerTitle.text = item.title
-        }
+        override fun bind(item: HeaderItem) {}
     }
 }

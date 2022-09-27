@@ -5,4 +5,6 @@ import com.ghuljr.onehabit_presenter.main.today.ActionInfoItem
 
 interface ActionInfoView : BaseView<ActionInfoPresenter> {
     fun displayActionInfo(actionInfoItem: ActionInfoItem)
+    fun close()
+    fun editAction(goalId: String, actionId: String)
 }

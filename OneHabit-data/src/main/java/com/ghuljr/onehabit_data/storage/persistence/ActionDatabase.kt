@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_data.storage.persistence
 import arrow.core.*
 import com.ghuljr.onehabit_data.base.storage.BaseDatabase
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
+import com.ghuljr.onehabit_data.domain.Action
 import com.ghuljr.onehabit_data.storage.model.ActionEntity
 import com.ghuljr.onehabit_data.storage.model.ActionEntity_
 import com.ghuljr.onehabit_data.storage.model.ActionOfGoalEntitiesHolder
@@ -55,6 +56,11 @@ class ActionDatabase @Inject constructor(
             .toFlowable(BackpressureStrategy.BUFFER)
             .subscribeOn(computationScheduler)
             .share()
+
+    fun removeAction(id: String) {
+        box.query().equal(ActionEntity_.id, id, QueryBuilder.StringOrder.CASE_SENSITIVE)
+            .build().remove()
+    }
 
     fun removeActionsForGoal(goalId: String) {
         box.query().equal(ActionEntity_.goalId, goalId, QueryBuilder.StringOrder.CASE_SENSITIVE)

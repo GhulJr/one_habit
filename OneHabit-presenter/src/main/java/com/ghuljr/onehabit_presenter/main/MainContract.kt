@@ -8,4 +8,6 @@ interface MainView: BaseView<MainPresenter> {
     fun changeCurrentStep(currentStep: MainStep)
     fun setTitle(title: String)
     fun setSubtitle(subtitle: String)
+    fun askForChoosingHabit()
+    fun displayMilestoneSummary()
 }

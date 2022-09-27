@@ -1,6 +1,8 @@
 package com.ghuljr.onehabit.di.module
 
 import com.ghuljr.onehabit.ui.add_action.AddActionActivity
+import com.ghuljr.onehabit.ui.goal_details.DetailsModule
+import com.ghuljr.onehabit.ui.goal_details.GoalDetailsActivity
 import com.ghuljr.onehabit.ui.intro.IntroActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataFragmentsModule
@@ -49,4 +51,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector
     fun addActionActivity(): AddActionActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [DetailsModule::class])
+    fun goalDetailsActivity(): GoalDetailsActivity
 }

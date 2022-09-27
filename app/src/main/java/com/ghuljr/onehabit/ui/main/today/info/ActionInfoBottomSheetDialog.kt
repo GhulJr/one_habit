@@ -12,6 +12,7 @@ import androidx.annotation.CallSuper
 import androidx.core.view.isVisible
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.DialogActionInfoBinding
+import com.ghuljr.onehabit.ui.add_action.AddActionActivity
 import com.ghuljr.onehabit.ui.main.today.list.generateTitle
 import com.ghuljr.onehabit_presenter.main.today.ActionInfoItem
 import com.ghuljr.onehabit_presenter.main.today.ActionType
@@ -45,6 +46,15 @@ class ActionInfoBottomSheetDialog(
         viewBind.apply {
             confirm.setOnClickListener { presenter.completeActionStep() }
             decline.setOnClickListener { presenter.revertCompleteActionStep() }
+
+            toolbar.setOnMenuItemClickListener {
+                when(it.itemId) {
+                    R.id.edit -> presenter.editAction()
+                    R.id.delete -> presenter.removeAction()
+                    else -> return@setOnMenuItemClickListener false
+                }
+                return@setOnMenuItemClickListener true
+            }
         }
     }
 
@@ -98,6 +108,15 @@ class ActionInfoBottomSheetDialog(
             }
             confirm.isVisible = item.confirmAvailable
             decline.isVisible = item.declineAvailable
+            toolbar.menu.findItem(R.id.delete).isVisible = item.editable
         }
+    }
+
+    override fun close() {
+        dismiss()
+    }
+
+    override fun editAction(goalId: String, actionId: String) {
+        startActivity(AddActionActivity.intent(requireContext(), goalId, actionId))
     }
 }
