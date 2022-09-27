@@ -117,7 +117,7 @@ class TodayPresenter @Inject constructor(
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
-                    .let { if (actions.isNotEmpty() && actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
+                    .let { if (actions.none { it.customTitle != null }) it.plus(AddActionItem { addCustomAction() }) else it }
                     .plus(extraActions)
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)

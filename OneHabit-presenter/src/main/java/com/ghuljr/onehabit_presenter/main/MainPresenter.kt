@@ -50,7 +50,9 @@ class MainPresenter @Inject constructor(
                 if(it.habitId == null)
                     view.askForChoosingHabit()
             },
-        goalRepository.keepTrackOfCurrentGoal.subscribe()
+        goalRepository.showMilestoneSummaryObservable.subscribe {
+            view.displayMilestoneSummary()
+        }
     )
 
     fun setCurrentStep(currentStep: MainStep): Unit = currentStepSubject.onNext(currentStep)

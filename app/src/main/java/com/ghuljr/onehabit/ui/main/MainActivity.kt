@@ -63,6 +63,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
             .show()
     }
 
+    override fun displayMilestoneSummary() {
+        /* TODO: open summary screen */
+    }
+
     fun setCurrentStep(currentStep: MainStep) {
         presenter.setCurrentStep(currentStep)
     }

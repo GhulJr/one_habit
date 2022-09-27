@@ -20,14 +20,6 @@ import io.reactivex.rxjava3.core.Observable
 class AddActionActivity :
     BaseActivity<ActivityAddActionBinding, AddActionView, AddActionPresenter>(), AddActionView {
 
-    private val eventHandler: EventHandler by lazy {
-        EventHandler(listOf(SnackbarEventManager(
-            eventView = viewBind.root,
-            duration = Snackbar.LENGTH_INDEFINITE,
-            actionWithName = { } to getString(R.string.ok)
-        )), viewBind.loadingIndicator)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.setGoalId(intent.getStringExtra(EXTRA_GOAL_ID)!!)
@@ -45,7 +37,13 @@ class AddActionActivity :
         viewBind.actionNameInput.debouncedTextChanges().startWithItem("")
 
     override fun handleEvent(event: Option<BaseEvent>) {
-        eventHandler.invoke(event)
+        val eventHandler = EventHandler(listOf(SnackbarEventManager(
+            eventView = viewBind.root,
+            duration = Snackbar.LENGTH_INDEFINITE,
+            actionWithName = { } to getString(R.string.ok)
+        )), viewBind.loadingIndicator)
+
+        eventHandler(event)
     }
 
     override fun close() {
