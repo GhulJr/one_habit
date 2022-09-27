@@ -113,7 +113,7 @@ class ActionInfoBottomSheetDialog(
     }
 
     override fun close() {
-        close()
+        dismiss()
     }
 
     override fun editAction(goalId: String, actionId: String) {

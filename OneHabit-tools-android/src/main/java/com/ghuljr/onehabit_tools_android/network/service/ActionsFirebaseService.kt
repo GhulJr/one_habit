@@ -107,7 +107,7 @@ class ActionsFirebaseService @Inject constructor(
         actionId: String
     ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
         .child(actionId)
-        .updateChildren(mapOf("customTitle" to actionName))
+        .updateChildren(mapOf("custom_title" to actionName))
         .asUnitSingle()
         .toMaybe()
         .leftOnThrow()
