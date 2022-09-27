@@ -15,7 +15,7 @@
         android:id="@+id/timeline_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_timeline_behaviour"
+        tools:listitem="@layout/item_timeline_goal"
         tools:itemCount="100"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

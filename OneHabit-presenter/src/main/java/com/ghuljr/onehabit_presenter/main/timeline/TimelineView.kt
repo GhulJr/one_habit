@@ -8,4 +8,5 @@ interface TimelineView : BaseView<TimelinePresenter> {
 
     fun submitItems(items: List<TimelineItem>)
     fun handleEvent(event: Option<BaseEvent>)
+    fun openGoalDetails(goalId: String)
 }

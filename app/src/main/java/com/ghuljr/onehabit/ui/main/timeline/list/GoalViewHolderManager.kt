@@ -4,18 +4,18 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import com.ghuljr.onehabit.R
-import com.ghuljr.onehabit.databinding.ItemTimelineBehaviourBinding
+import com.ghuljr.onehabit.databinding.ItemTimelineGoalBinding
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
 import com.ghuljr.onehabit_presenter.main.timeline.GoalItem
 import com.ghuljr.onehabit_tools_android.base.list.ViewHolderManager
 
-class BehaviourViewHolderManager : ViewHolderManager(R.layout.item_timeline_behaviour) {
+class GoalViewHolderManager : ViewHolderManager(R.layout.item_timeline_goal) {
 
     override fun isType(item: UniqueItem): Boolean = item is GoalItem
 
     override fun createViewHolder(view: View) = object : ViewHolder<GoalItem>(view) {
 
-        private val viewBind = ItemTimelineBehaviourBinding.bind(view)
+        private val viewBind = ItemTimelineGoalBinding.bind(view)
 
         override fun bind(item: GoalItem) {
             viewBind.apply {
@@ -46,6 +46,8 @@ class BehaviourViewHolderManager : ViewHolderManager(R.layout.item_timeline_beha
                     if(view.id != R.id.icon_background)
                         view.alpha = alpha
                 }
+
+                root.setOnClickListener { item.click() }
             }
         }
     }

@@ -8,6 +8,7 @@ import com.ghuljr.onehabit_data.repository.GoalRepository
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
+import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
@@ -16,18 +17,18 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: handle errors
-// TODO: handle loading
-// TODO: handle swipe refresh
 @FragmentScope
 class TimelinePresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
+    @ComputationScheduler private val computationScheduler: Scheduler,
     private val goalRepository: GoalRepository
 ) : BasePresenter<TimelineView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
+    private val openGoalDetailsSubject = PublishSubject.create<String>()
 
     override fun subscribeToView(view: TimelineView): Disposable = CompositeDisposable(
         goalRepository.currentGoals
@@ -54,6 +55,7 @@ class TimelinePresenter @Inject constructor(
                 )
             },
         refreshSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
             .switchMap {
                 goalRepository.refreshCurrentGoal()
                     .toObservable()
@@ -66,7 +68,11 @@ class TimelinePresenter @Inject constructor(
                     ifRight = { view.handleEvent(none()) },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
-            }
+            },
+        openGoalDetailsSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .observeOn(uiScheduler)
+            .subscribe { view.openGoalDetails(it) }
     )
 
 
@@ -75,7 +81,8 @@ class TimelinePresenter @Inject constructor(
     private fun Goal.toItem() = GoalItem(
         id = id,
         dayNumber = dayNumber.toInt() + 1,
-        state = getState()
+        state = getState(),
+        onClick = { openGoalDetails(id) }
     )
 
     private fun Goal.getState(): GoalItem.State {
@@ -88,4 +95,6 @@ class TimelinePresenter @Inject constructor(
             else -> GoalItem.State.Future
         }
     }
+
+    private fun openGoalDetails(goalId: String) = openGoalDetailsSubject.onNext(goalId)
 }

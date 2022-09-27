@@ -14,11 +14,14 @@ object HeaderItem : TimelineItem {
 data class GoalItem(
     private val id: String,
     val dayNumber: Int,
-    val state: State
+    val state: State,
+    private val onClick: () -> Unit
 ) : TimelineItem {
 
     override fun theSame(item: UniqueItem): Boolean = id == (item as? GoalItem)?.id
     override fun matches(item: UniqueItem): Boolean = this == item
+
+    fun click() = onClick()
 
     sealed interface State {
         object Today : State

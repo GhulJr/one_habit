@@ -9,8 +9,9 @@ import arrow.core.Option
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTimelineBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
+import com.ghuljr.onehabit.ui.goal_details.GoalDetailsActivity
 import com.ghuljr.onehabit.ui.main.MainActivity
-import com.ghuljr.onehabit.ui.main.timeline.list.BehaviourViewHolderManager
+import com.ghuljr.onehabit.ui.main.timeline.list.GoalViewHolderManager
 import com.ghuljr.onehabit.ui.main.timeline.list.HeaderViewHolderManager
 import com.ghuljr.onehabit.ui.main.timeline.list.SummaryViewHolderManager
 import com.ghuljr.onehabit_error.BaseEvent
@@ -29,7 +30,7 @@ class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, Tim
 
     private val timelineAdapter = ItemListAdapter(
         HeaderViewHolderManager(),
-        BehaviourViewHolderManager(),
+        GoalViewHolderManager(),
         SummaryViewHolderManager()
     )
 
@@ -67,5 +68,9 @@ class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, Tim
         )), viewBind.loadingIndicator)
 
         eventManager(event)
+    }
+
+    override fun openGoalDetails(goalId: String) {
+        startActivity(GoalDetailsActivity.intent(requireContext(), goalId))
     }
 }
