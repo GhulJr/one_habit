@@ -63,6 +63,10 @@
         <item name="fontFamily">@font/mplus_rounded_regular</item>
     </style>
 
+    <style name="OneHabit.TextAppearance.Primary.White" parent="OneHabit.TextAppearance.Primary">
+        <item name="android:textColor">@color/primary_white</item>
+    </style>
+
     <style name="OneHabit.TextAppearance.Primary.Small" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">@dimen/default_text_size_small</item>
     </style>

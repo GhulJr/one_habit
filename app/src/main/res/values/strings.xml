@@ -74,15 +74,15 @@
     <string name="app_version_1_s">App version %1$s</string>
 
     <!-- Actions -->
-    <string name="eat">Eat %1$s!</string>
+    <string name="eat_param">Eat %1$s!</string>
     <string name="eat_opposite">You don\'t have to eat %1$s!</string>
-    <string name="not_eat">Do not eat %1$s</string>
+    <string name="not_eat_param">Do not eat %1$s</string>
     <string name="not_eat_opposite">You can eat %1$s</string>
-    <string name="train">Make %1$s</string>
+    <string name="train_param">Make %1$s</string>
     <string name="train_opposite">You don\t have to make %1$s</string>
-    <string name="start_doing">Do %1$s</string>
+    <string name="start_doing_param">Do %1$s</string>
     <string name="start_doing_opposite">You don\'t have to do %1$s</string>
-    <string name="stop_doing">Do not do %1$s</string>
+    <string name="stop_doing_param">Do not do %1$s</string>
     <string name="stop_doing_opposite">You can do %1$s</string>
     <string name="no_reminders">No reminders set</string>
     <string name="add_action">Add action</string>
@@ -96,4 +96,9 @@
     <!-- Create Habit -->
     <string name="create_habit">Create Habit</string>
     <string name="create">Create</string>
+    <string name="eat">Eat</string>
+    <string name="not_eat">Stop eating</string>
+    <string name="train">Train</string>
+    <string name="start_doing">Start doing</string>
+    <string name="stop_doing">Stop doing</string>
 </resources>

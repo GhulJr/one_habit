@@ -37,7 +37,7 @@
             app:counterTextColor="@color/primary_black">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/action_name_input"
+                android:id="@+id/habit_action"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textImeMultiLine"
