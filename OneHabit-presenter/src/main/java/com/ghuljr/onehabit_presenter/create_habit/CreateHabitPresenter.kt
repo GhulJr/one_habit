@@ -7,6 +7,7 @@ import com.ghuljr.onehabit_tools.di.UiScheduler
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 // TODO: handle removing habit with all dependencies in withing the app
@@ -16,9 +17,15 @@ class CreateHabitPresenter @Inject constructor(
     private val habitRepository: HabitRepository
 ) : BasePresenter<CreateHabitView>() {
 
-
+    private val currentStepSubject = BehaviorSubject.createDefault(Step.ACTIVITY)
 
     override fun subscribeToView(view: CreateHabitView): Disposable = CompositeDisposable(
-
+        currentStepSubject
+            .observeOn(uiScheduler)
+            .subscribe { view.handleCurrentStep(it) },
     )
+
+    enum class Step {
+        ACTIVITY, WHAT, WHEN, INTENSITY, REMINDERS, MAKE_ACTIVE, ALLOW_CREATE
+    }
 }

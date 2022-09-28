@@ -92,4 +92,8 @@
     <string name="select_habit_title">Select habit</string>
     <string name="select_habit_message">It seems like you don\'t have any habit active. Please, select one.</string>
     <string name="goal_details">Goal details</string>
+
+    <!-- Create Habit -->
+    <string name="create_habit">Create Habit</string>
+    <string name="create">Create</string>
 </resources>
