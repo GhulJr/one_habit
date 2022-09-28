@@ -65,38 +65,47 @@ class GoalRepository @Inject constructor(
 
     val showMilestoneSummaryObservable: Observable<Unit> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
-            cache[user.milestoneId!!]
-                .switchMapRightWithEither { source ->
-                    source
-                        .dataFlowable
-                        .mapRight { it.toDomain() }
-                }
-                .toObservable()
-                .switchMapRightWithEither { goals ->
-                    val todayDayNumber = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) % 7 - 1
-                    val newGoal = goals.sortedBy { it.dayNumber }.filter { it.dayNumber >= todayDayNumber  }.firstOrNull { !it.finished }
-                    val newGoalIndex = goals.indexOfFirst { it.dayNumber == todayDayNumber.toLong() }
-                    val goalsToFinish = goals.dropLast(goals.size - newGoalIndex).filterNot { it.finished }
-                    when {
-                        newGoal == null -> Observable.just(true.right())
-                        newGoal.id == user.goalId -> Observable.just(false.right())
-                        else -> if (goalsToFinish.isEmpty()) {
-                            Maybe.just(Unit.right())
-                        } else {
-                            goalsService.setGoalsFinished(
-                                goalIds = goalsToFinish.map { it.id },
-                                userId = newGoal.userId,
-                                milestoneId = newGoal.milestoneId
-                            ).mapRightWithEither { updatedGoals ->
-                                val entities = updatedGoals.toEntity()
-                                goalsDatabase.put(*entities.toTypedArray())
-                                Unit.right()
-                            }
-                        }
-                            .flatMap { userMetadataRepository.setCurrentGoal(newGoal.id).mapRight { false } }
-                            .toObservable()
+            if (user.milestoneId == null)
+                Observable.just(true.right())
+            else
+                cache[user.milestoneId]
+                    .switchMapRightWithEither { source ->
+                        source
+                            .dataFlowable
+                            .mapRight { it.toDomain() }
                     }
-                }
+                    .toObservable()
+                    .switchMapRightWithEither { goals ->
+                        val todayDayNumber = (Calendar.getInstance()
+                            .get(Calendar.DAY_OF_WEEK) - 1) % 7 - 1
+                        val newGoal = goals.sortedBy { it.dayNumber }
+                            .filter { it.dayNumber >= todayDayNumber }.firstOrNull { !it.finished }
+                        val newGoalIndex = goals.indexOfFirst { it.dayNumber == todayDayNumber.toLong() }
+                        val goalsToFinish = goals.dropLast(goals.size - newGoalIndex)
+                            .filterNot { it.finished }
+                        when {
+                            user.milestoneId == null || newGoal == null -> Observable.just(true.right())
+                            newGoal.id == user.goalId -> Observable.just(false.right())
+                            else -> if (goalsToFinish.isEmpty()) {
+                                Maybe.just(Unit.right())
+                            } else {
+                                goalsService.setGoalsFinished(
+                                    goalIds = goalsToFinish.map { it.id },
+                                    userId = newGoal.userId,
+                                    milestoneId = newGoal.milestoneId
+                                ).mapRightWithEither { updatedGoals ->
+                                    val entities = updatedGoals.toEntity()
+                                    goalsDatabase.put(*entities.toTypedArray())
+                                    Unit.right()
+                                }
+                            }
+                                .flatMap {
+                                    userMetadataRepository.setCurrentGoal(newGoal.id)
+                                        .mapRight { false }
+                                }
+                                .toObservable()
+                        }
+                    }
         }
         .onlyRight()
         .filter { it }
