@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit_presenter.create_habit
 
-import com.ghuljr.onehabit_data.domain.Habit
 import com.ghuljr.onehabit_data.repository.HabitRepository
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
@@ -23,11 +22,17 @@ class CreateHabitPresenter @Inject constructor(
 
     override fun subscribeToView(view: CreateHabitView): Disposable = CompositeDisposable(
         currentStepSubject
+            .reduce(Step.ACTIVITY to Step.ACTIVITY) { (_, old), new -> old to new }
+            .filter { (old, new) -> Step.values().run { indexOf(old) < indexOf(new) } }
+            .map { (_, new) -> new }
             .observeOn(uiScheduler)
             .subscribe { view.handleCurrentStep(it) },
         habitActionSubject
             .observeOn(uiScheduler)
-            .subscribe { view.setAction(it) }
+            .subscribe {
+                view.setAction(it)
+                currentStepSubject.onNext(Step.SUBJECT)
+            }
     )
 
     fun actionEat() = habitActionSubject.onNext(HabitTopic.EAT)
@@ -37,6 +42,6 @@ class CreateHabitPresenter @Inject constructor(
     fun actionStopDoing() = habitActionSubject.onNext(HabitTopic.STOP_DOING)
 
     enum class Step {
-        ACTIVITY, WHAT, WHEN, INTENSITY, REMINDERS, MAKE_ACTIVE, ALLOW_CREATE
+        ACTIVITY, SUBJECT, INTENSITY_BASE, INTENSITY_DESIRED, FACTOR, SET_AS_ACTIVE, ALLOW_CREATE
     }
 }

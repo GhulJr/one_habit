@@ -17,8 +17,8 @@
             android:id="@+id/toolbar"
             style="@style/OneHabit.Toolbar"
             android:layout_width="match_parent"
-            app:title="@string/create_habit"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:title="@string/create_habit" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,22 +29,163 @@
         android:padding="@dimen/default_margin"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:text="@string/subject"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/OneHabit.TextInputLayout.Underline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/action_input_hint"
+            android:hint="@string/which_action_you_want_to_take"
             app:counterTextColor="@color/primary_black">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/habit_action"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textImeMultiLine"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary"
                 android:clickable="true"
-                android:focusable="false"/>
+                android:focusable="false"
+                android:inputType="text"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OneHabit.TextInputLayout.Underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/what_do_you_want_to_do"
+            android:visibility="gone"
+            app:counterTextColor="@color/primary_black"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/habit_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:inputType="text"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:text="@string/intensity"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_margin_small"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OneHabit.TextInputLayout.Underline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:hint="@string/base_intensity"
+                android:visibility="gone"
+                app:counterTextColor="@color/primary_black"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/base_intensity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:inputType="number"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/OneHabit.TextInputLayout.Underline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:hint="@string/frequency"
+                android:visibility="gone"
+                app:counterTextColor="@color/primary_black"
+                tools:visibility="visible">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/frequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin_small"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:inputType="number"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OneHabit.TextInputLayout.Underline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/base_intensity"
+            android:visibility="gone"
+            app:counterTextColor="@color/primary_black"
+            tools:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/desired_intensity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:inputType="number"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/intensity_factor"
+            android:gravity="center"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary.Bold"
+            android:layout_marginTop="@dimen/default_margin_small"/>
+
+        <com.google.android.material.slider.Slider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:valueFrom="10.0"
+            android:valueTo="25.0"
+            tools:value="15.0"
+            app:labelBehavior="floating"
+            app:trackColorActive="@color/primary_black"
+            app:trackColorInactive="@color/primary_black_transparent" />
+
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:text="@string/finish"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin" />
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_as_active_habit"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary"
+            android:textColor="@color/primary_black" />
 
         <Space
             android:layout_width="match_parent"
@@ -56,8 +197,9 @@
             style="@style/OneHabit.Button.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/create"
             android:visibility="gone"
-            android:text="@string/create" />
+            tools:visibility="visible" />
     </LinearLayout>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
