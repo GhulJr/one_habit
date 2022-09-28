@@ -1,12 +1,14 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import com.ghuljr.onehabit_data.network.model.HabitRequest
 import com.ghuljr.onehabit_data.network.model.HabitResponse
 import com.ghuljr.onehabit_data.network.service.HabitService
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 import com.google.firebase.database.ktx.database
@@ -41,6 +43,26 @@ class HabitFirebaseService @Inject constructor(
         TODO("Not yet implemented")
     }
 
+    override fun createHabit(habitRequest: HabitRequest): Maybe<Either<BaseError, HabitResponse>> {
+        val reference = habitDatabase.child(habitRequest.userId)
+        val key = reference.push().key!!
+
+        return reference
+            .child(key)
+            .setValue(ParsableHabitRequest.fromRequest(habitRequest))
+            .asUnitSingle()
+            .flatMap {
+                reference.child(key)
+                    .get()
+                    .toSingle()
+                    .toRx3()
+                    .map { it.getValue(ParsableHabitResponse::class.java)!!.toHabitResponse(habitRequest.userId, key) }
+            }
+            .toMaybe()
+            .leftOnThrow()
+            .subscribeOn(networkScheduler)
+    }
+
 
 }
 
@@ -71,4 +93,27 @@ private class ParsableHabitResponse(
         habitSubject = habitSubject!!,
         settlingFormat = settlingFormat
     )
+}
+
+@IgnoreExtraProperties
+data class ParsableHabitRequest(
+    @get:PropertyName("default_progress_factor") @set:PropertyName("default_progress_factor") var defaultProgressFactor: Int = 0,
+    @get:PropertyName("intensity_baseline") @set:PropertyName("intensity_baseline") var baseIntensity: Int = 0,
+    @get:PropertyName("intensity_desired") @set:PropertyName("intensity_desired") var desiredIntensity: Int = 0,
+    @get:PropertyName("type") @set:PropertyName("type") var type: String? = null,
+    @get:PropertyName("what") @set:PropertyName("what") var habitSubject: String? = null,
+    @get:PropertyName("which_days") @set:PropertyName("which_days") var settlingFormat: Int = 0
+) {
+    companion object {
+        fun fromRequest(request: HabitRequest) = request.run {
+            ParsableHabitRequest(
+                defaultProgressFactor = defaultProgressFactor,
+                baseIntensity = baseIntensity,
+                desiredIntensity = desiredIntensity,
+                type = type,
+                habitSubject = habitSubject,
+                settlingFormat = settlingFormat
+            )
+        }
+    }
 }
