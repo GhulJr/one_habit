@@ -7,12 +7,17 @@ import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import arrow.core.Option
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityCreateHabitBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
+import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error_android.event_handler.EventHandler
+import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.create_habit.CreateHabitPresenter
 import com.ghuljr.onehabit_presenter.create_habit.CreateHabitView
 import com.ghuljr.onehabit_tools.model.HabitTopic
+import com.google.android.material.snackbar.Snackbar
 
 class CreateHabitActivity :
     BaseActivity<ActivityCreateHabitBinding, CreateHabitView, CreateHabitPresenter>(),
@@ -111,6 +116,19 @@ class CreateHabitActivity :
             if (frequency == 0) R.string.weekly
             else R.string.daily
         )
+    }
+
+    override fun handleEvent(event: Option<BaseEvent>) {
+        val eventHandler = EventHandler(listOf(SnackbarEventManager(
+            eventView = viewBind.root,
+            duration = Snackbar.LENGTH_INDEFINITE,
+            actionWithName = { } to getString(R.string.ok)
+        )), viewBind.loadingIndicator)
+        eventHandler(event)
+    }
+
+    override fun close() {
+        onBackPressed()
     }
 
     companion object {

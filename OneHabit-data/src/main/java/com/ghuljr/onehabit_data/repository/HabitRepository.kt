@@ -15,6 +15,7 @@ import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
 import com.ghuljr.onehabit_tools.model.HabitTopic
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import java.util.concurrent.TimeUnit
@@ -64,6 +65,16 @@ class HabitRepository @Inject constructor(
         }
         .replay(1)
         .refCount()
+
+    fun createHabit(
+        habitTopic: HabitTopic,
+        habitSubject: String,
+        baseIntensity: Int,
+        frequency: Int,
+        desiredIntensity: Int,
+        intensityFactor: Float,
+        setAsActive: Boolean
+    ): Maybe<Either<BaseError, Habit>> {}
 }
 
 private fun HabitResponse.toEntity() = HabitEntity(

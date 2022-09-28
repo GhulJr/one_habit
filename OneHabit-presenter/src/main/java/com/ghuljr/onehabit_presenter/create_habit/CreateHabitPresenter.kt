@@ -1,10 +1,16 @@
 package com.ghuljr.onehabit_presenter.create_habit
 
+import arrow.core.left
+import arrow.core.none
+import arrow.core.some
 import com.ghuljr.onehabit_data.repository.HabitRepository
+import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
+import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.model.HabitTopic
 import com.ghuljr.onehabit_tools.model.WeeklyFlags
 import io.reactivex.rxjava3.core.Observable
@@ -69,7 +75,47 @@ class CreateHabitPresenter @Inject constructor(
         habitIntensityFactorSubject
             .debounce(500L, TimeUnit.MILLISECONDS, computationScheduler)
             .observeOn(uiScheduler)
-            .subscribe { currentStepSubject.onNext(Step.ALLOW_CREATE) }
+            .subscribe { currentStepSubject.onNext(Step.ALLOW_CREATE) },
+        createHabitSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .switchMap {
+                Observable.combineLatest(
+                    habitActionSubject,
+                    habitTopicSubject,
+                    habitBaseIntensity,
+                    habitFrequency,
+                    habitDesiredIntensity,
+                    habitIntensityFactorSubject,
+                    setAsActiveSubject
+                ) { action, subject, baseIntensity, frequency, desiredIntensity, factor, active ->
+                    habitRepository.createHabit(
+                        habitTopic = action,
+                        habitSubject = subject,
+                        baseIntensity = baseIntensity,
+                        frequency = frequency,
+                        desiredIntensity = desiredIntensity,
+                        intensityFactor = factor,
+                        setAsActive = active
+                    )
+                }
+                    .firstElement()
+                    .flatMapObservable {
+                        it.toObservable()
+                            .mapLeft { it as BaseEvent }
+                            .startWithItem(LoadingEvent.left())
+                    }
+            }
+            .observeOn(uiScheduler)
+            .subscribe {
+                it.fold(
+                    ifRight = {
+                        view.handleEvent(none())
+                        view.finish()
+                    },
+                    ifLeft = { view.handleEvent(it.some()) }
+                )
+            }
+
     )
 
     fun actionEat() = habitActionSubject.onNext(HabitTopic.EAT)
