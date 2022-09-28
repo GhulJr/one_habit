@@ -7,5 +7,5 @@ import io.reactivex.rxjava3.core.Maybe
 
 interface GoalsService {
     fun getGoalsForMilestone(milestoneId: String, userId: String): Maybe<Either<BaseError, List<GoalResponse>>>
-    fun setGoalsFinished(goalIds: List<String>, userId: String): Maybe<Either<BaseError, List<GoalResponse>>>
+    fun setGoalsFinished(goalIds: List<String>, userId: String, milestoneId: String): Maybe<Either<BaseError, List<GoalResponse>>>
 }

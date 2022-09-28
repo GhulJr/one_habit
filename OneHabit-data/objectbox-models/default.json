@@ -270,7 +270,7 @@
     },
     {
       "id": "8:7481785625492220139",
-      "lastPropertyId": "6:5940666338139476341",
+      "lastPropertyId": "7:8354938748857240765",
       "name": "GoalEntity",
       "properties": [
         {
@@ -309,6 +309,11 @@
           "id": "6:5940666338139476341",
           "name": "dayNumber",
           "type": 6
+        },
+        {
+          "id": "7:8354938748857240765",
+          "name": "finished",
+          "type": 1
         }
       ],
       "relations": []

@@ -270,7 +270,7 @@
     },
     {
       "id": "8:7481785625492220139",
-      "lastPropertyId": "5:5659520299913043765",
+      "lastPropertyId": "6:5940666338139476341",
       "name": "GoalEntity",
       "properties": [
         {
@@ -303,6 +303,11 @@
         {
           "id": "5:5659520299913043765",
           "name": "remindersAtMs",
+          "type": 6
+        },
+        {
+          "id": "6:5940666338139476341",
+          "name": "dayNumber",
           "type": 6
         }
       ],

@@ -7,6 +7,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
 import com.google.firebase.database.PropertyName
 import com.google.firebase.database.ktx.database
@@ -48,6 +49,29 @@ class GoalsFirebaseService @Inject constructor(
         .toMaybe()
         .leftOnThrow()
         .observeOn(networkScheduler)
+
+    override fun setGoalsFinished(
+        goalIds: List<String>,
+        userId: String,
+        milestoneId: String
+    ): Maybe<Either<BaseError, List<GoalResponse>>> = goalsDb.child(userId)
+        .updateChildren(goalIds.map { "/$it/finished" to true }.toMap())
+        .asUnitSingle()
+        .toObservable()
+        .flatMapIterable { goalIds }
+        .flatMapSingle { goalId ->
+            goalsDb.child(userId)
+            .equalTo(goalId)
+            .get()
+            .toSingle()
+            .toRx3()
+            .map { it.getValue(ParsableGoalResponse::class.java)!!.toGoalResponse(userId, goalId, milestoneId) }
+        }
+        .toList()
+        .toMaybe()
+        .leftOnThrow()
+        .subscribeOn(networkScheduler)
+
 }
 
 @IgnoreExtraProperties

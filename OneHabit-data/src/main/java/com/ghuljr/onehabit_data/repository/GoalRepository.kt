@@ -75,7 +75,7 @@ class GoalRepository @Inject constructor(
                 .switchMapRightWithEither { goals ->
                     val todayDayNumber = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) % 7 - 1
                     val newGoal = goals.sortedBy { it.dayNumber }.filter { it.dayNumber >= todayDayNumber  }.firstOrNull { !it.finished }
-                    val newGoalIndex = goals.indexOf(newGoal)
+                    val newGoalIndex = goals.indexOfFirst { it.dayNumber == todayDayNumber.toLong() }
                     val goalsToFinish = goals.dropLast(goals.size - newGoalIndex).filterNot { it.finished }
                     when {
                         newGoal == null -> Observable.just(true.right())
@@ -85,7 +85,8 @@ class GoalRepository @Inject constructor(
                         } else {
                             goalsService.setGoalsFinished(
                                 goalIds = goalsToFinish.map { it.id },
-                                userId = newGoal.userId
+                                userId = newGoal.userId,
+                                milestoneId = newGoal.milestoneId
                             ).mapRightWithEither { updatedGoals ->
                                 val entities = updatedGoals.toEntity()
                                 goalsDatabase.put(*entities.toTypedArray())
