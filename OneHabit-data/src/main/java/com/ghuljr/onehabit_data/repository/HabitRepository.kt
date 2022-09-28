@@ -72,7 +72,6 @@ class HabitRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    // TODO: handle set as active
     fun createHabit(
         habitTopic: HabitTopic,
         habitSubject: String,
