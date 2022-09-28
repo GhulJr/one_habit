@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.Disposable
 import javax.inject.Inject
 
+// TODO: handle removing habit with all dependencies in withing the app
 @FragmentScope
 class ProfilePresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
