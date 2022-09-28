@@ -110,9 +110,9 @@ data class ParsableHabitRequest(
                 defaultProgressFactor = defaultProgressFactor,
                 baseIntensity = baseIntensity,
                 desiredIntensity = desiredIntensity,
-                type = type,
+                type = topic,
                 habitSubject = habitSubject,
-                settlingFormat = settlingFormat
+                settlingFormat = frequency
             )
         }
     }

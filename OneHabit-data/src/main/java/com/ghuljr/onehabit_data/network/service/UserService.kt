@@ -11,4 +11,6 @@ interface UserService {
     fun getUserMetadata(userId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
 
     fun setCurrentGoal(userId: String, goalId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+
+    fun setCurrentHabit(userId: String, habitId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
 }

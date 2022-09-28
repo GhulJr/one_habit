@@ -17,11 +17,10 @@ data class HabitResponse(
 
 data class HabitRequest(
     val userId: String,
-    val currentProgress: Int,
     val defaultProgressFactor: Int,
     val baseIntensity: Int,
     val desiredIntensity: Int,
-    val type: String,
+    val topic: String,
     val habitSubject: String,
-    val settlingFormat: Int
+    val frequency: Int
 )

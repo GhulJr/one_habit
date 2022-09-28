@@ -110,7 +110,7 @@ class CreateHabitPresenter @Inject constructor(
                 it.fold(
                     ifRight = {
                         view.handleEvent(none())
-                        view.finish()
+                        view.close()
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )

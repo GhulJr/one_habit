@@ -22,7 +22,7 @@ import javax.inject.Singleton
 @Singleton
 class UserFirebaseService @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler
-): UserService {
+) : UserService {
 
     private val userDatabase = Firebase.database.getReference("user")
 
@@ -44,6 +44,23 @@ class UserFirebaseService @Inject constructor(
         goalId: String
     ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
         .updateChildren(mapOf("goal" to goalId))
+        .asUnitSingle()
+        .leftOnThrow()
+        .toMaybe()
+        .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+    override fun setCurrentHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
+        .updateChildren(
+            mapOf(
+                "habit" to habitId,
+                "goal" to null,
+                "milestone" to null
+            )
+        )
         .asUnitSingle()
         .leftOnThrow()
         .toMaybe()
