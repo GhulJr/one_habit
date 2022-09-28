@@ -115,7 +115,6 @@ class CreateHabitPresenter @Inject constructor(
                     ifLeft = { view.handleEvent(it.some()) }
                 )
             }
-
     )
 
     fun actionEat() = habitActionSubject.onNext(HabitTopic.EAT)

@@ -64,6 +64,7 @@
                     android:clickable="true"
                     android:focusable="false"
                     android:inputType="text"
+                    android:textAllCaps="false"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin_small"
                     android:inputType="text"
+                    android:textAllCaps="false"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,8 +118,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:hint="@string/base_intensity"
-                    app:expandedHintEnabled="true"
-                    app:counterTextColor="@color/primary_black">
+                    app:counterTextColor="@color/primary_black"
+                    app:expandedHintEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/base_intensity"
@@ -134,8 +136,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:hint="@string/frequency"
-                    app:expandedHintEnabled="true"
-                    app:counterTextColor="@color/primary_black">
+                    app:counterTextColor="@color/primary_black"
+                    app:expandedHintEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/frequency"
@@ -156,8 +158,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/base_intensity"
                 android:visibility="gone"
-                app:expandedHintEnabled="true"
                 app:counterTextColor="@color/primary_black"
+                app:expandedHintEnabled="true"
                 tools:visibility="visible">
 
                 <com.google.android.material.textfield.TextInputEditText
