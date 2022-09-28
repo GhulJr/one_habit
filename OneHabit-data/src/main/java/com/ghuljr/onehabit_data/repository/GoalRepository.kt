@@ -40,7 +40,10 @@ class GoalRepository @Inject constructor(
             refreshInterval = 1,
             refreshIntervalUnit = TimeUnit.HOURS,
             cachedDataFlowable = goalsDatabase.goalsForMilestoneSorted(key.customKey!!),
-            fetch = { goalsService.getGoalsForMilestone(key.customKey, key.userId).mapRight { it.toEntity() }.toSingle() },
+            fetch = {
+                goalsService.getGoalsForMilestone(key.customKey, key.userId)
+                    .mapRight { it.toEntity() }.toSingle()
+            },
             invalidateAndUpdate = { cacheWithTime -> goalsDatabase.replaceGoalsForMilestone(key.userId, key.customKey, cacheWithTime.dueToInMillis, cacheWithTime.value.orNull() ?: emptyList()) },
             networkScheduler = networkScheduler,
             computationScheduler = computationScheduler
@@ -71,11 +74,26 @@ class GoalRepository @Inject constructor(
                 .toObservable()
                 .switchMapRightWithEither { goals ->
                     val todayDayNumber = (Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1) % 7 - 1
-                    val newGoal = goals.getOrNull(todayDayNumber)
+                    val newGoal = goals.sortedBy { it.dayNumber }.filter { it.dayNumber >= todayDayNumber  }.firstOrNull { !it.finished }
+                    val newGoalIndex = goals.indexOf(newGoal)
+                    val goalsToFinish = goals.dropLast(goals.size - newGoalIndex).filterNot { it.finished }
                     when {
                         newGoal == null -> Observable.just(true.right())
                         newGoal.id == user.goalId -> Observable.just(false.right())
-                        else ->  userMetadataRepository.setCurrentGoal(newGoal.id).toObservable().mapRight { false }
+                        else -> if (goalsToFinish.isEmpty()) {
+                            Maybe.just(Unit.right())
+                        } else {
+                            goalsService.setGoalsFinished(
+                                goalIds = goalsToFinish.map { it.id },
+                                userId = newGoal.userId
+                            ).mapRightWithEither { updatedGoals ->
+                                val entities = updatedGoals.toEntity()
+                                goalsDatabase.put(*entities.toTypedArray())
+                                Unit.right()
+                            }
+                        }
+                            .flatMap { userMetadataRepository.setCurrentGoal(newGoal.id).mapRight { false } }
+                            .toObservable()
                     }
                 }
         }
@@ -85,16 +103,17 @@ class GoalRepository @Inject constructor(
         .replay(1)
         .refCount()
 
-    fun refreshCurrentGoal(): Maybe<Either<BaseError, List<Goal>>> = userMetadataRepository.currentUser
-        .firstElement()
-        .flatMapRightWithEither { user ->
-            cache[user.milestoneId!!]
-                .firstElement()
-                .flatMapRightWithEither { source ->
-                    source.refresh()
-                        .mapRight { it.toDomain() }
-                }
-        }
+    fun refreshCurrentGoal(): Maybe<Either<BaseError, List<Goal>>> =
+        userMetadataRepository.currentUser
+            .firstElement()
+            .flatMapRightWithEither { user ->
+                cache[user.milestoneId!!]
+                    .firstElement()
+                    .flatMapRightWithEither { source ->
+                        source.refresh()
+                            .mapRight { it.toDomain() }
+                    }
+            }
 }
 
 private fun List<GoalResponse>.toEntity() = map { it.toEntity() }
