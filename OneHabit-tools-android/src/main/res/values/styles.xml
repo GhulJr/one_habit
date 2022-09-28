@@ -137,6 +137,7 @@
     <style name="OneHabit.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="titleTextAppearance">@style/OneHabit.TextAppearance.Primary.Title.Toolbar</item>
         <item name="background">@color/primary_white</item>
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
     </style>
 
     <style name="OneHabit.CircularLoadingIndicator.Small.White" parent="Widget.MaterialComponents.CircularProgressIndicator">

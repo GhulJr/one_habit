@@ -5,6 +5,6 @@ import com.ghuljr.onehabit_tools.model.HabitTopic
 
 interface CreateHabitView : BaseView<CreateHabitPresenter> {
 
-    fun handleCurrentStep(currentStep: CreateHabitPresenter.Step)
+    fun handleCurrentStep(activeSteps: Set<CreateHabitPresenter.Step>)
     fun setAction(habitTopic: HabitTopic)
 }

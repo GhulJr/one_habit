@@ -22,11 +22,9 @@ class CreateHabitPresenter @Inject constructor(
 
     override fun subscribeToView(view: CreateHabitView): Disposable = CompositeDisposable(
         currentStepSubject
-            .reduce(Step.ACTIVITY to Step.ACTIVITY) { (_, old), new -> old to new }
-            .filter { (old, new) -> Step.values().run { indexOf(old) < indexOf(new) } }
-            .map { (_, new) -> new }
+            .scan(setOf<Step>()) { set, new -> set.plus(new) }
             .observeOn(uiScheduler)
-            .subscribe { view.handleCurrentStep(it) },
+            .subscribe { steps -> view.handleCurrentStep(steps) },
         habitActionSubject
             .observeOn(uiScheduler)
             .subscribe {
@@ -42,6 +40,6 @@ class CreateHabitPresenter @Inject constructor(
     fun actionStopDoing() = habitActionSubject.onNext(HabitTopic.STOP_DOING)
 
     enum class Step {
-        ACTIVITY, SUBJECT, INTENSITY_BASE, INTENSITY_DESIRED, FACTOR, SET_AS_ACTIVE, ALLOW_CREATE
+        ACTIVITY, SUBJECT, INTENSITY_BASE, INTENSITY_DESIRED, INTENSITY_FACTOR, ALLOW_CREATE
     }
 }

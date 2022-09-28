@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityCreateHabitBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
@@ -20,6 +21,7 @@ class CreateHabitActivity :
         super.onCreate(savedInstanceState)
 
         viewBind.apply {
+            toolbar.setNavigationOnClickListener { onBackPressed() }
             val popupMenu = PopupMenu(this@CreateHabitActivity, habitAction).apply {
                 inflate(R.menu.menu_habit_action)
                 setOnMenuItemClickListener {
@@ -43,8 +45,19 @@ class CreateHabitActivity :
 
     override fun getPresenterView(): CreateHabitView = this
 
-    override fun handleCurrentStep(currentStep: CreateHabitPresenter.Step) {
-        // TODO: handle visibility of incoming views
+    override fun handleCurrentStep(activeSteps: Set<CreateHabitPresenter.Step>) {
+        viewBind.apply {
+            habitActionContainer.isVisible = activeSteps.contains(CreateHabitPresenter.Step.ACTIVITY)
+            habitSubjectContainer.isVisible = activeSteps.contains(CreateHabitPresenter.Step.SUBJECT)
+            intensityHeader.isVisible = activeSteps.contains(CreateHabitPresenter.Step.INTENSITY_BASE)
+            intensityBaseContainer.isVisible = intensityHeader.isVisible
+            intensityDesiredContainer.isVisible = activeSteps.contains(CreateHabitPresenter.Step.INTENSITY_DESIRED)
+            intensityFactorHeader.isVisible = activeSteps.contains(CreateHabitPresenter.Step.INTENSITY_FACTOR)
+            intensityFactorSlider.isVisible = intensityFactorHeader.isVisible
+            finishHeader.isVisible = activeSteps.contains(CreateHabitPresenter.Step.ALLOW_CREATE)
+            makeActiveCheckbox.isVisible = finishHeader.isVisible
+            createHabit.isVisible = finishHeader.isVisible
+        }
     }
 
     override fun setAction(habitTopic: HabitTopic) {
