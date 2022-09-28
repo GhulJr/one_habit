@@ -9,7 +9,6 @@ import javax.inject.Singleton
 @Singleton
 class MilestoneRepository @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler,
-    @ComputationScheduler private val computationScheduler: Scheduler,
-
+    @ComputationScheduler private val computationScheduler: Scheduler
 ) {
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.ghuljr.onehabit.R
+import com.ghuljr.onehabit.databinding.ActivityGenerateMilestoneBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
 import com.ghuljr.onehabit_presenter.generate_milestone.GenerateMilestonePresenter
 import com.ghuljr.onehabit_presenter.generate_milestone.GenerateMilestoneView

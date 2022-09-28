@@ -56,21 +56,9 @@ class CreateHabitActivity :
             }
             habitAction.setOnClickListener { actionMenu.show() }
             habitSubject.doOnTextChanged { text, _, _, _ -> text?.let { presenter.setSubject(it.toString()) } }
-            baseIntensity.doOnTextChanged { text, _, _, _ ->
-                text?.let {
-                    presenter.setBaseIntensity(
-                        it.toString().toInt()
-                    )
-                }
-            }
+            baseIntensity.doOnTextChanged { text, _, _, _ -> text?.let { presenter.setBaseIntensity(it.toString().toIntOrNull() ?: 0) } }
             frequency.setOnClickListener { frequencyMenu.show() }
-            desiredIntensity.doOnTextChanged { text, _, _, _ ->
-                text?.let {
-                    presenter.setDesiredIntensity(
-                        it.toString().toInt()
-                    )
-                }
-            }
+            desiredIntensity.doOnTextChanged { text, _, _, _ -> text?.let { presenter.setDesiredIntensity(it.toString().toIntOrNull() ?: 0) } }
             intensityFactorSlider.addOnChangeListener { _, value, _ -> presenter.intensityFactor(value) }
             makeActiveCheckbox.setOnCheckedChangeListener { _, selected -> presenter.setAsActive(selected) }
             createHabit.setOnClickListener { presenter.createHabit() }
