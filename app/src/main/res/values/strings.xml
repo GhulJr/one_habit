@@ -110,4 +110,6 @@
     <string name="reminders">Reminders</string>
     <string name="set_as_active_habit">Set as active Habit</string>
     <string name="intensity_factor">Intensity factor</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
 </resources>

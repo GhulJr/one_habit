@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityCreateHabitBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
@@ -22,7 +23,7 @@ class CreateHabitActivity :
 
         viewBind.apply {
             toolbar.setNavigationOnClickListener { onBackPressed() }
-            val popupMenu = PopupMenu(this@CreateHabitActivity, habitAction).apply {
+            val actionMenu = PopupMenu(this@CreateHabitActivity, habitAction).apply {
                 inflate(R.menu.menu_habit_action)
                 setOnMenuItemClickListener {
                     when (it.itemId) {
@@ -36,7 +37,37 @@ class CreateHabitActivity :
                     return@setOnMenuItemClickListener true
                 }
             }
-            habitAction.setOnClickListener { popupMenu.show() }
+            val frequencyMenu = PopupMenu(this@CreateHabitActivity, frequency).apply {
+                inflate(R.menu.menu_habit_frequency)
+                setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.daily -> presenter.setDaily()
+                        R.id.weekly -> presenter.setWeekly()
+                        else -> return@setOnMenuItemClickListener false
+                    }
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            habitAction.setOnClickListener { actionMenu.show() }
+            habitSubject.doOnTextChanged { text, _, _, _ -> text?.let { presenter.setSubject(it.toString()) } }
+            baseIntensity.doOnTextChanged { text, _, _, _ ->
+                text?.let {
+                    presenter.setBaseIntensity(
+                        it.toString().toInt()
+                    )
+                }
+            }
+            frequency.setOnClickListener { frequencyMenu.show() }
+            desiredIntensity.doOnTextChanged { text, _, _, _ ->
+                text?.let {
+                    presenter.setDesiredIntensity(
+                        it.toString().toInt()
+                    )
+                }
+            }
+            intensityFactorSlider.addOnChangeListener { _, value, _ -> presenter.intensityFactor(value) }
+            makeActiveCheckbox.setOnCheckedChangeListener { _, selected -> presenter.setAsActive(selected) }
+            createHabit.setOnClickListener { presenter.createHabit() }
         }
     }
 
@@ -62,13 +93,20 @@ class CreateHabitActivity :
 
     override fun setAction(habitTopic: HabitTopic) {
         viewBind.habitAction.setText(
-            when(habitTopic) {
+            when (habitTopic) {
                 HabitTopic.EAT -> R.string.eat
                 HabitTopic.NOT_EAT -> R.string.not_eat
                 HabitTopic.TRAIN -> R.string.train
                 HabitTopic.START_DOING -> R.string.start_doing
                 HabitTopic.STOP_DOING -> R.string.stop_doing
             }
+        )
+    }
+
+    override fun setHabitFrequency(frequency: Int) {
+        viewBind.frequency.setText(
+            if (frequency == 0) R.string.weekly
+            else R.string.daily
         )
     }
 

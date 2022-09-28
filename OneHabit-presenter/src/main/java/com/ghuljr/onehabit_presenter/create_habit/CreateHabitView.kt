@@ -7,4 +7,5 @@ interface CreateHabitView : BaseView<CreateHabitPresenter> {
 
     fun handleCurrentStep(activeSteps: Set<CreateHabitPresenter.Step>)
     fun setAction(habitTopic: HabitTopic)
+    fun setHabitFrequency(frequency: Int)
 }
