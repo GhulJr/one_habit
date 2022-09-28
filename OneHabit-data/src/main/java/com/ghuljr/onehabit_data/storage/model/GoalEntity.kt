@@ -11,7 +11,8 @@ data class GoalEntity(
     @Index override var userId: String,
     @Index var milestoneId: String,
     var remindersAtMs: Long?,
-    var dayNumber: Long
+    var dayNumber: Long,
+    var finished: Boolean
 ) : IndexedEntity
 
 @Entity

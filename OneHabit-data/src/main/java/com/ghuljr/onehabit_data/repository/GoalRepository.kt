@@ -104,7 +104,8 @@ private fun GoalResponse.toEntity() = GoalEntity(
     userId = userId,
     milestoneId = milestoneId,
     remindersAtMs = remindAtMs,
-    dayNumber = dayNumber
+    dayNumber = dayNumber,
+    finished = finished
 )
 
 private fun List<GoalEntity>.toDomain() = map { it.toDomain() }
@@ -114,5 +115,6 @@ private fun GoalEntity.toDomain() = Goal(
     userId = userId,
     milestoneId = milestoneId,
     remindAtMs = remindersAtMs,
-    dayNumber = dayNumber
+    dayNumber = dayNumber,
+    finished = finished
 )

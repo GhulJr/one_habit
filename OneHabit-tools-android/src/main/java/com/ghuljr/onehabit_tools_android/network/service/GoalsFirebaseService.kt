@@ -53,13 +53,15 @@ class GoalsFirebaseService @Inject constructor(
 @IgnoreExtraProperties
 private data class ParsableGoalResponse(
    @get:PropertyName("remind_at_ms") @set:PropertyName("remind_at_ms") var remindAt: Long? = null,
-   @get:PropertyName("day_number") @set:PropertyName("day_number") var dayNumber: Int? = null
+   @get:PropertyName("day_number") @set:PropertyName("day_number") var dayNumber: Int? = null,
+   @get:PropertyName("finished") @set:PropertyName("finished") var finished: Boolean = false
 ) {
-    fun toGoalResponse(userId: String, goalId: String, milestoneId: String) = GoalResponse(
+   fun toGoalResponse(userId: String, goalId: String, milestoneId: String) = GoalResponse(
         userId = userId,
         goalId =  goalId,
         milestoneId = milestoneId,
         remindAtMs = remindAt,
-        dayNumber = dayNumber!!.toLong()
+        dayNumber = dayNumber!!.toLong(),
+        finished = finished
     )
 }
