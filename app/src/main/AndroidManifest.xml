@@ -12,12 +12,14 @@
         android:theme="@style/OneHabit.Theme">
         <activity
             android:name=".ui.create_habit.CreateHabitActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.goal_details.GoalDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.add_action.AddActionActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".ui.intro.change_data.FillUserDataActivity"

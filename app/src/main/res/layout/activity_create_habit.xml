@@ -26,6 +26,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
@@ -115,9 +116,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="3"
                     android:hint="@string/base_intensity"
-                    android:visibility="gone"
-                    app:counterTextColor="@color/primary_black"
-                    tools:visibility="visible">
+                    app:expandedHintEnabled="true"
+                    app:counterTextColor="@color/primary_black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/base_intensity"
@@ -134,9 +134,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:hint="@string/frequency"
-                    android:visibility="gone"
-                    app:counterTextColor="@color/primary_black"
-                    tools:visibility="visible">
+                    app:expandedHintEnabled="true"
+                    app:counterTextColor="@color/primary_black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/frequency"
@@ -157,6 +156,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/base_intensity"
                 android:visibility="gone"
+                app:expandedHintEnabled="true"
                 app:counterTextColor="@color/primary_black"
                 tools:visibility="visible">
 

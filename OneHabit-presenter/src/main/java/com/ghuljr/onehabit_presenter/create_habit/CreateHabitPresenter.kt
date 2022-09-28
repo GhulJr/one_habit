@@ -36,6 +36,7 @@ class CreateHabitPresenter @Inject constructor(
     override fun subscribeToView(view: CreateHabitView): Disposable = CompositeDisposable(
         currentStepSubject
             .scan(setOf<Step>()) { set, new -> set.plus(new) }
+            .distinctUntilChanged()
             .observeOn(uiScheduler)
             .subscribe { steps -> view.handleCurrentStep(steps) },
         habitActionSubject

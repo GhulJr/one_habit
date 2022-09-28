@@ -3,6 +3,7 @@ package com.ghuljr.onehabit.ui.create_habit
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -88,6 +89,8 @@ class CreateHabitActivity :
             finishHeader.isVisible = activeSteps.contains(CreateHabitPresenter.Step.ALLOW_CREATE)
             makeActiveCheckbox.isVisible = finishHeader.isVisible
             createHabit.isVisible = finishHeader.isVisible
+
+            scrollView.postDelayed({ scrollView.fullScroll(View.FOCUS_DOWN) }, 500L)
         }
     }
 
