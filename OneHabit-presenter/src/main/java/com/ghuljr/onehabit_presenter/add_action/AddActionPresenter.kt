@@ -91,7 +91,7 @@ class AddActionPresenter @Inject constructor(
                                 )
 
                         },
-                        ifLeft = { actionsRepository.createCustomAction(name, goalId) }
+                        ifLeft = { actionsRepository.createCustomAction(name, goalId, reminders) }
                     )
                         .toObservable()
                         .mapLeft { it as BaseEvent }

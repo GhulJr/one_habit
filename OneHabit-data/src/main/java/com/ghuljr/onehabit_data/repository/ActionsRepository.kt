@@ -123,7 +123,8 @@ class ActionsRepository @Inject constructor(
 
     fun createCustomAction(
         actionName: String,
-        goalId: String
+        goalId: String,
+        reminders: List<Long>
     ): Maybe<Either<BaseError, Action>> = loggedInUserRepository.userIdFlowable
         .toEither { NoDataError as BaseError }
         .firstElement()
@@ -132,7 +133,7 @@ class ActionsRepository @Inject constructor(
                 ActionRequest(
                     userId = userId,
                     goalId = goalId,
-                    remindersAtMs = null, //TODO: for now
+                    remindersAtMs = reminders,
                     currentRepeat = 0,
                     totalRepeats = 1,
                     customTitle = actionName

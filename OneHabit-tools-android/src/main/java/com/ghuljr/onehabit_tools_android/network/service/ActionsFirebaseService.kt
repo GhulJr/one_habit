@@ -101,13 +101,32 @@ class ActionsFirebaseService @Inject constructor(
             .subscribeOn(networkScheduler)
     }
 
+    override fun addRemindersToAction(
+        userId: String,
+        actionId: String,
+        reminders: List<Long>
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
+        .child(actionId)
+        .updateChildren(mapOf("remindes" to reminders))
+        .asUnitSingle()
+        .toMaybe()
+        .leftOnThrow()
+        .flatMapRightWithEither { getActionById(actionId, userId) }
+        .subscribeOn(networkScheduler)
+
     override fun editCustomAction(
         actionName: String,
         userId: String,
-        actionId: String
+        actionId: String,
+        reminders: List<Long>
     ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
         .child(actionId)
-        .updateChildren(mapOf("custom_title" to actionName))
+        .updateChildren(
+            mapOf(
+                "custom_title" to actionName,
+                "reminders" to reminders
+            )
+        )
         .asUnitSingle()
         .toMaybe()
         .leftOnThrow()
