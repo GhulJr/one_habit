@@ -8,6 +8,7 @@ import com.ghuljr.onehabit_data.storage.persistence.MilestoneDatabase
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import io.reactivex.rxjava3.core.Scheduler
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,4 +20,15 @@ class MilestoneRepository @Inject constructor(
     private val milestoneDatabase: MilestoneDatabase,
     private val cacheFactory: MemoryCache.Factory<String, DataSource<MilestoneEntity>>
 ) {
+
+    private val milestoneCache = cacheFactory.create { key ->
+        DataSource(
+            refreshInterval = 1,
+            refreshIntervalUnit = TimeUnit.DAYS,
+            cachedDataFlowable = milestoneDatabase.getMilestoneById(key.customKey!!),
+            fresh = {  },
+            networkScheduler = networkScheduler,
+            computationScheduler = computationScheduler
+        )
+    }
 }

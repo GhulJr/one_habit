@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.generate_milestone.generate.AdjustIntensityFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.generate_milestone.generate.AdjustIntensityFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_margin"
+        android:paddingStart="@dimen/default_margin"
+        android:paddingEnd="@dimen/default_margin"
+        android:paddingBottom="@dimen/default_margin"
         android:text="@string/adjust_intensity_message"
         android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
 
@@ -21,17 +23,15 @@
         android:layout_height="wrap_content"
         android:valueFrom="10.0"
         android:valueTo="25.0"
-        android:visibility="gone"
         app:labelBehavior="floating"
         app:trackColorActive="@color/primary_black"
         app:trackColorInactive="@color/primary_black_transparent"
-        tools:value="15.0"
-        tools:visibility="visible" />
+        tools:value="15.0" />
 
     <Space
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/next_button"
