@@ -3,15 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/reminder"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@drawable/ripple_button_click_black"
         android:paddingStart="@dimen/default_margin"
         android:paddingTop="@dimen/default_margin_small"
         android:paddingEnd="@dimen/default_margin"
@@ -19,11 +18,11 @@
         android:textAppearance="@style/OneHabit.TextAppearance.Primary"
         tools:text="10:21" />
 
-    <androidx.constraintlayout.utils.widget.ImageFilterView
+    <ImageView
         android:id="@+id/remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_button_click_black"
         android:padding="@dimen/default_margin_small"
-        android:src="@drawable/ic_remove"/>
-
+        android:src="@drawable/ic_remove" />
 </LinearLayout>

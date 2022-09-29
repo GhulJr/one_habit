@@ -3,6 +3,7 @@ package com.ghuljr.onehabit.ui.add_action.items
 import android.view.View
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ItemReminderAddBinding
+import com.ghuljr.onehabit_presenter.add_action.AddReminderItem
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
 import com.ghuljr.onehabit_tools_android.base.list.ViewHolderManager
 

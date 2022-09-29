@@ -12,4 +12,6 @@ interface AddActionView : BaseView<AddActionPresenter> {
     fun close()
     fun setActionTitle(title: String)
     fun enableSetTitle(enable: Boolean)
+    fun setReminders(items: List<BaseReminderItem>)
+    fun openDatePicker()
 }

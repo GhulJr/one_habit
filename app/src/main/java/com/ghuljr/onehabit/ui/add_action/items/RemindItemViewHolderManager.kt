@@ -3,10 +3,11 @@ package com.ghuljr.onehabit.ui.add_action.items
 import android.view.View
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ItemReminderBinding
+import com.ghuljr.onehabit_presenter.add_action.ReminderItem
 import com.ghuljr.onehabit_tools.base.list.UniqueItem
 import com.ghuljr.onehabit_tools_android.base.list.ViewHolderManager
 
-class RemindItemViewHolderManager : ViewHolderManager(R.layout.item_reminder) {
+class ReminderItemViewHolderManager : ViewHolderManager(R.layout.item_reminder) {
 
     override fun isType(item: UniqueItem): Boolean = item is ReminderItem
 
@@ -17,8 +18,8 @@ class RemindItemViewHolderManager : ViewHolderManager(R.layout.item_reminder) {
 
         override fun bind(item: ReminderItem) {
             viewBind.apply {
-                reminder.text = item.time
-                root.setOnClickListener { item.click() }
+                reminder.text = item.timeDisplay
+                remove.setOnClickListener { item.click() }
             }
         }
     }

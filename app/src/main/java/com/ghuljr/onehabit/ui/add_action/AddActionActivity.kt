@@ -5,15 +5,19 @@ import android.content.Intent
 import com.ghuljr.onehabit.databinding.ActivityAddActionBinding
 import android.os.Bundle
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import arrow.core.Option
 import arrow.core.toOption
 import com.ghuljr.onehabit.R
+import com.ghuljr.onehabit.ui.add_action.items.AddReminderViewHolderManager
+import com.ghuljr.onehabit.ui.add_action.items.ReminderItemViewHolderManager
 import com.ghuljr.onehabit.ui.base.BaseActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.add_action.AddActionPresenter
 import com.ghuljr.onehabit_presenter.add_action.AddActionView
+import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Observable
@@ -21,10 +25,20 @@ import io.reactivex.rxjava3.core.Observable
 class AddActionActivity :
     BaseActivity<ActivityAddActionBinding, AddActionView, AddActionPresenter>(), AddActionView {
 
+    private val reminderAdapter = ItemListAdapter(
+        ReminderItemViewHolderManager(),
+        AddReminderViewHolderManager()
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenter.init(intent.getStringExtra(EXTRA_GOAL_ID)!! to intent.getStringExtra(EXTRA_ACTION_ID).toOption())
         viewBind.apply {
+            remindersRecyclerView.apply {
+                layoutManager = LinearLayoutManager(this@AddActionActivity, LinearLayoutManager.VERTICAL, false)
+                adapter = reminderAdapter
+            }
+
             addActionButton.setOnClickListener { presenter.createAction() }
         }
     }

@@ -28,8 +28,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: Add option to schedule/change reminder notification for specific task on go.
-// TODO: display placeholder when there are no actions displayed
 @FragmentScope
 class ActionsPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository,
