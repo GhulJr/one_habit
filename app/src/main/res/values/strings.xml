@@ -108,6 +108,7 @@
     <string name="base_intensity">Base intensity</string>
     <string name="frequency">Frequency</string>
     <string name="reminders">Reminders</string>
+    <string name="reminders_param">Reminders %1$s</string>
     <string name="set_as_active_habit">Set as active Habit</string>
     <string name="intensity_factor">Intensity factor</string>
     <string name="daily">Daily</string>
@@ -123,4 +124,5 @@
     <string name="summary_message">Ensure the data is set correctly. After that click Next to proceed.</string>
     <string name="adjust_intensity_message">Adjust intensity for your next goal. Remember that it is not a race, it is marathon - if you feel you\'d like repeat previous Milestone then leave slider untouched.</string>
     <string name="generate">Generate</string>
+    <string name="title">Title</string>
 </resources>

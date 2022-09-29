@@ -146,6 +146,12 @@
         <item name="android:scaleY">0.6</item>
     </style>
 
+    <style name="OneHabit.CircularLoadingIndicator.Small.Black" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorColor">@color/primary_black</item>
+        <item name="android:scaleX">0.6</item>
+        <item name="android:scaleY">0.6</item>
+    </style>
+
     <style name="OneHabit.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="indicatorColor">@color/primary_black</item>
     </style>

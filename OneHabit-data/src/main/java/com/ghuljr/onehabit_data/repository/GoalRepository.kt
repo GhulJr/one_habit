@@ -65,7 +65,7 @@ class GoalRepository @Inject constructor(
 
     val showMilestoneSummaryObservable: Observable<Unit> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
-            if (/*user.milestoneId == null && user.habitId != null*/ true)
+            if (user.milestoneId == null && user.habitId != null)
                 Observable.just(true.right())
             else
                 cache[user.milestoneId]

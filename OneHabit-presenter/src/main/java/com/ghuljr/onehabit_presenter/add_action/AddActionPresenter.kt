@@ -66,7 +66,6 @@ class AddActionPresenter @Inject constructor(
                 .subscribe { view.setActionTitle(it.customTitle ?: "") },
             actionNameObservable.subscribe(),
         )
-
     }
 
     fun createAction() = createActionSubject.onNext(Unit)

@@ -29,7 +29,22 @@
         android:padding="@dimen/default_margin"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:id="@+id/title_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/default_margin"
+            android:paddingEnd="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:text="@string/title"
+            android:visibility="gone"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin"
+            tools:visibility="visible" />
+
+
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/action_name_container"
             style="@style/OneHabit.TextInputLayout.Underline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,10 +61,26 @@
                 android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Space
+        <com.ghuljr.onehabit_tools_android.widget.TextDivider
+            android:id="@+id/finish_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:paddingStart="@dimen/default_margin"
+            android:paddingEnd="@dimen/default_margin"
+            android:text="@string/reminders"
+            android:visibility="gone"
+            app:strokeWidth="@dimen/default_stroke_width_thin"
+            app:textPadding="@dimen/default_margin"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reminders_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            tools:itemCount="3"
+            tools:listitem="@layout/item_reminder"
+            android:layout_weight="1"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_action_button"
@@ -59,14 +90,15 @@
             android:text="@string/add" />
     </LinearLayout>
 
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/loading_indicator"
-        style="@style/OneHabit.CircularLoadingIndicator.Small.White"
+        style="@style/OneHabit.CircularLoadingIndicator.Small.Black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:elevation="10dp"
         android:indeterminate="true"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
