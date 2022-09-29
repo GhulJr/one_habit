@@ -28,4 +28,9 @@ interface ServicesModule {
     @Binds
     @Singleton
     fun goalService(impl: GoalsFirebaseService): GoalsService
+
+
+    @Binds
+    @Singleton
+    fun milestoneService(impl: MilestoneFirebaseService): GoalsService
 }
