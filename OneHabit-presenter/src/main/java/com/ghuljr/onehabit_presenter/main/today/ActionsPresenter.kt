@@ -28,8 +28,6 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-// TODO: Add option to schedule/change reminder notification for specific task on go.
-// TODO: display placeholder when there are no actions displayed
 @FragmentScope
 class ActionsPresenter @Inject constructor(
     private val actionsRepository: ActionsRepository,
@@ -117,13 +115,13 @@ class ActionsPresenter @Inject constructor(
             .mapRight { (actions, habit) ->
                 val regularActions = actions
                     .filter { it.customTitle == null }
-                    .filter { it.repeatCount < it.totalRepeats || habit.settlingFormat == 0 }
+                    .filter { it.repeatCount < it.totalRepeats || habit.frequency == 0 }
                     .map { it.toRegularActionItem(habit) as TodayItem }
                 val extraActions = actions
                     .filter { it.customTitle != null && it.repeatCount < it.totalRepeats }
                     .map { it.toCustomActionItem(habit) as TodayItem }
                 val finishedActions = actions
-                    .filter { it.repeatCount >= it.totalRepeats && (habit.settlingFormat != 0 || it.customTitle != null) }
+                    .filter { it.repeatCount >= it.totalRepeats && (habit.frequency != 0 || it.customTitle != null) }
                     .map { it.toFinishedActionItem(habit) as TodayItem }
 
                 regularActions
@@ -146,11 +144,11 @@ class ActionsPresenter @Inject constructor(
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
         id = id,
         time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
-        quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.settlingFormat <= 0) to totalRepeats,
+        quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.frequency <= 0) to totalRepeats,
         onActionClick = { selectItem(id) },
         habitTopic = habit.type,
         habitSubject = habit.habitSubject,
-        actionType = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY,
+        actionType = if (habit.frequency <= 0) ActionType.WEEKLY else ActionType.DAILY,
         exceeded = repeatCount >= totalRepeats
     )
 

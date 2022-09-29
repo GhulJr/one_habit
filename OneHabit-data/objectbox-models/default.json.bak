@@ -270,7 +270,7 @@
     },
     {
       "id": "8:7481785625492220139",
-      "lastPropertyId": "5:5659520299913043765",
+      "lastPropertyId": "7:8354938748857240765",
       "name": "GoalEntity",
       "properties": [
         {
@@ -304,6 +304,16 @@
           "id": "5:5659520299913043765",
           "name": "remindersAtMs",
           "type": 6
+        },
+        {
+          "id": "6:5940666338139476341",
+          "name": "dayNumber",
+          "type": 6
+        },
+        {
+          "id": "7:8354938748857240765",
+          "name": "finished",
+          "type": 1
         }
       ],
       "relations": []
@@ -338,10 +348,84 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "10:7256707929457616063",
+      "lastPropertyId": "4:2100034115286108808",
+      "name": "MilestoneEntityHolder",
+      "properties": [
+        {
+          "id": "1:5310907604526254219",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6207047566360481627",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:7827017423994501560",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:2100034115286108808",
+          "name": "milestoneId",
+          "indexId": "13:481457695543836918",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:1722163170832156770",
+      "lastPropertyId": "7:4860826761114283020",
+      "name": "MilestoneEntity",
+      "properties": [
+        {
+          "id": "1:8936548123630658630",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3477334107959097502",
+          "name": "id",
+          "indexId": "14:9110526324264375197",
+          "type": 9,
+          "flags": 34848
+        },
+        {
+          "id": "3:4269526250536635154",
+          "name": "userId",
+          "indexId": "15:5090819665462920299",
+          "type": 9,
+          "flags": 2048
+        },
+        {
+          "id": "5:1527432320316900163",
+          "name": "intensity",
+          "type": 5
+        },
+        {
+          "id": "6:24293419264978007",
+          "name": "orderNumber",
+          "type": 5
+        },
+        {
+          "id": "7:4860826761114283020",
+          "name": "resolved",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "9:7033204050790402043",
-  "lastIndexId": "12:5590053610497117405",
+  "lastEntityId": "11:1722163170832156770",
+  "lastIndexId": "16:2534336745102220916",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -349,7 +433,9 @@
   "retiredEntityUids": [
     4404177628123626710
   ],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    2534336745102220916
+  ],
   "retiredPropertyUids": [
     7762414669914543237,
     3524043416970328952,
@@ -358,7 +444,8 @@
     2125651765535187419,
     3245260505064365429,
     6177694818003458126,
-    7634113128211595513
+    7634113128211595513,
+    5904503821709648590
   ],
   "retiredRelationUids": [
     3025695076431287356,

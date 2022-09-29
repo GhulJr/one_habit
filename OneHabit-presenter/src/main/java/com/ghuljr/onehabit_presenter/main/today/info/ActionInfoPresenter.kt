@@ -40,7 +40,7 @@ class ActionInfoPresenter @Inject constructor(
         ) { actionEither, habitEither -> actionEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
             .mapRight { (action, habit) ->
-                val type = if (habit.settlingFormat <= 0) ActionType.WEEKLY else ActionType.DAILY
+                val type = if (habit.frequency <= 0) ActionType.WEEKLY else ActionType.DAILY
                 val exceeded = action.run { repeatCount >= totalRepeats }
                 ActionInfoItem(
                     customTitle = action.customTitle,

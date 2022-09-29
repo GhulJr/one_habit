@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="error_unknown">Unknown error</string>
+    <string name="error_unknown_param">Unknown error: %1$s</string>
     <string name="error_event_unknown">Unknown event</string>
     <string name="error_empty_field"> Field cannot be empty</string>
     <string name="error_invalid_email_format">Invalid email format</string>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.generate_milestone.generate.AdjustIntensityFragment">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:elevation="11dp"
+        android:indeterminate="true"
+        app:indeterminateAnimationType="disjoint"
+        app:indicatorColor="@color/primary_black"
+        app:trackCornerRadius="@dimen/default_corner_radius"
+        app:trackThickness="@dimen/default_stroke_width" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/default_margin"
+        android:paddingEnd="@dimen/default_margin"
+        android:paddingBottom="@dimen/default_margin"
+        android:text="@string/adjust_intensity_message"
+        android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/intensity_factor_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="100"
+        app:labelBehavior="floating"
+        app:trackColorActive="@color/primary_black"
+        app:trackColorInactive="@color/primary_black_transparent"
+        tools:value="15.0" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_button"
+        style="@style/OneHabit.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:drawableEnd="@drawable/ic_arrow_next"
+        android:drawableTint="@color/primary_white"
+        android:gravity="center"
+        android:text="@string/generate"
+        app:iconPadding="-32dp" />
+
+</LinearLayout>

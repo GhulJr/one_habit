@@ -2,19 +2,25 @@ package com.ghuljr.onehabit_data.repository
 
 import arrow.core.Either
 import arrow.core.getOrElse
+import arrow.core.right
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.Habit
+import com.ghuljr.onehabit_data.network.model.HabitRequest
 import com.ghuljr.onehabit_data.network.model.HabitResponse
 import com.ghuljr.onehabit_data.network.service.HabitService
 import com.ghuljr.onehabit_data.storage.model.HabitEntity
 import com.ghuljr.onehabit_data.storage.persistence.HabitDatabase
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
+import com.ghuljr.onehabit_tools.extension.toEither
 import com.ghuljr.onehabit_tools.model.HabitTopic
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import java.util.concurrent.TimeUnit
@@ -28,6 +34,7 @@ class HabitRepository @Inject constructor(
     private val habitDatabase: HabitDatabase,
     private val habitService: HabitService,
     private val userMetadataRepository: UserMetadataRepository,
+    private val loggedInUserRepository: LoggedInUserRepository,
     private val memoryCacheFactory: MemoryCache.Factory<String, DataSource<HabitEntity>>
 ) {
 
@@ -64,6 +71,41 @@ class HabitRepository @Inject constructor(
         }
         .replay(1)
         .refCount()
+
+    fun createHabit(
+        habitTopic: HabitTopic,
+        habitSubject: String,
+        baseIntensity: Int,
+        frequency: Int,
+        desiredIntensity: Int,
+        intensityFactor: Float,
+        setAsActive: Boolean
+    ): Maybe<Either<BaseError, Habit>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .firstElement()
+        .flatMapRightWithEither { userId ->
+            habitService.createHabit(
+                HabitRequest(
+                    userId = userId,
+                    topic = habitTopic.codeName,
+                    habitSubject = habitSubject,
+                    baseIntensity = baseIntensity,
+                    frequency = frequency,
+                    desiredIntensity = desiredIntensity,
+                    defaultProgressFactor = intensityFactor.toInt()
+                )
+            ).mapRight { response ->
+                val entity = response.toEntity()
+                habitDatabase.put(entity)
+                entity.toDomain()
+            }
+                .flatMapRightWithEither { habit ->
+                    if(setAsActive)
+                        userMetadataRepository.setCurrentHabit(habit.userId)
+                            .mapRight { habit }
+                    else Maybe.just(habit.right())
+                }
+        }
 }
 
 private fun HabitResponse.toEntity() = HabitEntity(
@@ -93,5 +135,5 @@ private fun HabitEntity.toDomain() = Habit(
     description = description,
     type = HabitTopic.values().first { it.codeName == type },
     habitSubject = habitSubject,
-    settlingFormat = settlingFormat
+    frequency = settlingFormat
 )

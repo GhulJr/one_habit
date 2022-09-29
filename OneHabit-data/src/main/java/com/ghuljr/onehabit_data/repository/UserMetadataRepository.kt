@@ -71,6 +71,32 @@ class UserMetadataRepository @Inject constructor(
                     entity.toDomain()
                 }
         }
+
+    fun setCurrentHabit(habitId: String): Maybe<Either<BaseError, UserMetadata>> = cache.get()
+        .firstElement()
+        .flatMapRightWithEither {
+            it.dataFlowable
+                .firstElement()
+                .flatMapRightWithEither { user -> userService.setCurrentGoal(user.id, habitId) }
+                .mapRight { userResponse ->
+                    val entity = userResponse.toUserEntity()
+                    userMetadataDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
+
+    fun setCurrentMilestone(milestoneId: String): Maybe<Either<BaseError, UserMetadata>> = cache.get()
+        .firstElement()
+        .flatMapRightWithEither {
+            it.dataFlowable
+                .firstElement()
+                .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, user.milestoneId, milestoneId) }
+                .mapRight { userResponse ->
+                    val entity = userResponse.toUserEntity()
+                    userMetadataDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
 }
 
 private fun UserMetadataResponse.toUserEntity() = UserEntity(

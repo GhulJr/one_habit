@@ -11,11 +11,19 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
+            android:name=".ui.generate_milestone.GenerateMilestoneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.create_habit.CreateHabitActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.goal_details.GoalDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.add_action.AddActionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.intro.change_data.FillUserDataActivity"
             android:exported="false"

@@ -71,6 +71,7 @@
                 style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_button_click_black"
                 android:drawableRight="@drawable/ic_arrow_next_small"
                 android:text="@string/habit_details" />
 
@@ -84,6 +85,7 @@
                 style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_button_click_black"
                 android:drawableRight="@drawable/ic_list"
                 android:text="@string/all_habits" />
 
@@ -94,9 +96,11 @@
                 android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/add_habit"
                 style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_button_click_black"
                 android:drawableRight="@drawable/ic_add_outline"
                 android:text="@string/add_new_habit" />
 

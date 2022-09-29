@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import arrow.core.right
 import com.ghuljr.onehabit_data.network.model.UserMetadataResponse
 import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError
@@ -16,15 +17,17 @@ import com.google.firebase.ktx.Firebase
 import io.ashdavies.rx.rxtasks.toSingle
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserFirebaseService @Inject constructor(
     @NetworkScheduler private val networkScheduler: Scheduler
-): UserService {
+) : UserService {
 
     private val userDatabase = Firebase.database.getReference("user")
+    private val milestoneDatabase = Firebase.database.getReference("milestone")
 
     override fun getUserMetadata(userId: String): Maybe<Either<BaseError, UserMetadataResponse>> =
         userDatabase.child(userId)
@@ -44,6 +47,52 @@ class UserFirebaseService @Inject constructor(
         goalId: String
     ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
         .updateChildren(mapOf("goal" to goalId))
+        .asUnitSingle()
+        .leftOnThrow()
+        .toMaybe()
+        .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+    override fun setCurrentMilestone(
+        userId: String,
+        previousMilestoneId: String?,
+        milestoneId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
+        .updateChildren(
+            mapOf(
+                "milestone" to milestoneId,
+                "goal" to null
+            )
+        )
+        .asUnitSingle()
+        .leftOnThrow()
+        .toMaybe()
+        .flatMapRightWithEither {
+            if (previousMilestoneId.isNullOrBlank())
+                Maybe.just(it.right())
+            else
+                milestoneDatabase
+                    .child(userId)
+                    .child(previousMilestoneId)
+                    .updateChildren(mapOf("resolved_at" to Calendar.getInstance().timeInMillis))
+                    .asUnitSingle()
+                    .toMaybe()
+                    .leftOnThrow()
+        }
+        .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+    override fun setCurrentHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
+        .updateChildren(
+            mapOf(
+                "habit" to habitId,
+                "goal" to null,
+                "milestone" to null
+            )
+        )
         .asUnitSingle()
         .leftOnThrow()
         .toMaybe()

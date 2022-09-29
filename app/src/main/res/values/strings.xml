@@ -74,15 +74,15 @@
     <string name="app_version_1_s">App version %1$s</string>
 
     <!-- Actions -->
-    <string name="eat">Eat %1$s!</string>
+    <string name="eat_param">Eat %1$s!</string>
     <string name="eat_opposite">You don\'t have to eat %1$s!</string>
-    <string name="not_eat">Do not eat %1$s</string>
+    <string name="not_eat_param">Do not eat %1$s</string>
     <string name="not_eat_opposite">You can eat %1$s</string>
-    <string name="train">Make %1$s</string>
+    <string name="train_param">Make %1$s</string>
     <string name="train_opposite">You don\t have to make %1$s</string>
-    <string name="start_doing">Do %1$s</string>
+    <string name="start_doing_param">Do %1$s</string>
     <string name="start_doing_opposite">You don\'t have to do %1$s</string>
-    <string name="stop_doing">Do not do %1$s</string>
+    <string name="stop_doing_param">Do not do %1$s</string>
     <string name="stop_doing_opposite">You can do %1$s</string>
     <string name="no_reminders">No reminders set</string>
     <string name="add_action">Add action</string>
@@ -92,4 +92,38 @@
     <string name="select_habit_title">Select habit</string>
     <string name="select_habit_message">It seems like you don\'t have any habit active. Please, select one.</string>
     <string name="goal_details">Goal details</string>
+
+    <!-- Create Habit -->
+    <string name="create_habit">Create Habit</string>
+    <string name="create">Create</string>
+    <string name="eat">Eat</string>
+    <string name="not_eat">Stop eating</string>
+    <string name="train">Train</string>
+    <string name="start_doing">Start doing</string>
+    <string name="stop_doing">Stop doing</string>
+    <string name="which_action_you_want_to_take">Which action you want to take?</string>
+    <string name="what_do_you_want_to_do">What do you want to do?</string>
+    <string name="subject">Subject</string>
+    <string name="intensity">Intensity</string>
+    <string name="base_intensity">Base intensity</string>
+    <string name="frequency">Frequency</string>
+    <string name="reminders">Reminders</string>
+    <string name="reminders_param">Reminders %1$s</string>
+    <string name="set_as_active_habit">Set as active Habit</string>
+    <string name="intensity_factor">Intensity factor</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+
+    <!-- Generate milestone -->
+    <string name="prepare">Prepare</string>
+    <string name="start">Start</string>
+    <string name="adjust">Adjust</string>
+    <string name="accept">Accept</string>
+    <string name="let_s_do_it">Let\'s do it!</string>
+    <string name="milestone_intro_message">Take on the next challenges! Every week you shorten the distance to reach your habit!</string>
+    <string name="summary_message">Ensure the data is set correctly. After that click Next to proceed.</string>
+    <string name="adjust_intensity_message">Adjust intensity for your next goal. Remember that it is not a race, it is marathon - if you feel you\'d like repeat previous Milestone then leave slider untouched.</string>
+    <string name="generate">Generate</string>
+    <string name="title">Title</string>
+    <string name="accept_milestone_message">This is your new milestone! Feel free to add custom action or set reminders. You can also get back here via Timeline tab.</string>
 </resources>

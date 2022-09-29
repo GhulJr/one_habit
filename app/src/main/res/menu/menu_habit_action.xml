@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/eat"
+        android:title="@string/eat" />
+
+    <item
+        android:id="@+id/not_eat"
+        android:title="@string/not_eat" />
+
+    <item
+        android:id="@+id/train"
+        android:title="@string/train" />
+
+    <item
+        android:id="@+id/start_doing"
+        android:title="@string/start_doing" />
+
+    <item
+        android:id="@+id/stop_doing"
+        android:title="@string/stop_doing" />
+</menu>

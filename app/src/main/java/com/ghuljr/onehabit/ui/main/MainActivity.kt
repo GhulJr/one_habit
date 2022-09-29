@@ -9,6 +9,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.ActivityMainBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
+import com.ghuljr.onehabit.ui.generate_milestone.GenerateMilestoneActivity
 import com.ghuljr.onehabit.ui.intro.change_data.FillUserDataActivity
 import com.ghuljr.onehabit_presenter.main.MainPresenter
 import com.ghuljr.onehabit_presenter.main.MainStep
@@ -64,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainView, MainPresenter>(
     }
 
     override fun displayMilestoneSummary() {
-        /* TODO: open summary screen */
+        startActivity(GenerateMilestoneActivity.instance(this))
     }
 
     fun setCurrentStep(currentStep: MainStep) {

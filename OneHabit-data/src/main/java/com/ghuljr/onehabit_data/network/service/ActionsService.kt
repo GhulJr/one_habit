@@ -25,13 +25,30 @@ interface ActionsService {
     ): Maybe<Either<BaseError, ActionResponse>>
 
     fun putAction(
-        actionRequest: ActionRequest
+        actionRequest: ActionRequest,
+        goalId: String,
     ): Maybe<Either<BaseError, ActionResponse>>
 
-    fun editAction(
+    fun putActions(
+        actionRequests: List<Pair<String, ActionRequest>>
+    ): Maybe<Either<BaseError, List<ActionResponse>>>
+
+    fun putOneActionToManyGoals(
+        actionRequests: ActionRequest,
+        goalIds: List<String>
+    ): Maybe<Either<BaseError, ActionResponse>>
+
+    fun editCustomAction(
         actionName: String,
         userId: String,
-        actionId: String
+        actionId: String,
+        reminders: List<Long>
+    ): Maybe<Either<BaseError, ActionResponse>>
+
+    fun addRemindersToAction(
+        userId: String,
+        actionId: String,
+        reminders: List<Long>
     ): Maybe<Either<BaseError, ActionResponse>>
 
     fun removeAction(

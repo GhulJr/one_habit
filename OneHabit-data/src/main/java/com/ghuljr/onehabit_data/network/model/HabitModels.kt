@@ -14,3 +14,13 @@ data class HabitResponse(
     val habitSubject: String,
     val settlingFormat: Int
 )
+
+data class HabitRequest(
+    val userId: String,
+    val defaultProgressFactor: Int,
+    val baseIntensity: Int,
+    val desiredIntensity: Int,
+    val topic: String,
+    val habitSubject: String,
+    val frequency: Int
+)

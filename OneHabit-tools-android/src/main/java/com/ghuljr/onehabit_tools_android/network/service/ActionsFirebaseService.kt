@@ -1,6 +1,9 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.reduceOrNull
+import arrow.core.right
 import com.ghuljr.onehabit_data.network.model.ActionRequest
 import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
@@ -18,6 +21,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.ashdavies.rx.rxtasks.toSingle
 import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -80,7 +84,8 @@ class ActionsFirebaseService @Inject constructor(
         .subscribeOn(networkScheduler)
 
     override fun putAction(
-        actionRequest: ActionRequest
+        actionRequest: ActionRequest,
+        goalId: String
     ): Maybe<Either<BaseError, ActionResponse>> {
         val actionsReference = actionDb.child(actionRequest.userId)
         val key = actionsReference.push().key!!
@@ -90,7 +95,7 @@ class ActionsFirebaseService @Inject constructor(
             .asUnitSingle()
             .flatMap {
                 actionToGoalDb.child(actionRequest.userId)
-                    .child(actionRequest.goalId)
+                    .child(goalId)
                     .child(key)
                     .setValue(true)
                     .asUnitSingle()
@@ -101,13 +106,71 @@ class ActionsFirebaseService @Inject constructor(
             .subscribeOn(networkScheduler)
     }
 
-    override fun editAction(
-        actionName: String,
+    override fun putActions(actionRequests: List<Pair<String, ActionRequest>>): Maybe<Either<BaseError, List<ActionResponse>>> =
+        Observable.fromIterable(actionRequests)
+            .flatMapMaybe { (goalId, actionRequest) -> putAction(goalId = goalId, actionRequest = actionRequest) }
+            .toList()
+            .toMaybe()
+            .map {
+                it.reduceOrNull(
+                    initial = { it.map { listOf(it) } },
+                    operation = { acc, new -> acc.flatMap { list -> new.map { list + it } } }
+                ) ?: listOf<ActionResponse>().right()
+            }
+            .subscribeOn(networkScheduler)
+
+    override fun putOneActionToManyGoals(
+        actionRequest: ActionRequest,
+        goalIds: List<String>
+    ): Maybe<Either<BaseError, ActionResponse>> {
+        val actionsReference = actionDb.child(actionRequest.userId)
+        val key = actionsReference.push().key!!
+
+        return actionsReference.child(key)
+            .setValue(ParsableActionRequest.fromActionRequest(actionRequest, key))
+            .asUnitSingle()
+            .toObservable()
+            .flatMapIterable { goalIds }
+            .flatMapSingle { goalId ->
+                actionToGoalDb.child(actionRequest.userId)
+                    .child(goalId)
+                    .child(key)
+                    .setValue(true)
+                    .asUnitSingle()
+            }
+            .toList()
+            .toMaybe()
+            .leftOnThrow()
+            .flatMapRightWithEither { getActionById(key, actionRequest.userId) }
+            .subscribeOn(networkScheduler)
+    }
+
+    override fun addRemindersToAction(
         userId: String,
-        actionId: String
+        actionId: String,
+        reminders: List<Long>
     ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
         .child(actionId)
-        .updateChildren(mapOf("custom_title" to actionName))
+        .updateChildren(mapOf("remind_at_ms" to reminders))
+        .asUnitSingle()
+        .toMaybe()
+        .leftOnThrow()
+        .flatMapRightWithEither { getActionById(actionId, userId) }
+        .subscribeOn(networkScheduler)
+
+    override fun editCustomAction(
+        actionName: String,
+        userId: String,
+        actionId: String,
+        reminders: List<Long>
+    ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
+        .child(actionId)
+        .updateChildren(
+            mapOf(
+                "custom_title" to actionName,
+                "remind_at_ms" to reminders
+            )
+        )
         .asUnitSingle()
         .toMaybe()
         .leftOnThrow()

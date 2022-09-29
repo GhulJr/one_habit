@@ -63,6 +63,10 @@
         <item name="fontFamily">@font/mplus_rounded_regular</item>
     </style>
 
+    <style name="OneHabit.TextAppearance.Primary.White" parent="OneHabit.TextAppearance.Primary">
+        <item name="android:textColor">@color/primary_white</item>
+    </style>
+
     <style name="OneHabit.TextAppearance.Primary.Small" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">@dimen/default_text_size_small</item>
     </style>
@@ -133,10 +137,17 @@
     <style name="OneHabit.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="titleTextAppearance">@style/OneHabit.TextAppearance.Primary.Title.Toolbar</item>
         <item name="background">@color/primary_white</item>
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
     </style>
 
     <style name="OneHabit.CircularLoadingIndicator.Small.White" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="indicatorColor">@color/primary_white</item>
+        <item name="android:scaleX">0.6</item>
+        <item name="android:scaleY">0.6</item>
+    </style>
+
+    <style name="OneHabit.CircularLoadingIndicator.Small.Black" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="indicatorColor">@color/primary_black</item>
         <item name="android:scaleX">0.6</item>
         <item name="android:scaleY">0.6</item>
     </style>

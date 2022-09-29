@@ -57,5 +57,13 @@ class StorageModule {
     @Singleton
     fun goalHolderBox(boxStore: BoxStore): Box<GoalEntityHolder> = boxStore.boxFor(GoalEntityHolder::class.java)
 
+    @Provides
+    @Singleton
+    fun milestoneBox(boxStore: BoxStore): Box<MilestoneEntity> = boxStore.boxFor(MilestoneEntity::class.java)
+
+    @Provides
+    @Singleton
+    fun milestoneHolderBox(boxStore: BoxStore): Box<MilestoneEntityHolder> = boxStore.boxFor(MilestoneEntityHolder::class.java)
+
 }
 
