@@ -41,12 +41,12 @@
     <fragment
         android:id="@+id/acceptGeneratedMilestoneFragment"
         android:name="com.ghuljr.onehabit.ui.generate_milestone.generated.AcceptGeneratedMilestoneFragment"
-        android:label="@string/adjust"
+        android:label="@string/accept"
         tools:layout="@layout/fragment_accept_generated_milestone" />
     <fragment
         android:id="@+id/adjustIntensityFragment"
         android:name="com.ghuljr.onehabit.ui.generate_milestone.generate.AdjustIntensityFragment"
-        android:label="@string/accept"
+        android:label="@string/adjust"
         tools:layout="@layout/fragment_adjust_intensity">
         <action
             android:id="@+id/toAccept"

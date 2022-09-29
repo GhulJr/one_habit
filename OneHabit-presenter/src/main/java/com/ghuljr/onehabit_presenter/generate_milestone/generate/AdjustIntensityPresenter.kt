@@ -82,4 +82,5 @@ class AdjustIntensityPresenter @Inject constructor(
     )
 
     fun setIntensity(intensity: Float) = intensitySubject.onNext(intensity)
+    fun next() = generateSubject.onNext(Unit)
 }

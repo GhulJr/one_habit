@@ -24,6 +24,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
 
 @Singleton
 class MilestoneRepository @Inject constructor(
@@ -81,7 +82,7 @@ class MilestoneRepository @Inject constructor(
             userId = habit.userId,
             remindersAtMs = listOf(),
             currentRepeat = 0,
-            totalRepeats = habit.run { (desiredIntensity - baseIntensity) * (intensity.toFloat() / 100 ) + baseIntensity }.toInt(),
+            totalRepeats = habit.run { abs((desiredIntensity - baseIntensity) * (intensity.toFloat() / 100 ) + baseIntensity) }.toInt(),
             customTitle = null
         )
         return milestoneService.generateMilestone(

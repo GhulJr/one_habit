@@ -86,7 +86,7 @@ class GoalsFirebaseService @Inject constructor(
         milestoneId: String
     ): Maybe<Either<BaseError, List<GoalResponse>>> = Observable.fromIterable(goalRequests)
         .flatMapSingle { goalRequest ->
-            val key = goalsDb.child(userId).key!!
+            val key = goalsDb.child(userId).push().key!!
             goalsDb.child(userId)
                 .child(key)
                 .setValue(ParsableGoalRequest.fromRequest(goalRequest))

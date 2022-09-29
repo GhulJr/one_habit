@@ -12,6 +12,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
+import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.database.IgnoreExtraProperties
@@ -69,7 +70,7 @@ class MilestoneFirebaseService @Inject constructor(
         actionRequest: ActionRequest,
         frequency: Int
     ): Maybe<Either<BaseError, MilestoneResponse>> {
-        val key = milestoneDatabase.child(milestoneRequest.userId).key!!
+        val key = milestoneDatabase.child(milestoneRequest.userId).push().key!!
         return milestoneDatabase
             .child(milestoneRequest.userId)
             .child(key)
@@ -91,7 +92,7 @@ class MilestoneFirebaseService @Inject constructor(
                     milestoneId = key
                 ).flatMapRightWithEither { goals ->
                     if (frequency == 0) {
-                        actionService.putOneActionToManyGoals(actionRequest, goals.map { it.goalId })
+                        actionService.putOneActionToManyGoals(actionRequest, goals.map { it.goalId }).mapRight { listOf(it) }
                     } else actionService.putActions(goals.map { it.goalId to actionRequest })
                 }
             }
