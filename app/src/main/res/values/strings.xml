@@ -112,10 +112,12 @@
     <string name="intensity_factor">Intensity factor</string>
     <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
+
+    <!-- Generate milestone -->
     <string name="prepare">Prepare</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">Start</string>
     <string name="adjust">Adjust</string>
     <string name="accept">Accept</string>
+    <string name="let_s_do_it">Let\'s do it!</string>
+    <string name="milestone_intro_message">Take on the next challenges! Every week you shorten the distance to reach your habit! Keep on!</string>
 </resources>
