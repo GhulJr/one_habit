@@ -270,7 +270,7 @@
     },
     {
       "id": "8:7481785625492220139",
-      "lastPropertyId": "6:5940666338139476341",
+      "lastPropertyId": "7:8354938748857240765",
       "name": "GoalEntity",
       "properties": [
         {
@@ -309,6 +309,11 @@
           "id": "6:5940666338139476341",
           "name": "dayNumber",
           "type": 6
+        },
+        {
+          "id": "7:8354938748857240765",
+          "name": "finished",
+          "type": 1
         }
       ],
       "relations": []
@@ -343,10 +348,41 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "10:7256707929457616063",
+      "lastPropertyId": "4:2100034115286108808",
+      "name": "MilestoneEntityHolder",
+      "properties": [
+        {
+          "id": "1:5310907604526254219",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6207047566360481627",
+          "name": "userId",
+          "type": 9
+        },
+        {
+          "id": "3:7827017423994501560",
+          "name": "dueToInMillis",
+          "type": 6
+        },
+        {
+          "id": "4:2100034115286108808",
+          "name": "milestoneId",
+          "indexId": "13:481457695543836918",
+          "type": 9,
+          "flags": 34848
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "9:7033204050790402043",
-  "lastIndexId": "12:5590053610497117405",
+  "lastEntityId": "10:7256707929457616063",
+  "lastIndexId": "13:481457695543836918",
   "lastRelationId": "2:3523845188744509739",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

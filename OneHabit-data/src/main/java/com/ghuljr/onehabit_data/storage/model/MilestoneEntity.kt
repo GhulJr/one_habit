@@ -4,6 +4,7 @@ import com.ghuljr.onehabit_data.base.storage.EntityHolder
 import com.ghuljr.onehabit_data.base.storage.IndexedEntity
 import io.objectbox.annotation.*
 
+@Entity
 data class MilestoneEntity(
     @Id override var objectBoxId: Long = 0,
     @Unique(onConflict = ConflictStrategy.REPLACE) override var id: String,
