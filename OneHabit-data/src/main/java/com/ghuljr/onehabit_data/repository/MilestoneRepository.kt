@@ -64,7 +64,6 @@ class MilestoneRepository @Inject constructor(
             .replay(1)
             .refCount()
 
-    // TODO: mark previous milestone as finished
     fun generateMilestone(habit: Habit, intensity: Int): Maybe<Either<BaseError, Milestone>> {
         val request = MilestoneRequest(
             intensity = intensity,
@@ -103,14 +102,12 @@ private fun MilestoneResponse.toEntity() = MilestoneEntity(
     id = id,
     userId = userId,
     intensity = intensity,
-    orderNumber = orderNumber,
-    resolved = resolved
+    resolvedAt = resolvedAt
 )
 
 private fun MilestoneEntity.toDomain() = Milestone(
     id = id,
     userId = userId,
     intensity = intensity,
-    orderNumber = orderNumber,
-    resolved = resolved
+    resolvedAt = resolvedAt
 )

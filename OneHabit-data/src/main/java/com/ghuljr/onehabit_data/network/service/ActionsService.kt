@@ -29,6 +29,15 @@ interface ActionsService {
         goalId: String,
     ): Maybe<Either<BaseError, ActionResponse>>
 
+    fun putActions(
+        actionRequests: List<Pair<String, ActionRequest>>
+    ): Maybe<Either<BaseError, List<ActionResponse>>>
+
+    fun putOneActionToManyGoals(
+        actionRequests: ActionRequest,
+        goalIds: List<String>
+    ): Maybe<Either<BaseError, List<ActionResponse>>>
+
     fun editCustomAction(
         actionName: String,
         userId: String,

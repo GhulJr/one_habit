@@ -1,7 +1,12 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import com.ghuljr.onehabit_data.network.model.ActionRequest
+import com.ghuljr.onehabit_data.network.model.GoalRequest
+import com.ghuljr.onehabit_data.network.model.MilestoneRequest
 import com.ghuljr.onehabit_data.network.model.MilestoneResponse
+import com.ghuljr.onehabit_data.network.service.ActionsService
+import com.ghuljr.onehabit_data.network.service.GoalsService
 import com.ghuljr.onehabit_data.network.service.MilestoneService
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
@@ -21,7 +26,9 @@ import javax.inject.Singleton
 
 @Singleton
 class MilestoneFirebaseService @Inject constructor(
-    @NetworkScheduler private val networkScheduler: Scheduler
+    @NetworkScheduler private val networkScheduler: Scheduler,
+    private val actionService: ActionsService,
+    private val goalService: GoalsService
 ) : MilestoneService {
 
     private val milestoneDatabase = Firebase.database.getReference("milestone")
@@ -36,7 +43,9 @@ class MilestoneFirebaseService @Inject constructor(
         .get()
         .toSingle()
         .toRx3()
-        .map { it.getValue(ParsableMilestoneResponse::class.java)!!.toResponse(milestoneId, userId) }
+        .map {
+            it.getValue(ParsableMilestoneResponse::class.java)!!.toResponse(milestoneId, userId)
+        }
         .toMaybe()
         .leftOnThrow()
         .subscribeOn(networkScheduler)
@@ -54,19 +63,57 @@ class MilestoneFirebaseService @Inject constructor(
         .flatMapRightWithEither { getMilestoneById(userId, milestoneId) }
         .subscribeOn(networkScheduler)
 
+    override fun generateMilestone(
+        milestoneRequest: MilestoneRequest,
+        goalRequests: List<GoalRequest>,
+        actionRequest: ActionRequest,
+        frequency: Int
+    ): Maybe<Either<BaseError, MilestoneResponse>> {
+        val key = milestoneDatabase.child(milestoneRequest.userId).key!!
+        return milestoneDatabase
+            .child(milestoneRequest.userId)
+            .child(key)
+            .setValue(ParsableMilestoneRequest(intensity = milestoneRequest.intensity))
+            .asUnitSingle()
+            .flatMap {
+                cacheDatabase.child(milestoneRequest.userId)
+                    .child(milestoneRequest.habitId)
+                    .child(key)
+                    .setValue(true)
+                    .asUnitSingle()
+            }
+            .toMaybe()
+            .leftOnThrow()
+            .flatMapRightWithEither {
+                goalService.putGoals(
+                    goalRequests = goalRequests,
+                    userId = milestoneRequest.userId,
+                    milestoneId = key
+                ).flatMapRightWithEither { goals ->
+                    if (frequency == 0) {
+                        actionService.putOneActionToManyGoals(actionRequest, goals.map { it.goalId })
+                    } else actionService.putActions(goals.map { it.goalId to actionRequest })
+                }
+            }
+            .flatMapRightWithEither { getMilestoneById(milestoneRequest.userId, key) }
+            .subscribeOn(networkScheduler)
+    }
+
+
 }
 
 @IgnoreExtraProperties
 private data class ParsableMilestoneResponse(
     @get:PropertyName("intensity") @set:PropertyName("intensity") var intensity: Int = 0,
-    @get:PropertyName("order_number") @set:PropertyName("order_number") var orderNumber: Int = 0,
-    @get:PropertyName("resolved") @set:PropertyName("resolved") var resolved: Boolean = false
+    @get:PropertyName("resolved_at") @set:PropertyName("resolved_at") var resolvedAt: Long? = null
 ) {
     fun toResponse(id: String, userId: String) = MilestoneResponse(
         id = id,
         userId = userId,
         intensity = intensity,
-        orderNumber = orderNumber,
-        resolved = resolved
+        resolvedAt = resolvedAt
     )
 }
+
+@IgnoreExtraProperties
+private data class ParsableMilestoneRequest(@get:PropertyName("intensity") @set:PropertyName("intensity") var intensity: Int = 0)

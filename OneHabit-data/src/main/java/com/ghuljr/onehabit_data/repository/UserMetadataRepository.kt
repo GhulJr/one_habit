@@ -90,7 +90,7 @@ class UserMetadataRepository @Inject constructor(
         .flatMapRightWithEither {
             it.dataFlowable
                 .firstElement()
-                .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, milestoneId) }
+                .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, user.milestoneId, milestoneId) }
                 .mapRight { userResponse ->
                     val entity = userResponse.toUserEntity()
                     userMetadataDatabase.put(entity)

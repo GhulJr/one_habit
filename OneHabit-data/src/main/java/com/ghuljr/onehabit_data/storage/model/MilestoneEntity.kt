@@ -10,8 +10,7 @@ data class MilestoneEntity(
     @Unique(onConflict = ConflictStrategy.REPLACE) override var id: String,
     @Index override var userId: String,
     var intensity: Int,
-    var orderNumber: Int,
-    var resolved: Boolean
+    var resolvedAt: Long?,
 ) : IndexedEntity
 
 @Entity

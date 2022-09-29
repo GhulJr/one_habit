@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import arrow.core.right
 import com.ghuljr.onehabit_data.network.model.UserMetadataResponse
 import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError
@@ -16,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import io.ashdavies.rx.rxtasks.toSingle
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -25,6 +27,7 @@ class UserFirebaseService @Inject constructor(
 ) : UserService {
 
     private val userDatabase = Firebase.database.getReference("user")
+    private val milestoneDatabase = Firebase.database.getReference("milestone")
 
     override fun getUserMetadata(userId: String): Maybe<Either<BaseError, UserMetadataResponse>> =
         userDatabase.child(userId)
@@ -52,6 +55,7 @@ class UserFirebaseService @Inject constructor(
 
     override fun setCurrentMilestone(
         userId: String,
+        previousMilestoneId: String?,
         milestoneId: String
     ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
         .updateChildren(
@@ -63,6 +67,18 @@ class UserFirebaseService @Inject constructor(
         .asUnitSingle()
         .leftOnThrow()
         .toMaybe()
+        .flatMapRightWithEither {
+            if (previousMilestoneId.isNullOrBlank())
+                Maybe.just(it.right())
+            else
+                milestoneDatabase
+                    .child(userId)
+                    .child(previousMilestoneId)
+                    .updateChildren(mapOf("resolved_at" to Calendar.getInstance().timeInMillis))
+                    .asUnitSingle()
+                    .toMaybe()
+                    .leftOnThrow()
+        }
         .flatMapRightWithEither { getUserMetadata(userId) }
         .subscribeOn(networkScheduler)
 

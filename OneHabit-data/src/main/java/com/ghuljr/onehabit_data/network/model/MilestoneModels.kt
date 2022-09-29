@@ -4,8 +4,7 @@ data class MilestoneResponse(
     val id: String,
     val userId: String,
     val intensity: Int,
-    val orderNumber: Int,
-    val resolved: Boolean
+    val resolvedAt: Long?
 )
 
 data class MilestoneRequest(
