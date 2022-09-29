@@ -4,6 +4,7 @@ import com.ghuljr.onehabit.ui.generate_milestone.generate.AdjustIntensityFragmen
 import com.ghuljr.onehabit.ui.generate_milestone.generated.AcceptGeneratedMilestoneFragment
 import com.ghuljr.onehabit.ui.generate_milestone.intro.MilestoneIntroFragment
 import com.ghuljr.onehabit.ui.generate_milestone.summary.SummarisePreviousMilestoneFragment
+import com.ghuljr.onehabit.ui.main.timeline.TimelineFragment
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -17,7 +18,7 @@ interface MilestoneFragmentsModule {
 
     @FragmentScope
     @ContributesAndroidInjector
-    fun summaryFragment() : SummarisePreviousMilestoneFragment
+    fun timelineFragment() : TimelineFragment
 
     @FragmentScope
     @ContributesAndroidInjector

@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.generate_milestone.summary.SummarisePreviousMilestoneFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_margin"
+            android:text="@string/summary_message"
+            android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+
+        <!-- TODO: in future add it dynamically, so it is possible to display exact milestone -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container"
+            android:name="com.ghuljr.onehabit.ui.main.timeline.TimelineFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="?actionBarSize" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_button"
+        style="@style/OneHabit.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:drawableEnd="@drawable/ic_arrow_next"
+        android:drawableTint="@color/primary_white"
+        android:gravity="center"
+        android:text="@string/next"
+        app:iconPadding="-32dp" />
+
 
 </FrameLayout>
