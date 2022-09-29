@@ -17,7 +17,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @FragmentScope
@@ -30,6 +32,7 @@ class AdjustIntensityPresenter @Inject constructor(
 ) : BasePresenter<AdjustIntensityView>() {
 
     private val intensitySubject = BehaviorSubject.create<Float>()
+    private val generateSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: AdjustIntensityView): Disposable = CompositeDisposable(
         userMetadataRepository.currentUser
@@ -56,6 +59,12 @@ class AdjustIntensityPresenter @Inject constructor(
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
+            },
+        generateSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .withLatestFrom(intensitySubject) { _, intensity -> intensity }
+            .switchMap {
+
             }
     )
 

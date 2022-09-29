@@ -8,3 +8,9 @@ data class GoalResponse(
     val dayNumber: Long,
     val finished: Boolean
 )
+
+data class GoalRequest(
+    val userId: String,
+    val dayNumber: Long,
+    val finished: Boolean
+)

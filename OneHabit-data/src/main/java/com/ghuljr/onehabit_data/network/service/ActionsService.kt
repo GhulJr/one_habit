@@ -25,7 +25,8 @@ interface ActionsService {
     ): Maybe<Either<BaseError, ActionResponse>>
 
     fun putAction(
-        actionRequest: ActionRequest
+        actionRequest: ActionRequest,
+        goalId: String,
     ): Maybe<Either<BaseError, ActionResponse>>
 
     fun editCustomAction(

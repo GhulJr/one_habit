@@ -14,5 +14,5 @@ data class Habit(
     val description: String?,
     val type: HabitTopic,
     val habitSubject: String,
-    val settlingFormat: Int
+    val frequency: Int
 )

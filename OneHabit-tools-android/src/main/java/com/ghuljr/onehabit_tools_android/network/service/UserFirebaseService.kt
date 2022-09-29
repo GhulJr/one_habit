@@ -50,6 +50,22 @@ class UserFirebaseService @Inject constructor(
         .flatMapRightWithEither { getUserMetadata(userId) }
         .subscribeOn(networkScheduler)
 
+    override fun setCurrentMilestone(
+        userId: String,
+        milestoneId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
+        .updateChildren(
+            mapOf(
+                "milestone" to milestoneId,
+                "goal" to null
+            )
+        )
+        .asUnitSingle()
+        .leftOnThrow()
+        .toMaybe()
+        .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
     override fun setCurrentHabit(
         userId: String,
         habitId: String

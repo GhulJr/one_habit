@@ -80,7 +80,8 @@ class ActionsFirebaseService @Inject constructor(
         .subscribeOn(networkScheduler)
 
     override fun putAction(
-        actionRequest: ActionRequest
+        actionRequest: ActionRequest,
+        goalId: String
     ): Maybe<Either<BaseError, ActionResponse>> {
         val actionsReference = actionDb.child(actionRequest.userId)
         val key = actionsReference.push().key!!
@@ -90,7 +91,7 @@ class ActionsFirebaseService @Inject constructor(
             .asUnitSingle()
             .flatMap {
                 actionToGoalDb.child(actionRequest.userId)
-                    .child(actionRequest.goalId)
+                    .child(goalId)
                     .child(key)
                     .setValue(true)
                     .asUnitSingle()

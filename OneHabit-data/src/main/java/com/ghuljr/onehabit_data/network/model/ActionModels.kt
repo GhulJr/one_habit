@@ -10,7 +10,6 @@ data class ActionResponse(
 
 data class ActionRequest(
     val userId: String,
-    val goalId: String,
     val remindersAtMs: List<Long>,
     val currentRepeat: Int,
     val totalRepeats: Int,

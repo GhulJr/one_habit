@@ -135,5 +135,5 @@ private fun HabitEntity.toDomain() = Habit(
     description = description,
     type = HabitTopic.values().first { it.codeName == type },
     habitSubject = habitSubject,
-    settlingFormat = settlingFormat
+    frequency = settlingFormat
 )

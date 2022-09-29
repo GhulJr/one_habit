@@ -9,8 +9,7 @@ data class MilestoneResponse(
 )
 
 data class MilestoneRequest(
-    val id: String,
-    val userId: Int,
+    val userId: String,
     val habitId: String,
     val intensity: Int
 )

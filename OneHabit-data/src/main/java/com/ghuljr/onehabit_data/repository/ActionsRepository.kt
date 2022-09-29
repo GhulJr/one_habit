@@ -132,12 +132,12 @@ class ActionsRepository @Inject constructor(
             actionsService.putAction(
                 ActionRequest(
                     userId = userId,
-                    goalId = goalId,
                     remindersAtMs = reminders,
                     currentRepeat = 0,
                     totalRepeats = 1,
                     customTitle = actionName
-                )
+                ),
+                goalId
             )
                 .mapRight { response ->
                     val entity = response.toStorageModel(goalId, userId)
