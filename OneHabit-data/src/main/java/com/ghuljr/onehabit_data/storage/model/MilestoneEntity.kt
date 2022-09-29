@@ -9,8 +9,7 @@ data class MilestoneEntity(
     @Id override var objectBoxId: Long = 0,
     @Unique(onConflict = ConflictStrategy.REPLACE) override var id: String,
     @Index override var userId: String,
-    @Index var habitId: String,
-    var intensity: Long,
+    var intensity: Int,
     var orderNumber: Int,
     var resolved: Boolean
 ) : IndexedEntity
