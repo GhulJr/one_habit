@@ -1,11 +1,9 @@
 package com.ghuljr.onehabit_presenter.add_action
 
 import arrow.core.*
+import com.ghuljr.onehabit_data.domain.Action
 import com.ghuljr.onehabit_data.repository.ActionsRepository
-import com.ghuljr.onehabit_error.BaseEvent
-import com.ghuljr.onehabit_error.LoadingEvent
-import com.ghuljr.onehabit_error.NoDataError
-import com.ghuljr.onehabit_error.ValidationError
+import com.ghuljr.onehabit_error.*
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
@@ -73,8 +71,8 @@ class AddActionPresenter @Inject constructor(
         return CompositeDisposable(
             createActionSubject
                 .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-                .withLatestFrom(actionNameObservable, credentialsSubject, currentActionObservable, remindersObservable.map { (items, _) -> items.map { it.time } }) { _, name, initData, action, reminders -> if (name.isBlank()) (ValidationError.EmptyField as BaseEvent).left() else Tuple4(name, initData.first, action, reminders).right() }
-                .switchMapRightWithEither { (name, goalId, actionEither, reminders) ->
+                .withLatestFrom(actionNameObservable, credentialsSubject, currentActionObservable, remindersObservable.map { (items, _) -> items.map { it.time } }) { _, name, initData, action, reminders -> Tuple4(name, initData.first, action, reminders) }
+                .switchMap { (name, goalId, actionEither, reminders) ->
                     actionEither.fold(
                         ifRight = {
                             if (it.customTitle == null)
@@ -92,7 +90,10 @@ class AddActionPresenter @Inject constructor(
                                 )
 
                         },
-                        ifLeft = { actionsRepository.createCustomAction(name, goalId, reminders) }
+                        ifLeft = {
+                             if (name.isBlank()) Maybe.just((ValidationError.EmptyField).left() as Either<BaseError, Action>)
+                             else actionsRepository.createCustomAction(name, goalId, reminders)
+                        }
                     )
                         .toObservable()
                         .mapLeft { it as BaseEvent }
