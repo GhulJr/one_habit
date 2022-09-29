@@ -8,4 +8,5 @@ interface AdjustIntensityView : BaseView<AdjustIntensityPresenter> {
 
     fun handleEvent(event: Option<BaseEvent>)
     fun setSliderScope(scope: Pair<Double, Double>)
+    fun next()
 }

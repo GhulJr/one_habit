@@ -12,6 +12,7 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.onlyRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -62,9 +63,21 @@ class AdjustIntensityPresenter @Inject constructor(
             },
         generateSubject
             .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-            .withLatestFrom(intensitySubject) { _, intensity -> intensity }
-            .switchMap {
-
+            .withLatestFrom(intensitySubject, habitRepository.todayHabitObservable.onlyRight()) { _, intensity, habit -> intensity to habit }
+            .switchMap { (intensity, habit) ->
+                milestoneRepository.generateMilestone(habit, intensity.toInt())
+                    .toObservable()
+                    .mapLeft { it as BaseEvent }
+                    .startWithItem(LoadingEvent.left())
+            }
+            .observeOn(uiScheduler)
+            .subscribe {
+                it.fold(
+                    ifRight = {
+                        view.next()
+                        view.handleEvent(none())
+                    },
+                    ifLeft = { view.handleEvent(it.some()) })
             }
     )
 
