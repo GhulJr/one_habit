@@ -39,6 +39,7 @@
         android:layout_gravity="center"
         android:textAppearance="@style/OneHabit.TextAppearance.Primary"
         />
+
     <Space
         android:layout_width="0dp"
         android:layout_height="0dp"

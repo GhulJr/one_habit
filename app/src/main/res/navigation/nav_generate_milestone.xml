@@ -9,22 +9,34 @@
         android:id="@+id/milestoneIntroFragment"
         android:name="com.ghuljr.onehabit.ui.generate_milestone.intro.MilestoneIntroFragment"
         android:label="@string/start"
-        tools:layout="@layout/fragment_milestone_intro" >
+        tools:layout="@layout/fragment_milestone_intro">
         <action
-            android:id="@+id/action_milestoneIntroFragment_to_summarisePreviousMilestoneFragment"
-            app:destination="@id/summarisePreviousMilestoneFragment" />
+            android:id="@+id/toSummary"
+            app:destination="@id/summarisePreviousMilestoneFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
         <action
-            android:id="@+id/action_milestoneIntroFragment_to_adjustIntensityFragment"
-            app:destination="@id/adjustIntensityFragment" />
+            android:id="@+id/toGenerate"
+            app:destination="@id/adjustIntensityFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
     <fragment
         android:id="@+id/summarisePreviousMilestoneFragment"
         android:name="com.ghuljr.onehabit.ui.generate_milestone.summary.SummarisePreviousMilestoneFragment"
         android:label="@string/summary"
-        tools:layout="@layout/fragment_summarise_previous_milestone" >
+        tools:layout="@layout/fragment_summarise_previous_milestone">
         <action
-            android:id="@+id/action_summarisePreviousMilestoneFragment_to_adjustIntensityFragment"
-            app:destination="@id/adjustIntensityFragment" />
+            android:id="@+id/toGenerate"
+            app:destination="@id/adjustIntensityFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
     <fragment
         android:id="@+id/acceptGeneratedMilestoneFragment"
@@ -35,9 +47,13 @@
         android:id="@+id/adjustIntensityFragment"
         android:name="com.ghuljr.onehabit.ui.generate_milestone.generate.AdjustIntensityFragment"
         android:label="@string/accept"
-        tools:layout="@layout/fragment_adjust_intensity" >
+        tools:layout="@layout/fragment_adjust_intensity">
         <action
-            android:id="@+id/action_adjustIntensityFragment_to_acceptGeneratedMilestoneFragment"
-            app:destination="@id/acceptGeneratedMilestoneFragment" />
+            android:id="@+id/toAccept"
+            app:destination="@id/acceptGeneratedMilestoneFragment"
+            app:enterAnim="@anim/slide_enter_right"
+            app:exitAnim="@anim/slide_exit_left"
+            app:popEnterAnim="@anim/slide_enter_left"
+            app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
 </navigation>
