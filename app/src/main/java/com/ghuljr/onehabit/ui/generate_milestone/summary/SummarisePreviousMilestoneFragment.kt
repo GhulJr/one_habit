@@ -19,7 +19,6 @@ class SummarisePreviousMilestoneFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         view.findViewById<Button>(R.id.next_button).setOnClickListener { findNavController().navigate(SummarisePreviousMilestoneFragmentDirections.toGenerate()) }
     }
 }

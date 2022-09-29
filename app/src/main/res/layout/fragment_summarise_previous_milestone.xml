@@ -18,7 +18,6 @@
             android:text="@string/summary_message"
             android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
 
-        <!-- TODO: in future add it dynamically, so it is possible to display exact milestone -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
             android:name="com.ghuljr.onehabit.ui.main.timeline.TimelineFragment"
