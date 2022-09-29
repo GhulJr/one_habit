@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.ghuljr.onehabit.databinding.ActivityAddActionBinding
 import android.os.Bundle
+import androidx.core.view.isVisible
 import arrow.core.Option
 import arrow.core.toOption
 import com.ghuljr.onehabit.R
@@ -52,6 +53,13 @@ class AddActionActivity :
 
     override fun setActionTitle(title: String) {
         viewBind.actionNameInput.setText(title)
+    }
+
+    override fun enableSetTitle(enable: Boolean) {
+        viewBind.apply {
+            titleHeader.isVisible = enable
+            actionNameInput.isVisible = enable
+        }
     }
 
     companion object {

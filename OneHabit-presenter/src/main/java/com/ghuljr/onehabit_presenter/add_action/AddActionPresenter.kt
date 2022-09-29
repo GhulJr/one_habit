@@ -13,6 +13,7 @@ import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.onlyDefined
 import com.ghuljr.onehabit_tools.extension.onlyRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -63,7 +64,10 @@ class AddActionPresenter @Inject constructor(
                 .switchMapMaybe { actionsRepository.getActionObservable(it).firstElement() }
                 .observeOn(uiScheduler)
                 .onlyRight()
-                .subscribe { view.setActionTitle(it.customTitle ?: "") },
+                .subscribe {
+                    view.setActionTitle(it.customTitle ?: "")
+                    view.enableSetTitle(it.customTitle != null)
+                },
             actionNameObservable.subscribe(),
         )
     }
