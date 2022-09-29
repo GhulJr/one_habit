@@ -48,7 +48,7 @@ class MilestoneRepository @Inject constructor(
         )
     }
 
-    fun milestoneById(milestoneId: String): Observable<Either<BaseError, Milestone>> =
+    fun getMilestoneByIdObservable(milestoneId: String): Observable<Either<BaseError, Milestone>> =
         milestoneCache[milestoneId]
             .switchMapRightWithEither {
                 it.dataFlowable
