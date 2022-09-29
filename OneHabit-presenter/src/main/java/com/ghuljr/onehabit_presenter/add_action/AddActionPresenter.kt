@@ -4,12 +4,14 @@ import arrow.core.*
 import com.ghuljr.onehabit_data.repository.ActionsRepository
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
+import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_error.ValidationError
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.*
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -35,12 +37,16 @@ class AddActionPresenter @Inject constructor(
         val currentActionObservable = credentialsSubject
             .map { it.second }
             .take(1)
-            .onlyDefined()
-            .switchMapMaybe { actionsRepository.getActionObservable(it).firstElement() }
+            .switchMapMaybe {
+                it.fold(
+                    ifSome = { actionsRepository.getActionObservable(it).firstElement() },
+                    ifEmpty = { Maybe.just(NoDataError.left()) }
+                )
+            }
             .replay(1)
             .refCount()
 
-        val itemsObservable = currentActionObservable
+        val remindersObservable = currentActionObservable
             .onlyRight()
             .switchMap { action ->
                 addRemoveSubject
@@ -56,9 +62,8 @@ class AddActionPresenter @Inject constructor(
                             ReminderItem(
                                 time = time,
                                 removeClick = { removeReminder(time) }
-                            ) as BaseReminderItem
-                        }
-                            .let { if (it.size < action.totalRepeats) it.plus(AddReminderItem { addReminderClick() }) else it }
+                            )
+                        } to (it.size < action.totalRepeats)
                     }
             }
             .replay(1)
@@ -67,11 +72,26 @@ class AddActionPresenter @Inject constructor(
         return CompositeDisposable(
             createActionSubject
                 .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-                .withLatestFrom(actionNameObservable, credentialsSubject) { _, name, initData -> if (name.isBlank()) (ValidationError.EmptyField as BaseEvent).left() else Triple(name, initData.first, initData.second).right() }
-                .switchMapRightWithEither { (name, goalId, actionOption) ->
-                    actionOption.fold(
-                        ifSome = { actionsRepository.editCustomAction(name, goalId, it) },
-                        ifEmpty = { actionsRepository.createCustomAction(name, goalId) }
+                .withLatestFrom(actionNameObservable, credentialsSubject, currentActionObservable, remindersObservable.map { (items, _) -> items.map { it.time } }) { _, name, initData, action, reminders -> if (name.isBlank()) (ValidationError.EmptyField as BaseEvent).left() else Tuple4(name, initData.first, action, reminders).right() }
+                .switchMapRightWithEither { (name, goalId, actionEither, reminders) ->
+                    actionEither.fold(
+                        ifRight = {
+                            if (it.customTitle == null)
+                                actionsRepository.addRemindersToRegularAction(
+                                    goalId,
+                                    it.id,
+                                    reminders
+                                )
+                            else
+                                actionsRepository.editCustomAction(
+                                    actionName = name,
+                                    goalId = goalId,
+                                    actionId = it.id,
+                                    reminders = reminders
+                                )
+
+                        },
+                        ifLeft = { actionsRepository.createCustomAction(name, goalId) }
                     )
                         .toObservable()
                         .mapLeft { it as BaseEvent }
@@ -95,7 +115,17 @@ class AddActionPresenter @Inject constructor(
                     view.enableSetTitle(it.customTitle != null)
                 },
             actionNameObservable.subscribe(),
-            itemsObservable
+            remindersObservable
+                .map { (items, allowAdd) ->
+                    items.map { it as BaseReminderItem }
+                        .let {
+                            if (allowAdd)
+                                it.plus(AddReminderItem { addReminderClick() })
+                            else
+                                it
+                        }
+
+                }
                 .observeOn(uiScheduler)
                 .subscribe { view.setReminders(it) },
             addReminderClick

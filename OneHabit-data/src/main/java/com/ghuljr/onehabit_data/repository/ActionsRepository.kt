@@ -148,15 +148,37 @@ class ActionsRepository @Inject constructor(
     fun editCustomAction(
         actionName: String,
         goalId: String,
-        actionId: String
+        actionId: String,
+        reminders: List<Long>
     ): Maybe<Either<BaseError, Action>> = loggedInUserRepository.userIdFlowable
         .toEither { LoggedOutError as BaseError }
         .firstElement()
         .flatMapRightWithEither { userId ->
-            actionsService.editAction(
+            actionsService.editCustomAction(
                 actionName = actionName,
                 userId = userId,
-                actionId = actionId
+                actionId = actionId,
+                reminders
+            )
+                .mapRight { response ->
+                    val entity = response.toStorageModel(goalId, userId)
+                    actionsDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
+
+    fun addRemindersToRegularAction(
+        goalId: String,
+        actionId: String,
+        reminders: List<Long>
+    ): Maybe<Either<BaseError, Action>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .firstElement()
+        .flatMapRightWithEither { userId ->
+            actionsService.addRemindersToAction(
+                userId = userId,
+                actionId = actionId,
+                reminders = reminders
             )
                 .mapRight { response ->
                     val entity = response.toStorageModel(goalId, userId)

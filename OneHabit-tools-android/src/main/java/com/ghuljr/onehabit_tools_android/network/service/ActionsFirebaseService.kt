@@ -101,7 +101,7 @@ class ActionsFirebaseService @Inject constructor(
             .subscribeOn(networkScheduler)
     }
 
-    override fun editAction(
+    override fun editCustomAction(
         actionName: String,
         userId: String,
         actionId: String
