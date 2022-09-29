@@ -1,6 +1,9 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.reduceOrNull
+import arrow.core.right
 import com.ghuljr.onehabit_data.network.model.ActionRequest
 import com.ghuljr.onehabit_data.network.model.ActionResponse
 import com.ghuljr.onehabit_data.network.service.ActionsService
@@ -18,6 +21,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.ashdavies.rx.rxtasks.toSingle
 import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -99,6 +103,45 @@ class ActionsFirebaseService @Inject constructor(
             .toMaybe()
             .leftOnThrow()
             .mapRight { actionRequest.toActionResponse(key) }
+            .subscribeOn(networkScheduler)
+    }
+
+    override fun putActions(actionRequests: List<Pair<String, ActionRequest>>): Maybe<Either<BaseError, List<ActionResponse>>> =
+        Observable.fromIterable(actionRequests)
+            .flatMapMaybe { (goalId, actionRequest) -> putAction(goalId = goalId, actionRequest = actionRequest) }
+            .toList()
+            .toMaybe()
+            .map {
+                it.reduceOrNull(
+                    initial = { it.map { listOf(it) } },
+                    operation = { acc, new -> acc.flatMap { list -> new.map { list + it } } }
+                ) ?: listOf<ActionResponse>().right()
+            }
+            .subscribeOn(networkScheduler)
+
+    override fun putOneActionToManyGoals(
+        actionRequest: ActionRequest,
+        goalIds: List<String>
+    ): Maybe<Either<BaseError, ActionResponse>> {
+        val actionsReference = actionDb.child(actionRequest.userId)
+        val key = actionsReference.push().key!!
+
+        return actionsReference.child(key)
+            .setValue(ParsableActionRequest.fromActionRequest(actionRequest, key))
+            .asUnitSingle()
+            .toObservable()
+            .flatMapIterable { goalIds }
+            .flatMapSingle { goalId ->
+                actionToGoalDb.child(actionRequest.userId)
+                    .child(goalId)
+                    .child(key)
+                    .setValue(true)
+                    .asUnitSingle()
+            }
+            .toList()
+            .toMaybe()
+            .leftOnThrow()
+            .flatMapRightWithEither { getActionById(key, actionRequest.userId) }
             .subscribeOn(networkScheduler)
     }
 
