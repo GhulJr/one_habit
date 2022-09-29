@@ -1,11 +1,7 @@
 package com.ghuljr.onehabit.ui.generate_milestone.generate
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentAdjustIntensityBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit_presenter.generate_milestone.generate.AdjustIntensityPresenter

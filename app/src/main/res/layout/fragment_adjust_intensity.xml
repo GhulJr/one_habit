@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.generate_milestone.generate.AdjustIntensityFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.generate_milestone.generate.AdjustIntensityFragment"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_margin"
+        android:text="@string/adjust_intensity_message"
+        android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
 
 
+    <com.google.android.material.slider.Slider
+        android:id="@+id/intensity_factor_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="10.0"
+        android:valueTo="25.0"
+        android:visibility="gone"
+        app:labelBehavior="floating"
+        app:trackColorActive="@color/primary_black"
+        app:trackColorInactive="@color/primary_black_transparent"
+        tools:value="15.0"
+        tools:visibility="visible" />
 
-</FrameLayout>
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/next_button"
+        style="@style/OneHabit.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin_small"
+        android:drawableEnd="@drawable/ic_arrow_next"
+        android:drawableTint="@color/primary_white"
+        android:gravity="center"
+        android:text="@string/generate"
+        app:iconPadding="-32dp" />
+
+</LinearLayout>
