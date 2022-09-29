@@ -1,10 +1,8 @@
 package com.ghuljr.onehabit_data.storage.model
 
+import com.ghuljr.onehabit_data.base.storage.EntityHolder
 import com.ghuljr.onehabit_data.base.storage.IndexedEntity
-import io.objectbox.annotation.ConflictStrategy
-import io.objectbox.annotation.Id
-import io.objectbox.annotation.Index
-import io.objectbox.annotation.Unique
+import io.objectbox.annotation.*
 
 data class MilestoneEntity(
     @Id override var objectBoxId: Long = 0,
@@ -12,5 +10,14 @@ data class MilestoneEntity(
     @Index override var userId: String,
     @Index var habitId: String,
     var intensity: Long,
-   // var
+    var orderNumber: Int,
+    var resolved: Boolean
 ) : IndexedEntity
+
+@Entity
+data class MilestoneEntityHolder(
+    @Id override var objectBoxId: Long = 0,
+    override var userId: String,
+    override var dueToInMillis: Long,
+    @Unique(onConflict = ConflictStrategy.REPLACE) val milestoneId: String
+) : EntityHolder

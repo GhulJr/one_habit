@@ -23,7 +23,6 @@ class CreateHabitActivity :
     BaseActivity<ActivityCreateHabitBinding, CreateHabitView, CreateHabitPresenter>(),
     CreateHabitView {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
