@@ -3,6 +3,7 @@ package com.ghuljr.onehabit.di.module
 import com.ghuljr.onehabit.ui.add_action.AddActionActivity
 import com.ghuljr.onehabit.ui.create_habit.CreateHabitActivity
 import com.ghuljr.onehabit.ui.generate_milestone.GenerateMilestoneActivity
+import com.ghuljr.onehabit.ui.generate_milestone.MilestoneFragmentsModule
 import com.ghuljr.onehabit.ui.goal_details.DetailsModule
 import com.ghuljr.onehabit.ui.goal_details.GoalDetailsActivity
 import com.ghuljr.onehabit.ui.intro.IntroActivity
@@ -63,6 +64,6 @@ interface ActivitiesModule {
     fun createHabitActivity(): CreateHabitActivity
 
     @ActivityScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [MilestoneFragmentsModule::class])
     fun generateMilestoneActivity(): GenerateMilestoneActivity
 }
