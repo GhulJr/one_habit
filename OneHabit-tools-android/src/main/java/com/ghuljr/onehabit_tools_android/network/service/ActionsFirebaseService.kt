@@ -107,7 +107,7 @@ class ActionsFirebaseService @Inject constructor(
         reminders: List<Long>
     ): Maybe<Either<BaseError, ActionResponse>> = actionDb.child(userId)
         .child(actionId)
-        .updateChildren(mapOf("remindes" to reminders))
+        .updateChildren(mapOf("remind_at_ms" to reminders))
         .asUnitSingle()
         .toMaybe()
         .leftOnThrow()
@@ -124,7 +124,7 @@ class ActionsFirebaseService @Inject constructor(
         .updateChildren(
             mapOf(
                 "custom_title" to actionName,
-                "reminders" to reminders
+                "remind_at_ms" to reminders
             )
         )
         .asUnitSingle()

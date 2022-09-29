@@ -47,14 +47,15 @@ class AddActionPresenter @Inject constructor(
             .refCount()
 
         val remindersObservable = currentActionObservable
-            .onlyRight()
-            .switchMap { action ->
+            .mapRight { (it.reminders ?: listOf()) to it.totalRepeats }
+            .map { it.getOrElse { listOf<Long>() to 1 } }
+            .switchMap { (reminders, maxRepeats) ->
                 addRemoveSubject
-                    .scan(action.reminders ?: listOf()) { acc, (time, removeOrAdd) ->
+                    .scan(reminders) { acc, (time, removeOrAdd) ->
                         if (removeOrAdd)
                             acc.plus(time)
                         else
-                            acc.filter { it == time }
+                            acc.filterNot { it == time }
                     }
                     .map { it.sorted() }
                     .map {
@@ -63,7 +64,7 @@ class AddActionPresenter @Inject constructor(
                                 time = time,
                                 removeClick = { removeReminder(time) }
                             )
-                        } to (it.size < action.totalRepeats)
+                        } to (it.size < maxRepeats)
                     }
             }
             .replay(1)
@@ -141,7 +142,9 @@ class AddActionPresenter @Inject constructor(
     fun init(initData: Pair<String, Option<String>>) = credentialsSubject.onNext(initData)
 
     private fun removeReminder(time: Long) = addRemoveSubject.onNext(time to false)
-    fun addReminder(hours: Int, minutes: Int) = addRemoveSubject.onNext(hours.toLong() * HOUR_AS_MILLIS + minutes * MINUTE_AS_MILLIS to true)
+    fun addReminder(hours: Int, minutes: Int) =
+        addRemoveSubject.onNext(hours.toLong() * HOUR_AS_MILLIS + minutes * MINUTE_AS_MILLIS to true)
+
     private fun addReminderClick() = addReminderClick.onNext(Unit)
 
     companion object {

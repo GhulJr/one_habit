@@ -78,7 +78,7 @@ class AddActionActivity :
     override fun enableSetTitle(enable: Boolean) {
         viewBind.apply {
             titleHeader.isVisible = enable
-            actionNameInput.isVisible = enable
+            actionNameContainer.isVisible = enable
         }
     }
 
