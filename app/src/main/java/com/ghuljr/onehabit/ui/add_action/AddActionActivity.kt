@@ -1,9 +1,11 @@
 package com.ghuljr.onehabit.ui.add_action
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import com.ghuljr.onehabit.databinding.ActivityAddActionBinding
 import android.os.Bundle
+import android.widget.TimePicker
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import arrow.core.Option
@@ -17,6 +19,7 @@ import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.add_action.AddActionPresenter
 import com.ghuljr.onehabit_presenter.add_action.AddActionView
+import com.ghuljr.onehabit_presenter.add_action.BaseReminderItem
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.extension.debouncedTextChanges
 import com.google.android.material.snackbar.Snackbar
@@ -32,7 +35,10 @@ class AddActionActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter.init(intent.getStringExtra(EXTRA_GOAL_ID)!! to intent.getStringExtra(EXTRA_ACTION_ID).toOption())
+        presenter.init(
+            intent.getStringExtra(EXTRA_GOAL_ID)!! to intent.getStringExtra(EXTRA_ACTION_ID)
+                .toOption()
+        )
         viewBind.apply {
             remindersRecyclerView.apply {
                 layoutManager = LinearLayoutManager(this@AddActionActivity, LinearLayoutManager.VERTICAL, false)
@@ -74,6 +80,20 @@ class AddActionActivity :
             titleHeader.isVisible = enable
             actionNameInput.isVisible = enable
         }
+    }
+
+    override fun setReminders(items: List<BaseReminderItem>) {
+        reminderAdapter.submitList(items)
+    }
+
+    override fun openDatePicker() {
+        TimePickerDialog(
+            this,
+            { _, hourOfDay, minutes -> presenter.addReminder(hourOfDay, minutes) },
+            0,
+            0,
+            true
+        ).show()
     }
 
     companion object {

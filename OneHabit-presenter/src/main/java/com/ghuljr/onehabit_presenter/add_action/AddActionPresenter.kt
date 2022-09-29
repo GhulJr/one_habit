@@ -141,6 +141,11 @@ class AddActionPresenter @Inject constructor(
     fun init(initData: Pair<String, Option<String>>) = credentialsSubject.onNext(initData)
 
     private fun removeReminder(time: Long) = addRemoveSubject.onNext(time to false)
-    fun addReminder(time: Long) = addRemoveSubject.onNext(time to true)
+    fun addReminder(hours: Int, minutes: Int) = addRemoveSubject.onNext(hours.toLong() * HOUR_AS_MILLIS + minutes * MINUTE_AS_MILLIS to true)
     private fun addReminderClick() = addReminderClick.onNext(Unit)
+
+    companion object {
+        private const val MINUTE_AS_MILLIS = 60 * 1000
+        private const val HOUR_AS_MILLIS = 60 * MINUTE_AS_MILLIS
+    }
 }
