@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_presenter.main.timeline
 
+import arrow.core.Option
 import arrow.core.left
 import arrow.core.none
 import arrow.core.some
@@ -15,6 +16,7 @@ import com.ghuljr.onehabit_tools.extension.mapLeft
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -29,11 +31,21 @@ class TimelinePresenter @Inject constructor(
 
     private val refreshSubject = PublishSubject.create<Unit>()
     private val openGoalDetailsSubject = PublishSubject.create<String>()
+    private val initSubject = BehaviorSubject.create<Option<String>>()
 
     override fun subscribeToView(view: TimelineView): Disposable = CompositeDisposable(
-        goalRepository.currentGoals
-            .mapLeft { it as BaseEvent }
-            .startWithItem(LoadingEvent.left())
+
+        initSubject
+            .take(1)
+            .switchMap {
+                it.fold(
+                    ifSome = { milestoneId -> goalRepository.getGoalsByMilestoneId(milestoneId) },
+                    ifEmpty = { goalRepository.currentGoals }
+                )
+                    .mapLeft { it as BaseEvent }
+                    .startWithItem(LoadingEvent.left())
+
+            }
             .observeOn(uiScheduler)
             .subscribe {
                 it.fold(
@@ -77,6 +89,7 @@ class TimelinePresenter @Inject constructor(
 
 
     fun refresh() = refreshSubject.onNext(Unit)
+    fun init(milestoneId: Option<String>) = initSubject.onNext(milestoneId)
 
     private fun Goal.toItem() = GoalItem(
         id = id,

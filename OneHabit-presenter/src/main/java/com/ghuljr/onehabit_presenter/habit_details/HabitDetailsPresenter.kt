@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ActivityScope
+import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import io.reactivex.rxjava3.core.Observable
@@ -19,17 +20,19 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @ActivityScope
 class HabitDetailsPresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
+    @ComputationScheduler private val computationScheduler: Scheduler,
     private val milestoneRepository: MilestoneRepository,
     private val habitRepository: HabitRepository,
 ) : BasePresenter<HabitDetailsView>() {
 
     private val initSubject = BehaviorSubject.create<String>()
-    private val openMilestoneDetailsSubject = PublishSubject.create<String>()
+    private val openMilestoneDetailsSubject = PublishSubject.create<Pair<String, Int>>()
 
     override fun subscribeToView(view: HabitDetailsView): Disposable = CompositeDisposable(
         initSubject
@@ -72,16 +75,23 @@ class HabitDetailsPresenter @Inject constructor(
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
+            },
+        openMilestoneDetailsSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .observeOn(uiScheduler)
+            .subscribe { (milestoneId, orderNumber) ->
+                view.openMilestoneDetails(milestoneId, orderNumber)
             }
+
     )
 
     fun init(habitId: String) = initSubject.onNext(habitId)
 
-    fun openMilestoneDetails(milestoneId: String) = openMilestoneDetailsSubject.onNext(milestoneId)
+    fun openMilestoneDetails(milestoneId: String, orderNumber: Int) = openMilestoneDetailsSubject.onNext(milestoneId to orderNumber)
 
     private fun Milestone.toItem(orderNumber: Int) = MilestoneItem(
         id = id,
         orderNumber = orderNumber,
-        onClick = { openMilestoneDetails(id) }
+        onClick = { openMilestoneDetails(id, orderNumber) }
     )
 }

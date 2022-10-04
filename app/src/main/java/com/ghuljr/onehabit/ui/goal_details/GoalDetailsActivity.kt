@@ -31,15 +31,15 @@ class GoalDetailsActivity : BaseActivity<ActivityGoalDetailsBinding, GoalDetails
     override fun bindView(): ActivityGoalDetailsBinding = ActivityGoalDetailsBinding.inflate(layoutInflater)
     override fun getPresenterView(): GoalDetailsView = this
 
+    override fun displayDayNumber(dayNumber: Int) {
+        viewBind.toolbar.title = getString(R.string.day_header, dayNumber.toString())
+    }
+
     companion object {
         private const val EXTRA_GOAL_ID = "extra_goal_id"
 
         fun intent(from: Context, goalId: String) = Intent(from, GoalDetailsActivity::class.java).apply {
             putExtra(EXTRA_GOAL_ID, goalId)
         }
-    }
-
-    override fun displayDayNumber(dayNumber: Int) {
-        viewBind.toolbar.title = getString(R.string.day_header, dayNumber.toString())
     }
 }

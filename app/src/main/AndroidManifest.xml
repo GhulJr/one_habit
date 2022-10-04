@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
+            android:name=".ui.milestone_details.MilestoneDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.habit_details.HabitDetailsActivity"
             android:exported="false" />
         <activity

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import arrow.core.Option
+import arrow.core.toOption
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.FragmentTimelineBinding
 import com.ghuljr.onehabit.ui.base.BaseFragment
@@ -14,6 +15,7 @@ import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.timeline.list.GoalViewHolderManager
 import com.ghuljr.onehabit.ui.main.timeline.list.HeaderViewHolderManager
 import com.ghuljr.onehabit.ui.main.timeline.list.SummaryViewHolderManager
+import com.ghuljr.onehabit.ui.main.today.ActionsFragment
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
@@ -37,6 +39,7 @@ class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, Tim
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TIMELINE)
+        presenter.init(arguments?.getString(EXTRA_MILESTONE_ID).toOption())
 
         viewBind.apply {
             timelineRecyclerView.apply {
@@ -72,5 +75,16 @@ class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, Tim
 
     override fun openGoalDetails(goalId: String) {
         startActivity(GoalDetailsActivity.intent(requireContext(), goalId))
+    }
+
+    companion object {
+
+        private const val EXTRA_MILESTONE_ID = "extra_milestone_id"
+
+        fun instance(habitId: String?) = TimelineFragment().apply {
+            arguments = Bundle().apply {
+                putString(EXTRA_MILESTONE_ID, habitId)
+            }
+        }
     }
 }

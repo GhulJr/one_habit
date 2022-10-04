@@ -10,6 +10,7 @@ import com.ghuljr.onehabit.databinding.ActivityHabitDetailsBinding
 import com.ghuljr.onehabit.ui.base.BaseActivity
 import com.ghuljr.onehabit.ui.habit_details.list.MilestoneViewHolderManager
 import com.ghuljr.onehabit.ui.main.today.list.generateTitle
+import com.ghuljr.onehabit.ui.milestone_details.MilestoneDetailsActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
@@ -67,6 +68,10 @@ class HabitDetailsActivity :
 
     override fun displayMilestoneItems(items: List<MilestoneItem>) {
         milestonesAdapter.submitList(items)
+    }
+
+    override fun openMilestoneDetails(milestoneId: String, orderNumber: Int) {
+        startActivity(MilestoneDetailsActivity.intent(this, milestoneId, orderNumber))
     }
 
     companion object {
