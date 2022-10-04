@@ -1,8 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.habit_details.HabitDetailsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        style="@style/OneHabit.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liftOnScroll="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/OneHabit.Toolbar"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:contentInsetStartWithNavigation="0dp"
+            app:title="@string/current_habit"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="exitUntilCollapsed"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin"
+            android:paddingStart="@dimen/default_margin"
+            android:paddingEnd="@dimen/default_margin"
+            app:layout_scrollFlags="exitUntilCollapsed|enterAlways|snap"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_habit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Bold"
+                tools:text="Eat vegetable" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_habit_percentage_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
+                android:textStyle="italic"
+                tools:text="50%" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/current_habit_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:indeterminate="false"
+                android:progress="50"
+                android:progressTint="@color/primary_black"
+                app:indicatorColor="@color/primary_black"
+                app:trackCornerRadius="@dimen/default_corner_radius"
+                app:trackThickness="@dimen/default_progress_indicator_thickness" />
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
