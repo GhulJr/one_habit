@@ -1,7 +1,6 @@
 package com.ghuljr.onehabit.ui.main.today.info
 
 import android.os.Bundle
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StrikethroughSpan
@@ -13,12 +12,11 @@ import androidx.core.view.isVisible
 import com.ghuljr.onehabit.R
 import com.ghuljr.onehabit.databinding.DialogActionInfoBinding
 import com.ghuljr.onehabit.ui.add_action.AddActionActivity
-import com.ghuljr.onehabit.ui.main.today.list.generateTitle
+import com.ghuljr.onehabit.ui.main.today.list.generateTitleWithOpposition
 import com.ghuljr.onehabit_presenter.main.today.ActionInfoItem
 import com.ghuljr.onehabit_presenter.main.today.ActionType
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoView
-import com.ghuljr.onehabit_tools.extension.blankToOption
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.math.abs
 
@@ -79,7 +77,7 @@ class ActionInfoBottomSheetDialog(
     override fun displayActionInfo(item: ActionInfoItem) {
         viewBind.apply {
             toolbar.apply {
-                title = item.customTitle ?: item.habitTopic.generateTitle(resources, item.habitSubject, item.exceeded)
+                title = item.customTitle ?: item.habitTopic.generateTitleWithOpposition(resources, item.habitSubject, item.exceeded)
                 subtitle =
                     if (item.quantity == null)
                         ""

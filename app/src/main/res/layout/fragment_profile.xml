@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/default_margin_small"
-                    android:text="Eat vegetable"
+                    tools:text="Eat vegetable"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary.Bold" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Week 5 of 10"
+                    tools:text="50%"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
                     android:textStyle="italic" />
 
@@ -266,7 +266,19 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/app_version_1_s" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:indeterminate="true"
+        app:indeterminateAnimationType="disjoint"
+        app:indicatorColor="@color/primary_black"
+        app:trackCornerRadius="@dimen/default_corner_radius"
+        app:trackThickness="@dimen/default_stroke_width" />
+
 </FrameLayout>
