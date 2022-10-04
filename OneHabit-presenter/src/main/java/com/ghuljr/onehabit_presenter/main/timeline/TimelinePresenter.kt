@@ -13,6 +13,7 @@ import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
+import com.ghuljr.onehabit_tools.extension.mapRight
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -30,37 +31,50 @@ class TimelinePresenter @Inject constructor(
 ) : BasePresenter<TimelineView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
-    private val openGoalDetailsSubject = PublishSubject.create<String>()
+    private val openGoalDetailsSubject = PublishSubject.create<Pair<String, Int>>()
     private val initSubject = BehaviorSubject.create<Option<String>>()
 
     override fun subscribeToView(view: TimelineView): Disposable = CompositeDisposable(
-
         initSubject
             .take(1)
-            .switchMap {
-                it.fold(
+            .switchMap { idOption ->
+                idOption.fold(
                     ifSome = { milestoneId -> goalRepository.getGoalsByMilestoneId(milestoneId) },
                     ifEmpty = { goalRepository.currentGoals }
                 )
                     .mapLeft { it as BaseEvent }
                     .startWithItem(LoadingEvent.left())
+                    .mapRight { goals ->
+                        listOf(HeaderItem)
+                            .plus(goals.map {
+                                it.toItem(
+                                    idOption.fold(
+                                        ifSome = { GoalItem.State.Past.Success },
+                                        ifEmpty = { it.getState() }
+                                    )
+                                )
+                            })
+                            .plus(
+
+                                SummaryItem(
+                                    dayNumber = idOption.fold(
+                                        ifSome = { 7 },
+                                        ifEmpty = {
+                                            (Calendar.getInstance()
+                                                .get(Calendar.DAY_OF_WEEK) - 1) % 7
+                                        }
+                                    ),
+                                    totalDays = goals.size
+                                )
+                            )
+                    }
 
             }
             .observeOn(uiScheduler)
             .subscribe {
                 it.fold(
                     ifRight = { goals ->
-                        view.submitItems(
-                            listOf(HeaderItem)
-                                .plus(goals.map { it.toItem() })
-                                .plus(
-                                    SummaryItem(
-                                        dayNumber = (Calendar.getInstance()
-                                            .get(Calendar.DAY_OF_WEEK) - 1) % 7,
-                                        totalDays = goals.size
-                                    )
-                                )
-                        )
+                        view.submitItems(goals)
                         view.handleEvent(none())
                     },
                     ifLeft = { view.handleEvent(it.some()) }
@@ -84,18 +98,18 @@ class TimelinePresenter @Inject constructor(
         openGoalDetailsSubject
             .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
             .observeOn(uiScheduler)
-            .subscribe { view.openGoalDetails(it) }
+            .subscribe { (id, orderNumber) -> view.openGoalDetails(id, orderNumber) }
     )
 
 
     fun refresh() = refreshSubject.onNext(Unit)
     fun init(milestoneId: Option<String>) = initSubject.onNext(milestoneId)
 
-    private fun Goal.toItem() = GoalItem(
+    private fun Goal.toItem(state: GoalItem.State) = GoalItem(
         id = id,
         dayNumber = dayNumber.toInt() + 1,
-        state = getState(),
-        onClick = { openGoalDetails(id) }
+        state = state,
+        onClick = { openGoalDetails(id, dayNumber.toInt() + 1) }
     )
 
     private fun Goal.getState(): GoalItem.State {
@@ -109,5 +123,6 @@ class TimelinePresenter @Inject constructor(
         }
     }
 
-    private fun openGoalDetails(goalId: String) = openGoalDetailsSubject.onNext(goalId)
+    private fun openGoalDetails(goalId: String, dayNumber: Int) =
+        openGoalDetailsSubject.onNext(goalId to dayNumber)
 }

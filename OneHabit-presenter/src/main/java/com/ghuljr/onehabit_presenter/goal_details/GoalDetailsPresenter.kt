@@ -19,21 +19,5 @@ class GoalDetailsPresenter @Inject constructor(
     private val goalRepository: GoalRepository
 ) : BasePresenter<GoalDetailsView>() {
 
-    private val goalIdSubject = BehaviorSubject.create<String>()
-
-    override fun subscribeToView(view: GoalDetailsView): Disposable = CompositeDisposable(
-        goalIdSubject
-            .take(1)
-            .switchMap { goalId ->
-                goalRepository.currentGoals
-                    .mapRight { it.map { it.id }.indexOf(goalId) + 1 }
-            }
-            .onlyRight()
-            .observeOn(uiScheduler)
-            .subscribe { dayNumber ->
-                view.displayDayNumber(dayNumber)
-            }
-    )
-
-    fun init(goalId: String) = goalIdSubject.onNext(goalId)
+    override fun subscribeToView(view: GoalDetailsView): Disposable = CompositeDisposable()
 }

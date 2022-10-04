@@ -9,6 +9,8 @@
         style="@style/OneHabit.Profile.SettingsItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:background="@drawable/ripple_button_click_black"
         android:drawableRight="@drawable/ic_arrow_next_small"
         tools:text="@string/week_param" />

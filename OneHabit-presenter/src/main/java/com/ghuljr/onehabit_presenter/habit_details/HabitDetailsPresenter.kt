@@ -87,7 +87,7 @@ class HabitDetailsPresenter @Inject constructor(
 
     fun init(habitId: String) = initSubject.onNext(habitId)
 
-    fun openMilestoneDetails(milestoneId: String, orderNumber: Int) = openMilestoneDetailsSubject.onNext(milestoneId to orderNumber)
+    private fun openMilestoneDetails(milestoneId: String, orderNumber: Int) = openMilestoneDetailsSubject.onNext(milestoneId to orderNumber)
 
     private fun Milestone.toItem(orderNumber: Int) = MilestoneItem(
         id = id,

@@ -11,35 +11,39 @@ import com.ghuljr.onehabit.ui.main.today.ActionsFragment
 import com.ghuljr.onehabit_presenter.goal_details.GoalDetailsPresenter
 import com.ghuljr.onehabit_presenter.goal_details.GoalDetailsView
 
-class GoalDetailsActivity : BaseActivity<ActivityGoalDetailsBinding, GoalDetailsView, GoalDetailsPresenter>(), GoalDetailsView {
+class GoalDetailsActivity : BaseActivity<ActivityGoalDetailsBinding, GoalDetailsView, GoalDetailsPresenter>(),
+    GoalDetailsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val goalId = intent.getStringExtra(EXTRA_GOAL_ID)!!
+        val orderNumber = intent.getIntExtra(EXTRA_ORDER_NUMBER, 0)
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             add(R.id.fragment_container, ActionsFragment.instance(goalId))
         }
 
-        presenter.init(goalId)
-
         viewBind.apply {
-            toolbar.setNavigationOnClickListener { onBackPressed() }
+            toolbar.apply {
+                title = getString(R.string.day_header, orderNumber.toString())
+                setNavigationOnClickListener { onBackPressed() }
+            }
         }
     }
 
-    override fun bindView(): ActivityGoalDetailsBinding = ActivityGoalDetailsBinding.inflate(layoutInflater)
-    override fun getPresenterView(): GoalDetailsView = this
+    override fun bindView(): ActivityGoalDetailsBinding =
+        ActivityGoalDetailsBinding.inflate(layoutInflater)
 
-    override fun displayDayNumber(dayNumber: Int) {
-        viewBind.toolbar.title = getString(R.string.day_header, dayNumber.toString())
-    }
+    override fun getPresenterView(): GoalDetailsView = this
 
     companion object {
         private const val EXTRA_GOAL_ID = "extra_goal_id"
+        private const val EXTRA_ORDER_NUMBER = "extra_order_number"
 
-        fun intent(from: Context, goalId: String) = Intent(from, GoalDetailsActivity::class.java).apply {
-            putExtra(EXTRA_GOAL_ID, goalId)
-        }
+        fun intent(from: Context, goalId: String, orderNumber: Int) =
+            Intent(from, GoalDetailsActivity::class.java).apply {
+                putExtra(EXTRA_GOAL_ID, goalId)
+                putExtra(EXTRA_ORDER_NUMBER, orderNumber)
+            }
     }
 }

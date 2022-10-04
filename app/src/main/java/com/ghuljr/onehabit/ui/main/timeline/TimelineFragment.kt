@@ -73,8 +73,8 @@ class TimelineFragment : BaseFragment<FragmentTimelineBinding, TimelineView, Tim
         eventManager(event)
     }
 
-    override fun openGoalDetails(goalId: String) {
-        startActivity(GoalDetailsActivity.intent(requireContext(), goalId))
+    override fun openGoalDetails(goalId: String, orderNumber: Int) {
+        startActivity(GoalDetailsActivity.intent(requireContext(), goalId, orderNumber))
     }
 
     companion object {

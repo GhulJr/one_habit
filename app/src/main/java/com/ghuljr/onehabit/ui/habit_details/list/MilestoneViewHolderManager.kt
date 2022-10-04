@@ -16,9 +16,9 @@ class MilestoneViewHolderManager : ViewHolderManager(R.layout.item_milestone) {
         private val viewBind = ItemMilestoneBinding.bind(view)
 
         override fun bind(item: MilestoneItem) {
-            viewBind.apply {
-                milestoneItemTitle.text = view.resources.getString(R.string.week_param, item.orderNumber.toString())
-                root.setOnClickListener { item.click() }
+            viewBind.milestoneItemTitle.apply {
+                text = view.resources.getString(R.string.week_param, item.orderNumber.toString())
+                setOnClickListener { item.click() }
             }
         }
     }
