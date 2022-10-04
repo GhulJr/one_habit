@@ -69,6 +69,19 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/milestones_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        tools:itemCount="100"
+        android:paddingTop="@dimen/default_margin"
+        android:paddingBottom="@dimen/default_margin"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:listitem="@layout/item_milestone" />
+
+
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/loading_indicator"
         android:layout_width="match_parent"
