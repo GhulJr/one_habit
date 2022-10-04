@@ -158,6 +158,24 @@ fun <L, OLD_R, NEW_R> Maybe<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (O
         }
     }
 
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.flatMapRightWithEither(onRight: (OLD_R) -> Observable<Either<L, NEW_R>>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.flatMap {
+            it.fold(
+                { left -> Observable.just(left.left()) },
+                { right -> onRight(right) })
+        }
+    }
+
+fun <L, OLD_R, NEW_R> Observable<Either<L, OLD_R>>.flatMapMaybeRightWithEither(onRight: (OLD_R) -> Maybe<Either<L, NEW_R>>): Observable<Either<L, NEW_R>> =
+    compose { flowable ->
+        flowable.flatMapMaybe {
+            it.fold(
+                { left -> Maybe.just(left.left()) },
+                { right -> onRight(right) })
+        }
+    }
+
 // map
 fun <L, OLD_R, NEW_R> Single<Either<L, OLD_R>>.mapRight(onRight: (OLD_R) -> NEW_R): Single<Either<L, NEW_R>> = map {
     it.map { right -> onRight(right) }

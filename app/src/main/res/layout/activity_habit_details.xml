@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.habit_details.HabitDetailsActivity">
 
+    <!--TODO: add option to delete habit-->
+    <!--TODO: consider editing habit, but it is kinda risky if it is already started-->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         style="@style/OneHabit.Toolbar"
@@ -21,7 +23,7 @@
             app:title="@string/current_habit"
             android:layout_width="match_parent"
             app:layout_scrollFlags="exitUntilCollapsed"
-            android:layout_height="match_parent" />
+            android:layout_height="?android:attr/actionBarSize" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,5 +67,18 @@
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:indeterminate="true"
+        app:indeterminateAnimationType="disjoint"
+        app:indicatorColor="@color/primary_black"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        app:trackCornerRadius="@dimen/default_corner_radius"
+        app:trackThickness="@dimen/default_stroke_width" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

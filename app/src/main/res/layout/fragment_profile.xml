@@ -270,7 +270,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/loading_indicator"
         android:layout_width="match_parent"
@@ -281,5 +280,4 @@
         app:indicatorColor="@color/primary_black"
         app:trackCornerRadius="@dimen/default_corner_radius"
         app:trackThickness="@dimen/default_stroke_width" />
-
 </FrameLayout>

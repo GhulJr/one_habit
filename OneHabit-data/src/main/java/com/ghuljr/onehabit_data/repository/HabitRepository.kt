@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_data.repository
 import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.core.right
+import com.fasterxml.jackson.databind.ser.Serializers
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.Habit
@@ -62,13 +63,14 @@ class HabitRepository @Inject constructor(
 
     val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
         .filter { it.map { it.habitId != null }.getOrElse { true } }
-        .switchMapRightWithEither { currentUser ->
-            cache[currentUser.habitId!!]
-                .switchMapRightWithEither { it.dataFlowable }
-                .toObservable()
-                .mapRight { it.toDomain() }
+        .switchMapRightWithEither { currentUser -> getHabitByIdObservable(currentUser.habitId ?: "") }
+        .replay(1)
+        .refCount()
 
-        }
+    fun getHabitByIdObservable(habitId: String): Observable<Either<BaseError, Habit>> =  cache[habitId]
+        .switchMapRightWithEither { it.dataFlowable }
+        .toObservable()
+        .mapRight { it.toDomain() }
         .replay(1)
         .refCount()
 
