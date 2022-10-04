@@ -4,9 +4,9 @@ import arrow.core.left
 import arrow.core.none
 import arrow.core.some
 import arrow.core.zip
+import com.ghuljr.onehabit_data.domain.Milestone
 import com.ghuljr.onehabit_data.repository.HabitRepository
 import com.ghuljr.onehabit_data.repository.MilestoneRepository
-import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
@@ -18,6 +18,7 @@ import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 @ActivityScope
@@ -28,6 +29,7 @@ class HabitDetailsPresenter @Inject constructor(
 ) : BasePresenter<HabitDetailsView>() {
 
     private val initSubject = BehaviorSubject.create<String>()
+    private val openMilestoneDetailsSubject = PublishSubject.create<String>()
 
     override fun subscribeToView(view: HabitDetailsView): Disposable = CompositeDisposable(
         initSubject
@@ -57,6 +59,16 @@ class HabitDetailsPresenter @Inject constructor(
                             habitSubject = habit.habitSubject,
                             intensityProgress = currentMilestone.intensity
                         )
+                        view.displayMilestoneItems(
+                            milestones
+                                .filter { it.resolvedAt != null }
+                                .sortedBy { it.resolvedAt }
+                                .let { list ->
+                                    milestones.firstOrNull { it.resolvedAt == null }
+                                        ?.let { list.plus(it) } ?: list
+                                }
+                                .mapIndexed { index, milestone -> milestone.toItem(index + 1) }
+                        )
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
@@ -64,4 +76,12 @@ class HabitDetailsPresenter @Inject constructor(
     )
 
     fun init(habitId: String) = initSubject.onNext(habitId)
+
+    fun openMilestoneDetails(milestoneId: String) = openMilestoneDetailsSubject.onNext(milestoneId)
+
+    private fun Milestone.toItem(orderNumber: Int) = MilestoneItem(
+        id = id,
+        orderNumber = orderNumber,
+        onClick = { openMilestoneDetails(id) }
+    )
 }

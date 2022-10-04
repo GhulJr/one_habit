@@ -7,4 +7,6 @@ import com.ghuljr.onehabit_tools.model.HabitTopic
 
 interface HabitDetailsView : BaseView<HabitDetailsPresenter> {
     fun displayCurrentHabitData(habitTopic: HabitTopic, habitSubject: String, intensityProgress: Int)
-    fun handleEvent(event: Option<BaseEvent>)}
+    fun handleEvent(event: Option<BaseEvent>)
+    fun displayMilestoneItems(items: List<MilestoneItem>)
+}
