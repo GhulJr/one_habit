@@ -68,6 +68,7 @@
             </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/current_habit_details_button"
                 style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -5,11 +5,12 @@ import arrow.core.none
 import arrow.core.some
 import arrow.core.zip
 import com.ghuljr.onehabit_data.repository.HabitRepository
-import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_data.repository.MilestoneRepository
+import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
+import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
@@ -17,17 +18,21 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.abs
 
 // TODO: handle removing habit with all dependencies in withing the app
 @FragmentScope
 class ProfilePresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
-    private val userRepository: LoggedInUserRepository,
+    @ComputationScheduler private val computationScheduler: Scheduler,
+    private val userRepository: UserMetadataRepository,
     private val habitRepository: HabitRepository,
     private val milestoneRepository: MilestoneRepository
 ) : BasePresenter<ProfileView>() {
+
+    private val openCurrentHabitDetailsSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: ProfileView): Disposable = CompositeDisposable(
         Observable.combineLatest(
@@ -49,6 +54,27 @@ class ProfilePresenter @Inject constructor(
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
+            },
+        openCurrentHabitDetailsSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .switchMap {
+                userRepository.currentUser
+                    .firstElement()
+                    .toObservable()
+                    .mapLeft { it as BaseEvent }
+                    .startWithItem((LoadingEvent as BaseEvent).left())
+            }
+            .observeOn(uiScheduler)
+            .subscribe {
+                it.fold(
+                    ifRight = { user ->
+                        view.handleEvent(none())
+                        view.openCurrentHabitDetails(user.habitId ?: "")
+                    },
+                    ifLeft = { view.handleEvent(it.some()) }
+                )
             }
     )
+
+    fun openCurrentHabitDetails() = openCurrentHabitDetailsSubject.onNext(Unit)
 }

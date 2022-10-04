@@ -16,6 +16,7 @@ import com.ghuljr.onehabit.ui.intro.register.RegisterActivity
 import com.ghuljr.onehabit.ui.intro.register.RegisterFragmentsModule
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.MainFragmentsModule
+import com.ghuljr.onehabit.ui.habit_details.HabitDetailsActivity
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -66,4 +67,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [MilestoneFragmentsModule::class])
     fun generateMilestoneActivity(): GenerateMilestoneActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun milestonesActivity(): HabitDetailsActivity
 }

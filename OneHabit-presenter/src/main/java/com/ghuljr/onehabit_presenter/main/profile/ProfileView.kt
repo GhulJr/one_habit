@@ -7,5 +7,6 @@ import com.ghuljr.onehabit_tools.model.HabitTopic
 
 interface ProfileView : BaseView<ProfilePresenter> {
     fun displayCurrentHabitData(habitTopic: HabitTopic, habitSubject: String, intensityProgress: Int)
+    fun openCurrentHabitDetails(habitId: String)
     fun handleEvent(event: Option<BaseEvent>)
 }
