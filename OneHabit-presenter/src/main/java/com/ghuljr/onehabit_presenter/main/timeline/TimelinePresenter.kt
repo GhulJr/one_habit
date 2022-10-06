@@ -1,11 +1,9 @@
 package com.ghuljr.onehabit_presenter.main.timeline
 
-import arrow.core.Option
-import arrow.core.left
-import arrow.core.none
-import arrow.core.some
+import arrow.core.*
 import com.ghuljr.onehabit_data.domain.Goal
 import com.ghuljr.onehabit_data.repository.GoalRepository
+import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error.LoadingEvent
 import com.ghuljr.onehabit_presenter.base.BasePresenter
@@ -14,6 +12,7 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -27,7 +26,8 @@ import javax.inject.Inject
 class TimelinePresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler,
-    private val goalRepository: GoalRepository
+    private val goalRepository: GoalRepository,
+    private val userMetadataRepository: UserMetadataRepository
 ) : BasePresenter<TimelineView>() {
 
     private val refreshSubject = PublishSubject.create<Unit>()
@@ -38,19 +38,26 @@ class TimelinePresenter @Inject constructor(
         initSubject
             .take(1)
             .switchMap { idOption ->
-                idOption.fold(
-                    ifSome = { milestoneId -> goalRepository.getGoalsByMilestoneId(milestoneId) },
-                    ifEmpty = { goalRepository.currentGoals }
-                )
+                Observable.combineLatest(
+                    idOption.fold(
+                        ifSome = { milestoneId -> goalRepository.getGoalsByMilestoneId(milestoneId) },
+                        ifEmpty = { goalRepository.currentGoals }
+                    ),
+                    userMetadataRepository.currentUser
+                ) { goals, user -> goals.zip(user) }
                     .mapLeft { it as BaseEvent }
                     .startWithItem(LoadingEvent.left())
-                    .mapRight { goals ->
+                    .mapRight { (goals, user) ->
                         listOf(HeaderItem)
-                            .plus(goals.map {
-                                it.toItem(
+                            .plus(goals.map { goal ->
+                                goal.toItem(
                                     idOption.fold(
-                                        ifSome = { GoalItem.State.Past.Success },
-                                        ifEmpty = { it.getState() }
+                                        ifSome = { milestoneId ->
+                                            if (milestoneId == user.milestoneId)
+                                                goal.getState()
+                                            else GoalItem.State.Past.Success
+                                        },
+                                        ifEmpty = { goal.getState() }
                                     )
                                 )
                             })
