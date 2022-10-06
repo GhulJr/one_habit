@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.habit_details.HabitDetailsActivity">
 
-    <!--TODO: add option to delete habit-->
-    <!--TODO: consider editing habit, but it is kinda risky if it is already started-->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         style="@style/OneHabit.Toolbar"
@@ -64,6 +62,14 @@
                 app:indicatorColor="@color/primary_black"
                 app:trackCornerRadius="@dimen/default_corner_radius"
                 app:trackThickness="@dimen/default_progress_indicator_thickness" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/set_as_current"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_small"
+                android:text="@string/set_as_current"
+                style="@style/OneHabit.Button.Primary"/>
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

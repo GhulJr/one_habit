@@ -129,4 +129,5 @@
 
     <!-- Habit details -->
     <string name="week_param">Week %1$s</string>
+    <string name="set_as_current">Set as current</string>
 </resources>

@@ -3,6 +3,7 @@ package com.ghuljr.onehabit.ui.habit_details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import arrow.core.Option
 import com.ghuljr.onehabit.R
@@ -21,8 +22,7 @@ import com.ghuljr.onehabit_tools.model.HabitTopic
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.google.android.material.snackbar.Snackbar
 
-class HabitDetailsActivity :
-    BaseActivity<ActivityHabitDetailsBinding, HabitDetailsView, HabitDetailsPresenter>(),
+class HabitDetailsActivity : BaseActivity<ActivityHabitDetailsBinding, HabitDetailsView, HabitDetailsPresenter>(),
     HabitDetailsView {
 
     private val milestonesAdapter = ItemListAdapter(MilestoneViewHolderManager())
@@ -53,6 +53,7 @@ class HabitDetailsActivity :
             currentHabitTitle.text = habitTopic.generateTitle(resources, habitSubject)
             currentHabitPercentageProgress.text = "$intensityProgress%"
             currentHabitProgressBar.progress = intensityProgress
+            setAsCurrent.setOnClickListener { presenter.setAsCurrent() }
         }
     }
 
@@ -70,8 +71,16 @@ class HabitDetailsActivity :
         milestonesAdapter.submitList(items)
     }
 
+    override fun close() {
+        onBackPressed()
+    }
+
     override fun openMilestoneDetails(milestoneId: String, orderNumber: Int) {
         startActivity(MilestoneDetailsActivity.intent(this, milestoneId, orderNumber))
+    }
+
+    override fun displaySetAsCurrent(display: Boolean) {
+       viewBind.setAsCurrent.isVisible = display
     }
 
     companion object {

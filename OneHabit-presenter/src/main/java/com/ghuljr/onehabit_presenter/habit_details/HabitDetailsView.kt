@@ -9,6 +9,8 @@ interface HabitDetailsView : BaseView<HabitDetailsPresenter> {
     fun displayCurrentHabitData(habitTopic: HabitTopic, habitSubject: String, intensityProgress: Int)
     fun handleEvent(event: Option<BaseEvent>)
     fun displayMilestoneItems(items: List<MilestoneItem>)
+    fun close()
 
     fun openMilestoneDetails(milestoneId: String, orderNumber: Int)
+    fun displaySetAsCurrent(display: Boolean)
 }
