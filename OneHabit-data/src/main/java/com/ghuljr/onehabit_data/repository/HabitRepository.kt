@@ -16,10 +16,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.toEither
+import com.ghuljr.onehabit_tools.extension.*
 import com.ghuljr.onehabit_tools.model.HabitTopic
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
@@ -61,18 +58,29 @@ class HabitRepository @Inject constructor(
         )
     }
 
+    val allHabitsObservable: Observable<Either<BaseError, List<Habit>>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .switchMapMaybeRightWithEither { userId ->
+            habitService.getAllHabits(userId)
+                .mapRight { it.map { it.toEntity().toDomain() } }
+        }
+        .toObservable()
+        .replay(1)
+        .refCount()
+
     val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
         .filter { it.map { it.habitId != null }.getOrElse { true } }
         .switchMapRightWithEither { currentUser -> getHabitByIdObservable(currentUser.habitId ?: "") }
         .replay(1)
         .refCount()
 
-    fun getHabitByIdObservable(habitId: String): Observable<Either<BaseError, Habit>> =  cache[habitId]
-        .switchMapRightWithEither { it.dataFlowable }
-        .toObservable()
-        .mapRight { it.toDomain() }
-        .replay(1)
-        .refCount()
+    fun getHabitByIdObservable(habitId: String): Observable<Either<BaseError, Habit>> =
+        cache[habitId]
+            .switchMapRightWithEither { it.dataFlowable }
+            .toObservable()
+            .mapRight { it.toDomain() }
+            .replay(1)
+            .refCount()
 
     fun createHabit(
         habitTopic: HabitTopic,
@@ -102,7 +110,7 @@ class HabitRepository @Inject constructor(
                 entity.toDomain()
             }
                 .flatMapRightWithEither { habit ->
-                    if(setAsActive)
+                    if (setAsActive)
                         userMetadataRepository.setCurrentHabit(habit.userId)
                             .mapRight { habit }
                     else Maybe.just(habit.right())
