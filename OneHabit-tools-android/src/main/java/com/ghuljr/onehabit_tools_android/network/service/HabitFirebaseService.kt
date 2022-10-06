@@ -39,9 +39,15 @@ class HabitFirebaseService @Inject constructor(
         .leftOnThrow()
         .subscribeOn(networkScheduler)
 
-    override fun getAllHabits(userId: String): Maybe<Either<BaseError, List<HabitResponse>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getAllHabits(userId: String): Maybe<Either<BaseError, List<HabitResponse>>> = habitDatabase
+        .child(userId)
+        .get()
+        .toSingle()
+        .toRx3()
+        .map { it.children.map { it.getValue(ParsableHabitResponse::class.java)!!.toHabitResponse(userId, it.key!!) } }
+        .toMaybe()
+        .leftOnThrow()
+        .subscribeOn(networkScheduler)
 
     override fun createHabit(habitRequest: HabitRequest): Maybe<Either<BaseError, HabitResponse>> {
         val reference = habitDatabase.child(habitRequest.userId)

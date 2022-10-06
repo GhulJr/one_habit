@@ -28,6 +28,4 @@ interface MilestoneFragmentsModule {
     @ContributesAndroidInjector
     fun acceptMilestoneFragment() : AcceptGeneratedMilestoneFragment
 
-
-
 }

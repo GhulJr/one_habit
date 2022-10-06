@@ -12,7 +12,7 @@ data class Habit(
     val desiredIntensity: Int,
     val title: String?,
     val description: String?,
-    val type: HabitTopic,
+    val topic: HabitTopic,
     val habitSubject: String,
     val frequency: Int
 )

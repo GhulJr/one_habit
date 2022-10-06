@@ -45,7 +45,7 @@ class ActionInfoPresenter @Inject constructor(
                 ActionInfoItem(
                     customTitle = action.customTitle,
                     editable = action.customTitle != null && action.repeatCount < action.totalRepeats,
-                    habitTopic = habit.type,
+                    habitTopic = habit.topic,
                     quantity = if (action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
                     habitSubject = habit.habitSubject,
                     type = type,

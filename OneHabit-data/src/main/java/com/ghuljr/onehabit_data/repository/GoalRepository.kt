@@ -51,15 +51,7 @@ class GoalRepository @Inject constructor(
     }
 
     val currentGoals: Observable<Either<BaseError, List<Goal>>> = userMetadataRepository.currentUser
-        .switchMapRightWithEither { user ->
-            cache[user.milestoneId!!]
-                .switchMapRightWithEither { source ->
-                    source
-                        .dataFlowable
-                        .mapRight { it.toDomain() }
-                }
-                .toObservable()
-        }
+        .switchMapRightWithEither { user -> getGoalsByMilestoneId(user.milestoneId!!) }
         .replay(1)
         .refCount()
 
@@ -112,6 +104,17 @@ class GoalRepository @Inject constructor(
         .toUnit()
         .replay(1)
         .refCount()
+
+    fun getGoalsByMilestoneId(milestoneId: String): Observable<Either<BaseError, List<Goal>>> =
+        cache[milestoneId]
+            .switchMapRightWithEither { source ->
+                source
+                    .dataFlowable
+                    .mapRight { it.toDomain() }
+            }
+            .toObservable()
+            .replay(1)
+            .refCount()
 
     fun refreshCurrentGoal(): Maybe<Either<BaseError, List<Goal>>> =
         userMetadataRepository.currentUser

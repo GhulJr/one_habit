@@ -13,11 +13,13 @@ import com.ghuljr.onehabit_data.network.service.MilestoneService
 import com.ghuljr.onehabit_data.storage.model.MilestoneEntity
 import com.ghuljr.onehabit_data.storage.persistence.MilestoneDatabase
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
+import com.ghuljr.onehabit_tools.extension.toEither
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -33,6 +35,7 @@ class MilestoneRepository @Inject constructor(
     private val milestoneService: MilestoneService,
     private val milestoneDatabase: MilestoneDatabase,
     private val userMetadataRepository: UserMetadataRepository,
+    private val loggedInUserRepository: LoggedInUserRepository,
     private val cacheFactory: MemoryCache.Factory<String, DataSource<MilestoneEntity>>
 ) {
 
@@ -55,6 +58,15 @@ class MilestoneRepository @Inject constructor(
         )
     }
 
+    val todayMilestoneObservable: Observable<Either<BaseError, Milestone>> = userMetadataRepository.currentUser
+        .switchMapRightWithEither { user ->
+            milestoneCache[user.milestoneId ?: ""].switchMapRightWithEither { it.dataFlowable }
+                .mapRight { it.toDomain() }
+                .toObservable()
+        }
+        .replay(1)
+        .refCount()
+
     fun getMilestoneByIdObservable(milestoneId: String): Observable<Either<BaseError, Milestone>> =
         milestoneCache[milestoneId]
             .switchMapRightWithEither {
@@ -62,6 +74,18 @@ class MilestoneRepository @Inject constructor(
                     .mapRight { it.toDomain() }
             }
             .toObservable()
+            .replay(1)
+            .refCount()
+
+    fun getMilestonesOfHabitObservable(habitId: String): Observable<Either<BaseError, List<Milestone>>> =
+        loggedInUserRepository
+            .userIdFlowable
+            .toEither { LoggedOutError as BaseError }
+            .toObservable()
+            .switchMapRightWithEither { userId ->
+                milestoneService.getMilestonesByHabitId(userId, habitId).toObservable()
+                    .mapRight { it.map { it.toEntity().toDomain() } }
+            }
             .replay(1)
             .refCount()
 
@@ -82,20 +106,21 @@ class MilestoneRepository @Inject constructor(
             userId = habit.userId,
             remindersAtMs = listOf(),
             currentRepeat = 0,
-            totalRepeats = habit.run { abs((desiredIntensity - baseIntensity) * (intensity.toFloat() / 100 ) + baseIntensity) }.toInt(),
+            totalRepeats = habit.run { abs((desiredIntensity - baseIntensity) * (intensity.toFloat() / 100) + baseIntensity) }
+                .toInt(),
             customTitle = null
         )
         return milestoneService.generateMilestone(
             request, goals, action, habit.frequency
         )
             .flatMapRightWithEither { milestoneResponse ->
-            userMetadataRepository.setCurrentMilestone(milestoneResponse.id)
-                .mapRight {
-                    val entity = milestoneResponse.toEntity()
-                    milestoneDatabase.put(entity)
-                    entity.toDomain()
-                }
-        }
+                userMetadataRepository.setCurrentMilestone(milestoneResponse.id)
+                    .mapRight {
+                        val entity = milestoneResponse.toEntity()
+                        milestoneDatabase.put(entity)
+                        entity.toDomain()
+                    }
+            }
     }
 }
 

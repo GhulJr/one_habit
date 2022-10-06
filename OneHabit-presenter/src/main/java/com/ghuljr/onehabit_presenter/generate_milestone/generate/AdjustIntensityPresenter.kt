@@ -40,7 +40,7 @@ class AdjustIntensityPresenter @Inject constructor(
             .mapLeft { it as BaseEvent }
             .switchMapRightWithEither {
                 if (it.milestoneId == null)
-                    Observable.just((0.0 to 25.0).right())
+                    Observable.just((10.0 to 25.0).right())
                 else
                     Observable.combineLatest(
                         habitRepository.todayHabitObservable,

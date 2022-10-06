@@ -3,6 +3,7 @@ package com.ghuljr.onehabit_data.repository
 import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.core.right
+import com.fasterxml.jackson.databind.ser.Serializers
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.Habit
@@ -15,10 +16,7 @@ import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
-import com.ghuljr.onehabit_tools.extension.toEither
+import com.ghuljr.onehabit_tools.extension.*
 import com.ghuljr.onehabit_tools.model.HabitTopic
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
@@ -60,17 +58,29 @@ class HabitRepository @Inject constructor(
         )
     }
 
-    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
-        .filter { it.map { it.habitId != null }.getOrElse { true } }
-        .switchMapRightWithEither { currentUser ->
-            cache[currentUser.habitId!!]
-                .switchMapRightWithEither { it.dataFlowable }
-                .toObservable()
-                .mapRight { it.toDomain() }
-
+    val allHabitsObservable: Observable<Either<BaseError, List<Habit>>> = loggedInUserRepository.userIdFlowable
+        .toEither { LoggedOutError as BaseError }
+        .switchMapMaybeRightWithEither { userId ->
+            habitService.getAllHabits(userId)
+                .mapRight { it.map { it.toEntity().toDomain() } }
         }
+        .toObservable()
         .replay(1)
         .refCount()
+
+    val todayHabitObservable: Observable<Either<BaseError, Habit>> = userMetadataRepository.currentUser
+        .filter { it.map { it.habitId != null }.getOrElse { true } }
+        .switchMapRightWithEither { currentUser -> getHabitByIdObservable(currentUser.habitId ?: "") }
+        .replay(1)
+        .refCount()
+
+    fun getHabitByIdObservable(habitId: String): Observable<Either<BaseError, Habit>> =
+        cache[habitId]
+            .switchMapRightWithEither { it.dataFlowable }
+            .toObservable()
+            .mapRight { it.toDomain() }
+            .replay(1)
+            .refCount()
 
     fun createHabit(
         habitTopic: HabitTopic,
@@ -100,7 +110,7 @@ class HabitRepository @Inject constructor(
                 entity.toDomain()
             }
                 .flatMapRightWithEither { habit ->
-                    if(setAsActive)
+                    if (setAsActive)
                         userMetadataRepository.setCurrentHabit(habit.userId)
                             .mapRight { habit }
                     else Maybe.just(habit.right())
@@ -133,7 +143,7 @@ private fun HabitEntity.toDomain() = Habit(
     desiredIntensity = desiredIntensity,
     title = title,
     description = description,
-    type = HabitTopic.values().first { it.codeName == type },
+    topic = HabitTopic.values().first { it.codeName == type },
     habitSubject = habitSubject,
     frequency = settlingFormat
 )

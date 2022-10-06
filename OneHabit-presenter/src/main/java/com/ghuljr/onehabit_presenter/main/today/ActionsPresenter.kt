@@ -146,7 +146,7 @@ class ActionsPresenter @Inject constructor(
         time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
         quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.frequency <= 0) to totalRepeats,
         onActionClick = { selectItem(id) },
-        habitTopic = habit.type,
+        habitTopic = habit.topic,
         habitSubject = habit.habitSubject,
         actionType = if (habit.frequency <= 0) ActionType.WEEKLY else ActionType.DAILY,
         exceeded = repeatCount >= totalRepeats
@@ -156,7 +156,7 @@ class ActionsPresenter @Inject constructor(
         id = id,
         time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
         onActionClick = { selectItem(id) },
-        habitTopic = habit.type,
+        habitTopic = habit.topic,
         habitSubject = habit.habitSubject,
         title = customTitle!!
     )
@@ -167,7 +167,7 @@ class ActionsPresenter @Inject constructor(
             time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
             quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(false) to totalRepeats,
             onActionClick = { selectItem(id) },
-            habitTopic = habit.type,
+            habitTopic = habit.topic,
             habitSubject = habit.habitSubject,
             customTitle = customTitle
         )

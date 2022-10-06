@@ -126,4 +126,8 @@
     <string name="generate">Generate</string>
     <string name="title">Title</string>
     <string name="accept_milestone_message">This is your new milestone! Feel free to add custom action or set reminders. You can also get back here via Timeline tab.</string>
+
+    <!-- Habit details -->
+    <string name="week_param">Week %1$s</string>
+    <string name="set_as_current">Set as current</string>
 </resources>

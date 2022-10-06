@@ -15,6 +15,12 @@ interface MilestoneService {
         milestoneId: String
     ): Maybe<Either<BaseError, MilestoneResponse>>
 
+    fun getMilestonesByHabitId(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, List<MilestoneResponse>>>
+
+
     fun resolveMilestone(
         userId: String,
         milestoneId: String,

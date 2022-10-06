@@ -1,16 +1,17 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
 import arrow.core.Either
-import com.ghuljr.onehabit_data.network.model.ActionRequest
-import com.ghuljr.onehabit_data.network.model.GoalRequest
-import com.ghuljr.onehabit_data.network.model.MilestoneRequest
-import com.ghuljr.onehabit_data.network.model.MilestoneResponse
+import arrow.core.flatMap
+import arrow.core.reduceOrNull
+import arrow.core.right
+import com.ghuljr.onehabit_data.network.model.*
 import com.ghuljr.onehabit_data.network.service.ActionsService
 import com.ghuljr.onehabit_data.network.service.GoalsService
 import com.ghuljr.onehabit_data.network.service.MilestoneService
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
+import com.ghuljr.onehabit_tools.extension.flatMapMaybeRightWithEither
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.toRx3
@@ -49,6 +50,29 @@ class MilestoneFirebaseService @Inject constructor(
         }
         .toMaybe()
         .leftOnThrow()
+        .subscribeOn(networkScheduler)
+
+    override fun getMilestonesByHabitId(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, List<MilestoneResponse>>> = cacheDatabase
+        .child(userId)
+        .child(habitId)
+        .get()
+        .toSingle()
+        .toRx3()
+        .toObservable()
+        .flatMapIterable { it.children.map { it.key!! } }
+        .leftOnThrow()
+        .flatMapMaybeRightWithEither { milestoneId -> getMilestoneById(userId = userId, milestoneId = milestoneId) }
+        .toList()
+        .toMaybe()
+        .map {
+            it.reduceOrNull(
+                initial = { it.map { listOf(it) } },
+                operation = { acc, new -> acc.flatMap { list -> new.map { list + it } } }
+            ) ?: listOf<MilestoneResponse>().right()
+        }
         .subscribeOn(networkScheduler)
 
     override fun resolveMilestone(
@@ -92,7 +116,8 @@ class MilestoneFirebaseService @Inject constructor(
                     milestoneId = key
                 ).flatMapRightWithEither { goals ->
                     if (frequency == 0) {
-                        actionService.putOneActionToManyGoals(actionRequest, goals.map { it.goalId }).mapRight { listOf(it) }
+                        actionService.putOneActionToManyGoals(actionRequest, goals.map { it.goalId })
+                            .mapRight { listOf(it) }
                     } else actionService.putActions(goals.map { it.goalId to actionRequest })
                 }
             }

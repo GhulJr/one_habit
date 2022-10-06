@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
-// TODO: add mechanics to ask user to select at least one habit
 @Singleton
 class UserMetadataRepository @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
@@ -77,7 +76,7 @@ class UserMetadataRepository @Inject constructor(
         .flatMapRightWithEither {
             it.dataFlowable
                 .firstElement()
-                .flatMapRightWithEither { user -> userService.setCurrentGoal(user.id, habitId) }
+                .flatMapRightWithEither { user -> userService.setCurrentHabit(user.id, habitId) }
                 .mapRight { userResponse ->
                     val entity = userResponse.toUserEntity()
                     userMetadataDatabase.put(entity)
