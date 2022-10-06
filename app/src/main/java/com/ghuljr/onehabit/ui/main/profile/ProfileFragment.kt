@@ -12,6 +12,7 @@ import com.ghuljr.onehabit.ui.create_habit.CreateHabitActivity
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.list.generateTitle
 import com.ghuljr.onehabit.ui.habit_details.HabitDetailsActivity
+import com.ghuljr.onehabit.ui.habits.HabitsActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
@@ -30,6 +31,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileView, Profil
         viewBind.apply {
             addHabit.setOnClickListener { startActivity(CreateHabitActivity.intent(requireContext())) }
             currentHabitDetailsButton.setOnClickListener { presenter.openCurrentHabitDetails() }
+            allHabits.setOnClickListener { startActivity(HabitsActivity.intent(requireContext())) }
         }
     }
 
