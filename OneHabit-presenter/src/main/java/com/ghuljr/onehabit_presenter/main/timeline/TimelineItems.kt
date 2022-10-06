@@ -10,7 +10,6 @@ object HeaderItem : TimelineItem {
     override fun matches(item: UniqueItem): Boolean = this == item
 }
 
-/*TODO: use ids to distinct items?*/
 data class GoalItem(
     private val id: String,
     val dayNumber: Int,
