@@ -61,7 +61,7 @@
     <string name="all_habits">All Habits</string>
     <string name="add_new_habit">Add new Habit</string>
     <string name="profile_details">Profile details</string>
-    <string name="change_email">Change email</string>
+    <string name="change_email">Change e-mail</string>
     <string name="change_password">Change password</string>
     <string name="change_display_name">Change display name</string>
     <string name="notifications">Notifications</string>
@@ -130,4 +130,13 @@
     <!-- Habit details -->
     <string name="week_param">Week %1$s</string>
     <string name="set_as_current">Set as current</string>
+    <string name="provide_email">Provide email</string>
+    <string name="set_password">Set password</string>
+    <string name="display_name">Display name</string>
+    <string name="set_new_name_to_be_displayed">Set new name to be displayed.</string>
+    <string name="provide_name">Provide name</string>
+    <string name="set_new_email">Set new email.</string>
+    <string name="confirm_old_password_and_display_the_new_one">Confirm old password and display the new one.</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
 </resources>

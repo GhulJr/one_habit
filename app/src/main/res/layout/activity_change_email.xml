@@ -16,7 +16,7 @@
             app:navigationIcon="@drawable/ic_arrow_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:title="@string/change_password" />
+            app:title="@string/change_email" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,7 +43,7 @@
                 style="@style/OneHabit.TextAppearance.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password_description" />
+                android:text="@string/set_new_email" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginTop="@dimen/default_margin_small"
