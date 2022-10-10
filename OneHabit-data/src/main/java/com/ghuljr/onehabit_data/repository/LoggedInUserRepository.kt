@@ -9,6 +9,7 @@ import com.ghuljr.onehabit_data.network.service.LoggedInUserManager
 import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_error.AuthError
 import com.ghuljr.onehabit_error.BaseError
+import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -56,6 +57,11 @@ class LoggedInUserRepository @Inject constructor(
             .signIn(loginRequest.email, loginRequest.password)
             .subscribeOn(networkScheduler)
 
+    fun reAuthenticate(loginRequest: LoginRequest): Single<Either<BaseError, UserAuthResponse>> =
+        loggedInUserService
+            .reAuthenticate(loginRequest.email, loginRequest.password)
+            .subscribeOn(networkScheduler)
+
     fun sendEmailVerification(): Single<Either<BaseError, Boolean>> = loggedInUserService
         .sendAuthorisationEmail()
         .subscribeOn(networkScheduler)
@@ -70,6 +76,10 @@ class LoggedInUserRepository @Inject constructor(
 
     fun setName(name: String): Single<Either<BaseError, UserAuthResponse>> = loggedInUserService
         .changeUsername(name)
+        .subscribeOn(networkScheduler)
+
+    fun setEmail(email: String): Single<Either<BaseEvent, UserAuthResponse>> = loggedInUserService
+        .changeEmail(email)
         .subscribeOn(networkScheduler)
 
     companion object {

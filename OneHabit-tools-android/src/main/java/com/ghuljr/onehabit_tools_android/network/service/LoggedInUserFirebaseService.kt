@@ -7,12 +7,18 @@ import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_error_android.extension.orLoggedOutError
 import com.ghuljr.onehabit_error_android.extension.resumeWithBaseError
 import com.ghuljr.onehabit_data.network.service.LoggedInUserService
+import com.ghuljr.onehabit_error.BaseEvent
+import com.ghuljr.onehabit_error.RequireReAuthenticationEvent
+import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.blankToOption
+import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.mapRightWithEither
 import com.ghuljr.onehabit_tools.extension.toRx3
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -68,7 +74,10 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun signIn(email: String, password: String): Single<Either<BaseError, UserAuthResponse>> =
+    override fun signIn(
+        email: String,
+        password: String
+    ): Single<Either<BaseError, UserAuthResponse>> =
         firebaseAuth
             .signInWithEmailAndPassword(email, password)
             .toSingle()
@@ -83,13 +92,13 @@ class LoggedInUserFirebaseService @Inject constructor(
             })
             ?.asUnitSingle()
             .toOption()
-            .map { it }
             .getOrElse { Single.just(LoggedOutError.left()) }
             .updateSynchronouslyWithUser()
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    override fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>> = firebaseAuth.currentUser
+    override fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>> =
+        firebaseAuth.currentUser
             ?.sendEmailVerification()
             ?.asUnitSingle()
             .toOption()
@@ -98,7 +107,6 @@ class LoggedInUserFirebaseService @Inject constructor(
             .resumeWithBaseError()
             .subscribeOn(networkScheduler)
 
-    /*TODO: something is wrong here*/
     override fun refreshUser(): Single<Either<BaseError, UserAuthResponse>> = firebaseAuth
         .currentUser?.reload()
         ?.asUnitSingle()
@@ -108,7 +116,6 @@ class LoggedInUserFirebaseService @Inject constructor(
         .resumeWithBaseError()
         .subscribeOn(networkScheduler)
 
-    /*TODO: something is wrong here*/
     override fun resetPassword(email: String): Single<Either<BaseError, Unit>> =
         firebaseAuth.sendPasswordResetEmail(email)
             .asUnitSingle()
@@ -120,6 +127,25 @@ class LoggedInUserFirebaseService @Inject constructor(
     override fun signOut() {
         firebaseAuth.signOut()
     }
+
+    override fun changeEmail(email: String): Single<Either<BaseEvent, UserAuthResponse>> =
+        firebaseAuth.currentUser?.updateEmail(email)
+            ?.asUnitSingle()
+            ?.leftOnThrow()
+            ?.flatMap { userFlowable.first(none()).map { it.toEither { LoggedOutError as BaseEvent } } }
+            ?.mapRightWithEither { if (it.email != email) RequireReAuthenticationEvent.left() else it.right() }
+            ?: Single.just(LoggedOutError.left())
+
+    override fun reAuthenticate(
+        email: String,
+        password: String
+    ): Single<Either<BaseError, UserAuthResponse>> = firebaseAuth
+        .currentUser?.reauthenticate(EmailAuthProvider.getCredential(email, password))
+        ?.asUnitSingle()
+        ?.leftOnThrow()
+        ?.flatMap { userFlowable.first(none()).map { it.toEither { LoggedOutError as BaseError } } }
+        ?.subscribeOn(networkScheduler)
+        ?: Single.just(LoggedOutError.left())
 
     private fun FirebaseUser.toUserResponse(): UserAuthResponse = UserAuthResponse(
         userId = uid,

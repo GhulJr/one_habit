@@ -3,7 +3,6 @@ package com.ghuljr.onehabit_error_android.extension
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
-import arrow.core.Either
 import com.ghuljr.onehabit_error.*
 import com.ghuljr.onehabit_error_android.R
 
@@ -13,7 +12,7 @@ fun BaseError.textForError(resources: Resources): String = when (this) {
     is AuthError -> message ?: textForAuthError(resources)
     is LoggedOutError -> resources.getString(R.string.error_logged_out_error)
     is NoDataError -> resources.getString(R.string.error_no_data)
-    is UnknownError -> cause.message ?: resources.getString(R.string.error_unknown_param, cause.toString())
+    is GenericError -> cause.message ?: resources.getString(R.string.error_unknown_param, cause.toString())
     is ValidationError -> this.textForError(resources)
     else -> resources.getString(R.string.error_unknown)
 }

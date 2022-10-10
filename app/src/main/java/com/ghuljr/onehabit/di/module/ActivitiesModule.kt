@@ -23,6 +23,7 @@ import com.ghuljr.onehabit.ui.milestone_details.MilestoneDetailsModule
 import com.ghuljr.onehabit.ui.profile.email.ChangeEmailActivity
 import com.ghuljr.onehabit.ui.profile.name.ChangeDisplayNameActivity
 import com.ghuljr.onehabit.ui.profile.password.ChangePasswordActivity
+import com.ghuljr.onehabit.ui.profile.reauthenticate.ReAuthenticateActivity
 import com.ghuljr.onehabit_tools.di.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -97,4 +98,8 @@ interface ActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector
     fun changeEmailActivity(): ChangeEmailActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    fun reAuthenticateActivity(): ReAuthenticateActivity
 }

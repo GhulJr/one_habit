@@ -20,6 +20,7 @@ class ChangeDisplayNameActivity : BaseActivity<ActivityChangeDisplayNameBinding,
         super.onCreate(savedInstanceState)
         viewBind.apply {
             sendButton.setOnClickListener { presenter.setNewName() }
+            toolbar.setNavigationOnClickListener { onBackPressed() }
             nameInput.doOnTextChanged { text, _, _, _ -> text?.toString()?.let { presenter.nameChanged(it) } }
         }
     }

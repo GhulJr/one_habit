@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_presenter.intro.login
+package com.ghuljr.onehabit_presenter.profile.reauthenticate
 
 import arrow.core.Option
 import arrow.core.none
@@ -22,13 +22,13 @@ import io.reactivex.rxjava3.disposables.Disposable
 import javax.inject.Inject
 
 @ActivityScope
-class LoginPresenter @Inject constructor(
+class ReAuthenticatePresenter @Inject constructor(
     private val emailValidator: EmailValidator,
     private val passwordValidator: PasswordValidator,
     private val loggedInUserRepository: LoggedInUserRepository,
     @ComputationScheduler private val computationScheduler: Scheduler,
     @UiScheduler private val uiScheduler: Scheduler
-): BasePresenter<LoginView>() {
+) : BasePresenter<ReAuthenticateView>() {
 
     private val loginDataOptionObservable: Observable<Option<LoginRequest>> =
         Observable.combineLatest(
@@ -43,7 +43,8 @@ class LoginPresenter @Inject constructor(
             .replay(1)
             .refCount()
 
-    override fun subscribeToView(view: LoginView): Disposable {
+
+    override fun subscribeToView(view: ReAuthenticateView): Disposable {
         val signInClicked = view.signInClickedObservable().share()
 
         val validateEmailSignal = Observable.merge(view.emailFocusLostObservable(), signInClicked)
@@ -62,12 +63,6 @@ class LoginPresenter @Inject constructor(
                     view.setPasswordErrorOption(none())
                     passwordValidator.passwordChanged(it)
                 },
-            view.dontHaveAccountClickedObservable()
-                .observeOn(uiScheduler)
-                .subscribe { view.openRegisterFlow() },
-            view.resetPasswordClickedObservable()
-                .observeOn(uiScheduler)
-                .subscribe { view.openResetPassword() },
             validateEmailSignal
                 .switchMapSingle { emailValidator.validatedEmailEitherObservable.firstOrError() }
                 .leftToOption()
@@ -83,7 +78,7 @@ class LoginPresenter @Inject constructor(
                     loginDataOptionObservable
                         .firstOrError()
                         .onlyDefined()
-                        .flatMapSingle { loggedInUserRepository.signIn(it) }
+                        .flatMapSingle { loggedInUserRepository.reAuthenticate(it) }
                         .leftAsEvent()
                         .toObservableWithLoading()
                 }
@@ -94,4 +89,5 @@ class LoginPresenter @Inject constructor(
                 },
             loginDataOptionObservable.subscribe()
         )
-    }}
+    }
+}

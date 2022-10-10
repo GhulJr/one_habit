@@ -139,4 +139,7 @@
     <string name="confirm_old_password_and_display_the_new_one">Confirm old password and display the new one.</string>
     <string name="old_password">Old password</string>
     <string name="new_password">New password</string>
+    <string name="re_authenticate">Re-authenticate</string>
+    <string name="in_order_to_proceed_with_change_please_re_authenticate">To verify this change we need to ask you to re-authenticate. After successful authentication you will be asked to login again.</string>
+
 </resources>

@@ -13,6 +13,7 @@ import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.list.generateTitle
 import com.ghuljr.onehabit.ui.habit_details.HabitDetailsActivity
 import com.ghuljr.onehabit.ui.habits.HabitsActivity
+import com.ghuljr.onehabit.ui.profile.email.ChangeEmailActivity
 import com.ghuljr.onehabit.ui.profile.name.ChangeDisplayNameActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
@@ -34,6 +35,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileView, Profil
             currentHabitDetailsButton.setOnClickListener { presenter.openCurrentHabitDetails() }
             allHabits.setOnClickListener { startActivity(HabitsActivity.intent(requireContext())) }
             changeName.setOnClickListener { startActivity(ChangeDisplayNameActivity.intent(requireContext())) }
+            changeEmail.setOnClickListener { startActivity(ChangeEmailActivity.intent(requireContext())) }
         }
     }
 
