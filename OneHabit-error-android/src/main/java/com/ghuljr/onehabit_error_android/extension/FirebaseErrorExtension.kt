@@ -21,6 +21,7 @@ fun FirebaseAuthException.toError(): BaseError = when (this) {
     is FirebaseAuthRecentLoginRequiredException, //TODO: check if this should sign out or make a login deeplink
     is FirebaseAuthInvalidUserException -> when (errorCode) {
         "ERROR_USER_DISABLED", "ERROR_USER_NOT_FOUND" -> AuthError.AccountDoNotExist(message)
+        "ERROR_REQUIRES_RECENT_LOGIN" -> AuthError.RequireReAuthentication
         else -> LoggedOutError
     }
     is FirebaseAuthMultiFactorException -> AuthError.TwoFactorVerificationFailed(message)

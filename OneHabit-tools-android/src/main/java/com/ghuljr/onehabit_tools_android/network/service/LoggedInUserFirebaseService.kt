@@ -8,14 +8,10 @@ import com.ghuljr.onehabit_error_android.extension.orLoggedOutError
 import com.ghuljr.onehabit_error_android.extension.resumeWithBaseError
 import com.ghuljr.onehabit_data.network.service.LoggedInUserService
 import com.ghuljr.onehabit_error.BaseEvent
-import com.ghuljr.onehabit_error.RequireReAuthenticationEvent
 import com.ghuljr.onehabit_error_android.extension.leftOnThrow
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
-import com.ghuljr.onehabit_tools.extension.blankToOption
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.mapRightWithEither
-import com.ghuljr.onehabit_tools.extension.toRx3
+import com.ghuljr.onehabit_tools.extension.*
 import com.ghuljr.onehabit_tools_android.tool.asUnitSingle
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.EmailAuthProvider
@@ -128,24 +124,30 @@ class LoggedInUserFirebaseService @Inject constructor(
         firebaseAuth.signOut()
     }
 
-    override fun changeEmail(email: String): Single<Either<BaseEvent, UserAuthResponse>> =
+    override fun changeEmail(email: String): Single<Either<BaseEvent, Unit>> =
         firebaseAuth.currentUser?.updateEmail(email)
             ?.asUnitSingle()
             ?.leftOnThrow()
-            ?.flatMap { userFlowable.first(none()).map { it.toEither { LoggedOutError as BaseEvent } } }
-            ?.mapRightWithEither { if (it.email != email) RequireReAuthenticationEvent.left() else it.right() }
+            ?.mapLeft { it as BaseEvent }
             ?: Single.just(LoggedOutError.left())
 
     override fun reAuthenticate(
         email: String,
         password: String
-    ): Single<Either<BaseError, UserAuthResponse>> = firebaseAuth
+    ): Single<Either<BaseError, Unit>> = firebaseAuth
         .currentUser?.reauthenticate(EmailAuthProvider.getCredential(email, password))
         ?.asUnitSingle()
         ?.leftOnThrow()
-        ?.flatMap { userFlowable.first(none()).map { it.toEither { LoggedOutError as BaseError } } }
         ?.subscribeOn(networkScheduler)
         ?: Single.just(LoggedOutError.left())
+
+    override fun setPassword(password: String): Single<Either<BaseEvent, Unit>> =
+        firebaseAuth.currentUser?.updatePassword(password)
+            ?.asUnitSingle()
+            ?.leftOnThrow()
+            ?.mapLeft { it as BaseEvent }
+            ?: Single.just(LoggedOutError.left())
+
 
     private fun FirebaseUser.toUserResponse(): UserAuthResponse = UserAuthResponse(
         userId = uid,

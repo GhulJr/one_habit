@@ -57,7 +57,7 @@ class LoggedInUserRepository @Inject constructor(
             .signIn(loginRequest.email, loginRequest.password)
             .subscribeOn(networkScheduler)
 
-    fun reAuthenticate(loginRequest: LoginRequest): Single<Either<BaseError, UserAuthResponse>> =
+    fun reAuthenticate(loginRequest: LoginRequest): Single<Either<BaseError, Unit>> =
         loggedInUserService
             .reAuthenticate(loginRequest.email, loginRequest.password)
             .subscribeOn(networkScheduler)
@@ -78,8 +78,12 @@ class LoggedInUserRepository @Inject constructor(
         .changeUsername(name)
         .subscribeOn(networkScheduler)
 
-    fun setEmail(email: String): Single<Either<BaseEvent, UserAuthResponse>> = loggedInUserService
+    fun setEmail(email: String): Single<Either<BaseEvent, Unit>> = loggedInUserService
         .changeEmail(email)
+        .subscribeOn(networkScheduler)
+
+    fun setPassword(password: String): Single<Either<BaseEvent, Unit>> = loggedInUserService
+        .setPassword(password)
         .subscribeOn(networkScheduler)
 
     companion object {

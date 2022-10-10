@@ -1,4 +1,4 @@
-package com.ghuljr.onehabit_presenter.profile.email
+package com.ghuljr.onehabit_presenter.profile.password
 
 import arrow.core.left
 import arrow.core.none
@@ -19,21 +19,21 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @ActivityScope
-class ChangeEmailPresenter @Inject constructor(
+class ChangePasswordPresenter @Inject constructor(
     @UiScheduler private val uiScheduler: Scheduler,
     @ComputationScheduler private val computationScheduler: Scheduler,
     private val loggedInUserRepository: LoggedInUserRepository
-) : BasePresenter<ChangeEmailView>() {
+) : BasePresenter<ChangePasswordView>() {
 
-    private val setNewEmailSubject = PublishSubject.create<Unit>()
-    private val newEmailSubject = BehaviorSubject.create<String>()
+    private val setNewPasswordSubject = PublishSubject.create<Unit>()
+    private val newPasswordSubject = BehaviorSubject.create<String>()
 
-    override fun subscribeToView(view: ChangeEmailView): Disposable = CompositeDisposable(
-        setNewEmailSubject
+    override fun subscribeToView(view: ChangePasswordView): Disposable = CompositeDisposable(
+        setNewPasswordSubject
             .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-            .withLatestFrom(newEmailSubject) { _, newName -> newName }
+            .withLatestFrom(newPasswordSubject) { _, newName -> newName }
             .switchMap { newName ->
-                loggedInUserRepository.setEmail(newName)
+                loggedInUserRepository.setPassword(newName)
                     .toObservable()
                     .startWithItem(LoadingEvent.left())
             }
@@ -54,6 +54,6 @@ class ChangeEmailPresenter @Inject constructor(
             }
     )
 
-    fun changeEmail() = setNewEmailSubject.onNext(Unit)
-    fun emailInputChanged(email: String) = newEmailSubject.onNext(email)
+    fun changePassword() = setNewPasswordSubject.onNext(Unit)
+    fun passwordInputChanged(password: String) = newPasswordSubject.onNext(password)
 }

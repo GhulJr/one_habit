@@ -15,6 +15,7 @@ import com.ghuljr.onehabit.ui.habit_details.HabitDetailsActivity
 import com.ghuljr.onehabit.ui.habits.HabitsActivity
 import com.ghuljr.onehabit.ui.profile.email.ChangeEmailActivity
 import com.ghuljr.onehabit.ui.profile.name.ChangeDisplayNameActivity
+import com.ghuljr.onehabit.ui.profile.password.ChangePasswordActivity
 import com.ghuljr.onehabit_error.BaseEvent
 import com.ghuljr.onehabit_error_android.event_handler.EventHandler
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
@@ -36,6 +37,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileView, Profil
             allHabits.setOnClickListener { startActivity(HabitsActivity.intent(requireContext())) }
             changeName.setOnClickListener { startActivity(ChangeDisplayNameActivity.intent(requireContext())) }
             changeEmail.setOnClickListener { startActivity(ChangeEmailActivity.intent(requireContext())) }
+            changePassword.setOnClickListener { startActivity(ChangePasswordActivity.intent(requireContext())) }
         }
     }
 

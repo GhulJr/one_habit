@@ -21,6 +21,7 @@ interface LoggedInUserService: LoggedInUserManager {
     fun signIn(email: String, password: String): Single<Either<BaseError, UserAuthResponse>>
     fun sendAuthorisationEmail(): Single<Either<BaseError, Unit>>
     fun refreshUser(): Single<Either<BaseError, UserAuthResponse>>
-    fun changeEmail(email: String): Single<Either<BaseEvent, UserAuthResponse>>
-    fun reAuthenticate(email: String, password: String) : Single<Either<BaseError, UserAuthResponse>>
+    fun changeEmail(email: String): Single<Either<BaseEvent, Unit>>
+    fun reAuthenticate(email: String, password: String) : Single<Either<BaseError, Unit>>
+    fun setPassword(password: String): Single<Either<BaseEvent, Unit>>
 }

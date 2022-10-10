@@ -45,4 +45,5 @@ fun AuthError.textForAuthError(resources: Resources): String = when (this) {
     is AuthError.InvalidLoginCredentials -> resources.getString(R.string.error_email_in_use)
     is AuthError.TwoFactorVerificationFailed -> resources.getString(R.string.error_two_factor_failed)
     is AuthError.AccountDoNotExist -> resources.getString(R.string.error_account_do_not_exist)
+    is AuthError.RequireReAuthentication -> resources.getString(R.string.error_reauthenticate)
 }
