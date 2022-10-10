@@ -46,7 +46,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginTop="@dimen/default_margin_small"
-                android:id="@+id/email_layout"
+                android:id="@+id/name_layout"
                 style="@style/OneHabit.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                 android:hint="@string/display_name">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_input"
+                    android:id="@+id/name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"

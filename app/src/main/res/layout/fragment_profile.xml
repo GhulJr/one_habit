@@ -154,6 +154,7 @@
                 android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/change_name"
                 style="@style/OneHabit.Profile.SettingsItem"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

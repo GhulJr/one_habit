@@ -11,13 +11,13 @@
         android:supportsRtl="true"
         android:theme="@style/OneHabit.Theme">
         <activity
-            android:name=".ChangeDisplayNameActivity"
+            android:name=".ui.profile.name.ChangeDisplayNameActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".ui.profile.password.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangeEmailActivity"
+            android:name=".ui.profile.email.ChangeEmailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.habits.HabitsActivity"
@@ -74,5 +74,4 @@
             android:name=".ui.main.MainActivity"
             android:exported="true" />
     </application>
-
 </manifest>

@@ -68,6 +68,10 @@ class LoggedInUserRepository @Inject constructor(
             else it.right()
         }
 
+    fun setName(name: String): Single<Either<BaseError, UserAuthResponse>> = loggedInUserService
+        .changeUsername(name)
+        .subscribeOn(networkScheduler)
+
     companion object {
         const val KEY_IS_EMAIL_VERIFICATION_SEND = "is_email_verification_send"
     }
