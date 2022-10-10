@@ -58,13 +58,7 @@ class HabitDetailsActivity : BaseActivity<ActivityHabitDetailsBinding, HabitDeta
     }
 
     override fun handleEvent(event: Option<BaseEvent>) {
-        val eventHandler = EventHandler(listOf(SnackbarEventManager(
-            eventView = viewBind.root,
-            duration = Snackbar.LENGTH_INDEFINITE,
-            actionWithName = { } to getString(R.string.ok)
-        )), viewBind.loadingIndicator)
 
-        eventHandler(event)
     }
 
     override fun displayMilestoneItems(items: List<MilestoneItem>) {

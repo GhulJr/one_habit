@@ -16,7 +16,7 @@
             app:navigationIcon="@drawable/ic_arrow_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:title="@string/change_password" />
+            app:title="@string/re_authenticate" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -43,23 +43,43 @@
                 style="@style/OneHabit.TextAppearance.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/forgot_password_description" />
+                android:text="@string/in_order_to_proceed_with_change_please_re_authenticate" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:layout_marginTop="@dimen/default_margin_small"
                 android:id="@+id/email_layout"
                 style="@style/OneHabit.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_large"
                 android:layout_marginBottom="@dimen/default_margin_small"
-                android:hint="@string/e_mail">
+                android:hint="@string/e_mail"
+                app:startIconDrawable="@drawable/ic_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:maxLength="64"
+                    android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_layout"
+                style="@style/OneHabit.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                app:passwordToggleDrawable="@drawable/ic_visibility"
+                app:passwordToggleEnabled="true"
+                app:startIconDrawable="@drawable/ic_key">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
                     android:textAppearance="@style/OneHabit.TextAppearance.Primary" />
 
             </com.google.android.material.textfield.TextInputLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ghuljr.onehabit">
+    package="com.ghuljr.onehabit" >
 
     <application
         android:name=".App"
@@ -9,7 +9,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/OneHabit.Theme">
+        android:theme="@style/OneHabit.Theme" >
+        <activity
+            android:name=".ui.profile.reauthenticate.ReAuthenticateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.name.ChangeDisplayNameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.password.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.email.ChangeEmailActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.habits.HabitsActivity"
             android:exported="false" />
@@ -39,7 +51,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".ui.intro.launch.LaunchActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
