@@ -5,6 +5,7 @@ import arrow.core.none
 import arrow.core.some
 import arrow.core.zip
 import com.ghuljr.onehabit_data.repository.HabitRepository
+import com.ghuljr.onehabit_data.repository.LoggedInUserRepository
 import com.ghuljr.onehabit_data.repository.MilestoneRepository
 import com.ghuljr.onehabit_data.repository.UserMetadataRepository
 import com.ghuljr.onehabit_error.BaseEvent
@@ -29,10 +30,12 @@ class ProfilePresenter @Inject constructor(
     @ComputationScheduler private val computationScheduler: Scheduler,
     private val userRepository: UserMetadataRepository,
     private val habitRepository: HabitRepository,
-    private val milestoneRepository: MilestoneRepository
+    private val milestoneRepository: MilestoneRepository,
+    private val loggedInUserRepository: LoggedInUserRepository
 ) : BasePresenter<ProfileView>() {
 
     private val openCurrentHabitDetailsSubject = PublishSubject.create<Unit>()
+    private val logoutSubject = PublishSubject.create<Unit>()
 
     override fun subscribeToView(view: ProfileView): Disposable = CompositeDisposable(
         Observable.combineLatest(
@@ -73,8 +76,15 @@ class ProfilePresenter @Inject constructor(
                     },
                     ifLeft = { view.handleEvent(it.some()) }
                 )
-            }
+            },
+        logoutSubject
+            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+            .doOnNext{ loggedInUserRepository.signOut() }
+            .observeOn(uiScheduler)
+            .subscribe()
     )
 
     fun openCurrentHabitDetails() = openCurrentHabitDetailsSubject.onNext(Unit)
+
+    fun logout() = logoutSubject.onNext(Unit)
 }
