@@ -27,6 +27,8 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 @FragmentScope
 class ActionsPresenter @Inject constructor(
@@ -109,7 +111,7 @@ class ActionsPresenter @Inject constructor(
     private fun actionsObservable(actionsSourceObservable: Observable<Either<BaseError, List<Action>>>): Observable<Either<BaseEvent, List<TodayItem>>> =
         Observable.combineLatest(
             actionsSourceObservable,
-            habitRepository.todayHabitObservable
+            habitRepository.todayHabitObservable // TODO: handle habit id
         ) { actionsEither, habitEither -> actionsEither.zip(habitEither) }
             .mapLeft { it as BaseEvent }
             .mapRight { (actions, habit) ->
@@ -144,12 +146,13 @@ class ActionsPresenter @Inject constructor(
     private fun Action.toRegularActionItem(habit: Habit) = TodayActionItem(
         id = id,
         time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
-        quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.frequency <= 0) to totalRepeats,
+        quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(habit.frequency <= 0, totalRepeats) to totalRepeats,
         onActionClick = { selectItem(id) },
         habitTopic = habit.topic,
         habitSubject = habit.habitSubject,
         actionType = if (habit.frequency <= 0) ActionType.WEEKLY else ActionType.DAILY,
-        exceeded = repeatCount >= totalRepeats
+        exceeded = if (habit.frequency <= 0) repeatCount >= totalRepeats else true
+
     )
 
     private fun Action.toCustomActionItem(habit: Habit) = CustomActionItem(
@@ -165,14 +168,14 @@ class ActionsPresenter @Inject constructor(
         TodayActionFinishedItem(
             id = id,
             time = reminders?.getOrNull(repeatCount)?.timeToString(TIME_FORMAT),
-            quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(false) to totalRepeats,
+            quantity = if (totalRepeats <= 1) null else repeatCount.calculateCurrentRepeat(false, totalRepeats) to totalRepeats,
             onActionClick = { selectItem(id) },
             habitTopic = habit.topic,
             habitSubject = habit.habitSubject,
             customTitle = customTitle
         )
 
-    private fun Int.calculateCurrentRepeat(isWeekly: Boolean) = if (isWeekly) this else this + 1
+    private fun Int.calculateCurrentRepeat(isWeekly: Boolean, totalRepeats: Int) = if (isWeekly) this else min(this + 1, totalRepeats)
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

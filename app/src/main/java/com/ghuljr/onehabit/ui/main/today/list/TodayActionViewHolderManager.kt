@@ -21,7 +21,7 @@ class TodayActionViewHolderManager : ViewHolderManager(R.layout.item_today_actio
 
             override fun bind(item: TodayActionItem) {
                 viewBind.apply {
-                    title.text = item.habitTopic.generateTitleWithOpposition(view.resources, item.habitSubject, item.exceeded)
+                    title.text = item.habitTopic.generateTitleWithOpposition(view.resources, item.habitSubject, item.exceeded, item.actionType == ActionType.WEEKLY)
                     time.text = item.time ?: when (item.actionType) {
                         ActionType.DAILY -> view.resources.getString(R.string.today)
                         ActionType.WEEKLY -> view.resources.getString(R.string.week)

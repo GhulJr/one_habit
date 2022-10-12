@@ -31,8 +31,6 @@ class GoalRepository @Inject constructor(
     private val userMetadataRepository: UserMetadataRepository
 ) {
 
-    // TODO: swap current goal
-    // TODO: if milestone is finished, then return summary
     // TODO: if habit is finished, then return screen with congrats, where user can select new habit and eventually keep current one
 
     private val cache = milestoneGoalsCache.create { key ->
@@ -100,6 +98,7 @@ class GoalRepository @Inject constructor(
                     }
         }
         .onlyRight()
+        .distinctUntilChanged()
         .filter { it }
         .toUnit()
         .replay(1)

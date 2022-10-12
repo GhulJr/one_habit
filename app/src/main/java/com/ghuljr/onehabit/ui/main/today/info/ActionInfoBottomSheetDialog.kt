@@ -15,6 +15,7 @@ import com.ghuljr.onehabit.ui.add_action.AddActionActivity
 import com.ghuljr.onehabit.ui.main.today.list.generateTitleWithOpposition
 import com.ghuljr.onehabit_presenter.main.today.ActionInfoItem
 import com.ghuljr.onehabit_presenter.main.today.ActionType
+import com.ghuljr.onehabit_presenter.main.today.TodayItem
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -77,7 +78,7 @@ class ActionInfoBottomSheetDialog(
     override fun displayActionInfo(item: ActionInfoItem) {
         viewBind.apply {
             toolbar.apply {
-                title = item.customTitle ?: item.habitTopic.generateTitleWithOpposition(resources, item.habitSubject, item.exceeded)
+                title = item.customTitle ?: item.habitTopic.generateTitleWithOpposition(resources, item.habitSubject, item.exceeded, item.type == ActionType.WEEKLY)
                 subtitle =
                     if (item.quantity == null)
                         ""
