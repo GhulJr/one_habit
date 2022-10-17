@@ -8,11 +8,31 @@ import io.reactivex.rxjava3.core.Maybe
 
 interface UserService {
 
-    fun getUserMetadata(userId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+    fun getUserMetadata(userId: String): Maybe<Either<BaseError, UserMetadataResponse>>
 
-    fun setCurrentGoal(userId: String, goalId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+    fun setCurrentGoal(
+        userId: String,
+        goalId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
 
-    fun setCurrentMilestone(userId: String, previousMilestone: String?, milestoneId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+    fun setCurrentMilestone(
+        userId: String,
+        previousMilestone: String?,
+        milestoneId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
 
-    fun setCurrentHabit(userId: String, habitId: String) : Maybe<Either<BaseError, UserMetadataResponse>>
+    fun setCurrentHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
+
+    fun clearHabit(
+        userId: String,
+        addAsTopTier: Boolean = false
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
+
+    fun addTopTierHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
 }

@@ -9,7 +9,6 @@ import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_data.storage.model.UserEntity
 import com.ghuljr.onehabit_data.storage.persistence.UserMetadataDatabase
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -90,6 +89,19 @@ class UserMetadataRepository @Inject constructor(
             it.dataFlowable
                 .firstElement()
                 .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, user.milestoneId, milestoneId) }
+                .mapRight { userResponse ->
+                    val entity = userResponse.toUserEntity()
+                    userMetadataDatabase.put(entity)
+                    entity.toDomain()
+                }
+        }
+
+    fun clearCurrentHabit(shouldAddAsEndTier: Boolean): Maybe<Either<BaseError, UserMetadata>> = cache.get()
+        .firstElement()
+        .flatMapRightWithEither {
+            it.dataFlowable
+                .firstElement()
+                .flatMapRightWithEither { user -> userService.clearHabit(user.userId, shouldAddAsEndTier) }
                 .mapRight { userResponse ->
                     val entity = userResponse.toUserEntity()
                     userMetadataDatabase.put(entity)

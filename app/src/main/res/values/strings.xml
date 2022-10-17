@@ -143,4 +143,6 @@
     <string name="in_order_to_proceed_with_change_please_re_authenticate">To verify this change we need to ask you to re-authenticate. After successful authentication you will be asked to login again.</string>
     <string name="desired_intensity">Desired intensity</string>
     <string name="habit_finished">Habit finished</string>
+    <string name="finish_habit_message">Great Job! You made it to the end of your journey! In order to select the next habit click Finish button below. If you want to receive actions from the last step of this habit, then mark checkbox below.</string>
+    <string name="use_this_habit_s_actions_in_the_new_habit">Use this Habit\'s Actions in the new Habit</string>
 </resources>

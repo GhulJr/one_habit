@@ -25,8 +25,7 @@ class MilestoneIntroFragment :
     override fun bindView(
         layoutInflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentMilestoneIntroBinding =
-        FragmentMilestoneIntroBinding.inflate(layoutInflater, container, false)
+    ): FragmentMilestoneIntroBinding = FragmentMilestoneIntroBinding.inflate(layoutInflater, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
