@@ -4,11 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/default_margin"
+    android:paddingStart="@dimen/default_margin"
+    android:paddingEnd="@dimen/default_margin"
+    android:paddingBottom="@dimen/default_margin"
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".ui.generate_milestone.intro.MilestoneIntroFragment">
 
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        style="@style/OneHabit.CircularLoadingIndicator.Small.White"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <Space
         android:layout_width="0dp"

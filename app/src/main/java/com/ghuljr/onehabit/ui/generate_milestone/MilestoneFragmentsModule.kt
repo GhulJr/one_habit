@@ -14,6 +14,11 @@ interface MilestoneFragmentsModule {
 
     @FragmentScope
     @ContributesAndroidInjector
+    fun summarisePreviousMilestoneFragment() : SummarisePreviousMilestoneFragment
+
+
+    @FragmentScope
+    @ContributesAndroidInjector
     fun introFragment() : MilestoneIntroFragment
 
     @FragmentScope

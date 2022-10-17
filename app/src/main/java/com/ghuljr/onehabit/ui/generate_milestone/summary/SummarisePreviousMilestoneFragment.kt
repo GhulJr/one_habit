@@ -8,27 +8,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.ghuljr.onehabit.R
-import com.ghuljr.onehabit.databinding.FragmentSummarisePreviousMilestoneBinding
-import com.ghuljr.onehabit.ui.base.BaseFragment
-import com.ghuljr.onehabit_presenter.generate_milestone.summary.SummarisePreviousMilestonePresenter
-import com.ghuljr.onehabit_presenter.generate_milestone.summary.SummarisePreviousMilestoneView
 
-class SummarisePreviousMilestoneFragment : BaseFragment<FragmentSummarisePreviousMilestoneBinding, SummarisePreviousMilestoneView, SummarisePreviousMilestonePresenter>(), SummarisePreviousMilestoneView {
-
+class SummarisePreviousMilestoneFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_summarise_previous_milestone, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBind.apply {
-            nextButton.setOnClickListener { presenter.goNext() }
-        }
-      //  view.findViewById<Button>(R.id.next_button).setOnClickListener { findNavController().navigate(SummarisePreviousMilestoneFragmentDirections.toGenerate()) }
+        view.findViewById<Button>(R.id.next_button).setOnClickListener { findNavController().navigate(SummarisePreviousMilestoneFragmentDirections.toGenerate()) }
     }
-
-    override fun bindView(
-        layoutInflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentSummarisePreviousMilestoneBinding = FragmentSummarisePreviousMilestoneBinding.inflate(layoutInflater, container, false)
-
-    override fun getPresenterView(): SummarisePreviousMilestoneView = this
-
 }
