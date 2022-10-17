@@ -13,7 +13,6 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.onlyRight
 import com.ghuljr.onehabit_tools.extension.startWithLoading
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler

@@ -142,5 +142,5 @@
     <string name="re_authenticate">Re-authenticate</string>
     <string name="in_order_to_proceed_with_change_please_re_authenticate">To verify this change we need to ask you to re-authenticate. After successful authentication you will be asked to login again.</string>
     <string name="desired_intensity">Desired intensity</string>
-
+    <string name="habit_finished">Habit finished</string>
 </resources>

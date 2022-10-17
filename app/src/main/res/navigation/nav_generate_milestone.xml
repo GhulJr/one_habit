@@ -24,6 +24,9 @@
             app:exitAnim="@anim/slide_exit_left"
             app:popEnterAnim="@anim/slide_enter_left"
             app:popExitAnim="@anim/slide_exit_right" />
+        <action
+            android:id="@+id/toFinishHabit"
+            app:destination="@id/finishHabitFragment" />
     </fragment>
     <fragment
         android:id="@+id/summarisePreviousMilestoneFragment"
@@ -56,4 +59,9 @@
             app:popEnterAnim="@anim/slide_enter_left"
             app:popExitAnim="@anim/slide_exit_right" />
     </fragment>
+    <fragment
+        android:id="@+id/finishHabitFragment"
+        android:name="com.ghuljr.onehabit.ui.generate_milestone.finish_habit.FinishHabitFragment"
+        android:label="@string/habit_finished"
+        tools:layout="@layout/fragment_finish_habit" />
 </navigation>
