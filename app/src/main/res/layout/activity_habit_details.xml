@@ -94,6 +94,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:indeterminate="true"
+        android:visibility="gone"
         app:indeterminateAnimationType="disjoint"
         app:indicatorColor="@color/primary_black"
         android:layout_marginTop="?android:attr/actionBarSize"
