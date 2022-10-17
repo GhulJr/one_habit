@@ -1,5 +1,6 @@
 package com.ghuljr.onehabit_data.storage.persistence
 
+import arrow.core.none
 import arrow.core.some
 import com.ghuljr.onehabit_data.base.storage.BaseDatabase
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
@@ -30,7 +31,7 @@ class GoalDatabase @Inject constructor(
             .build()
     )
         .map { goals -> DataSource.CacheWithTime(
-            value = goals.some(),
+            value = if(goals.isEmpty()) none() else goals.some(),
             dueToInMillis = goalHolderBox.query()
                 .equal(GoalEntityHolder_.milestoneId, milestoneId, QueryBuilder.StringOrder.CASE_SENSITIVE).build()
                 .findUnique()?.dueToInMillis ?: 0L

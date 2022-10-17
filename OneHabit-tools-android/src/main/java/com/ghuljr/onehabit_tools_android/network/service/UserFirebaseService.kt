@@ -1,7 +1,6 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import arrow.core.Either
-import arrow.core.right
+import arrow.core.*
 import com.ghuljr.onehabit_data.network.model.UserMetadataResponse
 import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError
@@ -28,6 +27,7 @@ class UserFirebaseService @Inject constructor(
 
     private val userDatabase = Firebase.database.getReference("user")
     private val milestoneDatabase = Firebase.database.getReference("milestone")
+    private val milestoneOfHabitDatabase = Firebase.database.getReference("milestone_of_habit")
 
     override fun getUserMetadata(userId: String): Maybe<Either<BaseError, UserMetadataResponse>> =
         userDatabase.child(userId)
@@ -85,19 +85,44 @@ class UserFirebaseService @Inject constructor(
     override fun setCurrentHabit(
         userId: String,
         habitId: String
-    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
-        .updateChildren(
-            mapOf(
-                "habit" to habitId,
-                "goal" to null,
-                "milestone" to null
-            )
-        )
-        .asUnitSingle()
-        .leftOnThrow()
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = milestoneOfHabitDatabase
+        .child(userId)
+        .child(habitId)
+        .get()
+        .toSingle()
+        .toRx3()
         .toMaybe()
-        .flatMapRightWithEither { getUserMetadata(userId) }
-        .subscribeOn(networkScheduler)
+        .map { it.children.map { it.key!! } }
+        .toObservable()
+        .flatMapIterable { it }
+        .concatMapSingle { milestoneId ->
+            milestoneDatabase
+                .child(userId)
+                .child(milestoneId)
+                .child("resolved_at")
+                .get()
+                .toSingle()
+                .toRx3()
+                .map { if(it.value == null) milestoneId.some() else none<String>() }
+        }
+        .toList()
+        .toMaybe()
+        .map { it.firstOrNull { it.isDefined() }?.orNull().toOption() }
+        .flatMap { milestoneId ->
+            userDatabase.child(userId)
+                .updateChildren(
+                    mapOf(
+                        "habit" to habitId,
+                        "goal" to null,
+                        "milestone" to milestoneId.orNull()
+                    )
+                )
+                .asUnitSingle()
+                .leftOnThrow()
+                .toMaybe()
+                .flatMapRightWithEither { getUserMetadata(userId) }
+                .subscribeOn(networkScheduler)
+        }
 }
 
 @IgnoreExtraProperties
