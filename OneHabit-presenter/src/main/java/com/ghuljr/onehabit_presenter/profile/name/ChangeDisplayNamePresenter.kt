@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -35,7 +36,7 @@ class ChangeDisplayNamePresenter @Inject constructor(
                 loggedInUserRepository.setName(newName)
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {

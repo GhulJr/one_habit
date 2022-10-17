@@ -14,6 +14,7 @@ import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
 import com.ghuljr.onehabit_tools.extension.onlyRight
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -94,7 +95,7 @@ class HabitDetailsPresenter @Inject constructor(
                 userMetadataRepository.setCurrentHabit(it)
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {

@@ -11,6 +11,7 @@ import com.ghuljr.onehabit_tools.di.ActivityScope
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import com.ghuljr.onehabit_tools.model.HabitTopic
 import com.ghuljr.onehabit_tools.model.WeeklyFlags
 import io.reactivex.rxjava3.core.Observable
@@ -102,7 +103,7 @@ class CreateHabitPresenter @Inject constructor(
                     .flatMapObservable {
                         it.toObservable()
                             .mapLeft { it as BaseEvent }
-                            .startWithItem(LoadingEvent.left())
+                            .startWithLoading()
                     }
             }
             .observeOn(uiScheduler)

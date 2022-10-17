@@ -18,6 +18,7 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import com.ghuljr.onehabit_tools.extension.timeToString
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
@@ -81,7 +82,7 @@ class ActionsPresenter @Inject constructor(
                 actionsRepository.refreshTodayActions()
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {
@@ -132,7 +133,7 @@ class ActionsPresenter @Inject constructor(
                     .let { if (finishedActions.isEmpty()) it else it.plus(DoneActionsHeaderItem) }
                     .plus(finishedActions)
             }
-            .startWithItem(LoadingEvent.left())
+            .startWithLoading()
             .observeOn(uiScheduler)
             .share()
 

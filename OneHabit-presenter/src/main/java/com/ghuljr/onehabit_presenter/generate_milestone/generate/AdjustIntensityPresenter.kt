@@ -10,10 +10,7 @@ import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
-import com.ghuljr.onehabit_tools.extension.mapLeft
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.onlyRight
-import com.ghuljr.onehabit_tools.extension.switchMapRightWithEither
+import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -48,7 +45,7 @@ class AdjustIntensityPresenter @Inject constructor(
                     ) { habit, milestone -> habit.zip(milestone) }
                         .mapRight { (habit, milestone) -> milestone.intensity.toDouble() to milestone.intensity.toFloat() + habit.defaultProgressFactor.toDouble() }
                         .mapLeft { it as BaseEvent }
-                        .startWithItem(LoadingEvent.left())
+                        .startWithLoading()
             }
             .observeOn(uiScheduler)
             .takeUntil { it.isRight() }
@@ -68,7 +65,7 @@ class AdjustIntensityPresenter @Inject constructor(
                 milestoneRepository.generateMilestone(habit, intensity.toInt())
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {

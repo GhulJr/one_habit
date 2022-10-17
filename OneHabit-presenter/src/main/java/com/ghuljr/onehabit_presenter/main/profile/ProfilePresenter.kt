@@ -15,6 +15,7 @@ import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -40,11 +41,11 @@ class ProfilePresenter @Inject constructor(
     override fun subscribeToView(view: ProfileView): Disposable = CompositeDisposable(
         Observable.combineLatest(
             habitRepository.todayHabitObservable,
-            milestoneRepository.todayMilestoneObservable
+            milestoneRepository.currentMilestoneObservable
         ) { habitEither, milestoneEither -> habitEither.zip(milestoneEither) }
             .observeOn(uiScheduler)
             .mapLeft { it as BaseEvent }
-            .startWithItem((LoadingEvent as BaseEvent).left())
+            .startWithLoading()
             .subscribe {
                 it.fold(
                     ifRight = { (habit, milestone) ->
@@ -65,7 +66,7 @@ class ProfilePresenter @Inject constructor(
                     .firstElement()
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem((LoadingEvent as BaseEvent).left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {
