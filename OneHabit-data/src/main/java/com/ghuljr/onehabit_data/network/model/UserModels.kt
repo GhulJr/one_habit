@@ -5,5 +5,5 @@ data class UserMetadataResponse(
     val habitId: String?,
     val milestoneId: String?,
     val goalId: String?,
-    val extraHabitsIds: List<String>?
+    val topTierHabitsIds: List<String>?
 )

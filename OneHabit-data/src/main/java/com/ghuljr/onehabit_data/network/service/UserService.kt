@@ -28,10 +28,16 @@ interface UserService {
 
     fun clearHabit(
         userId: String,
+        habitId: String,
         addAsTopTier: Boolean = false
     ): Maybe<Either<BaseError, UserMetadataResponse>>
 
     fun addTopTierHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>>
+
+   fun removeTopTierHabit(
         userId: String,
         habitId: String
     ): Maybe<Either<BaseError, UserMetadataResponse>>
