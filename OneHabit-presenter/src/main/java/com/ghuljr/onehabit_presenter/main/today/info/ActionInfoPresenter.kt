@@ -18,6 +18,8 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.max
+import kotlin.math.min
 
 @FragmentScope
 class ActionInfoPresenter @Inject constructor(
@@ -46,7 +48,7 @@ class ActionInfoPresenter @Inject constructor(
                     customTitle = action.customTitle,
                     editable = action.customTitle != null && action.repeatCount < action.totalRepeats,
                     habitTopic = habit.topic,
-                    quantity = if (action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY) to totalRepeats },
+                    quantity = if (action.totalRepeats <= 1) null else action.run { repeatCount.calculateCurrentRepeat(type == ActionType.WEEKLY, totalRepeats) to totalRepeats },
                     habitSubject = habit.habitSubject,
                     type = type,
                     reminders = action.reminders?.map { it.timeToString(TIME_FORMAT) },
@@ -105,7 +107,7 @@ class ActionInfoPresenter @Inject constructor(
 
     fun displayAction(actionId: String) = actionInfoSubject.onNext(actionId)
 
-    private fun Int.calculateCurrentRepeat(exceeded: Boolean) = if (exceeded) this else this + 1
+    private fun Int.calculateCurrentRepeat(isWeekly: Boolean, totalRepeats: Int) = if (isWeekly) this else min(this + 1, totalRepeats)
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

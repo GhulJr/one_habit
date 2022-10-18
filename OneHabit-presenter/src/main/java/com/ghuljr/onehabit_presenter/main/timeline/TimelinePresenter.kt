@@ -12,6 +12,7 @@ import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
 import com.ghuljr.onehabit_tools.extension.mapLeft
 import com.ghuljr.onehabit_tools.extension.mapRight
+import com.ghuljr.onehabit_tools.extension.startWithLoading
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -46,7 +47,7 @@ class TimelinePresenter @Inject constructor(
                     userMetadataRepository.currentUser
                 ) { goals, user -> goals.zip(user) }
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
                     .mapRight { (goals, user) ->
                         listOf(HeaderItem)
                             .plus(goals.map { goal ->
@@ -93,7 +94,7 @@ class TimelinePresenter @Inject constructor(
                 goalRepository.refreshCurrentGoal()
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithItem(LoadingEvent.left())
+                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {

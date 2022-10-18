@@ -155,7 +155,7 @@
                 style="@style/OneHabit.TextInputLayout.Underline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/base_intensity"
+                android:hint="@string/desired_intensity"
                 android:visibility="gone"
                 app:counterTextColor="@color/primary_black"
                 app:expandedHintEnabled="true"

@@ -111,7 +111,7 @@ class HabitRepository @Inject constructor(
             }
                 .flatMapRightWithEither { habit ->
                     if (setAsActive)
-                        userMetadataRepository.setCurrentHabit(habit.userId)
+                        userMetadataRepository.setCurrentHabit(habit.id)
                             .mapRight { habit }
                     else Maybe.just(habit.right())
                 }

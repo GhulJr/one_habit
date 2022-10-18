@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_data.repository
 
 import arrow.core.Either
+import arrow.core.right
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.UserMetadata
@@ -9,7 +10,6 @@ import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_data.storage.model.UserEntity
 import com.ghuljr.onehabit_data.storage.persistence.UserMetadataDatabase
 import com.ghuljr.onehabit_error.BaseError
-import com.ghuljr.onehabit_error.LoggedOutError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.*
@@ -84,18 +84,38 @@ class UserMetadataRepository @Inject constructor(
                 }
         }
 
-    fun setCurrentMilestone(milestoneId: String): Maybe<Either<BaseError, UserMetadata>> = cache.get()
-        .firstElement()
-        .flatMapRightWithEither {
-            it.dataFlowable
-                .firstElement()
-                .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, user.milestoneId, milestoneId) }
-                .mapRight { userResponse ->
-                    val entity = userResponse.toUserEntity()
-                    userMetadataDatabase.put(entity)
-                    entity.toDomain()
-                }
-        }
+    fun setCurrentMilestone(milestoneId: String): Maybe<Either<BaseError, UserMetadata>> =
+        cache.get()
+            .firstElement()
+            .flatMapRightWithEither {
+                it.dataFlowable
+                    .firstElement()
+                    .flatMapRightWithEither { user -> userService.setCurrentMilestone(user.id, user.milestoneId, milestoneId) }
+                    .mapRight { userResponse ->
+                        val entity = userResponse.toUserEntity()
+                        userMetadataDatabase.put(entity)
+                        entity.toDomain()
+                    }
+            }
+
+    fun clearCurrentHabit(shouldAddAsEndTier: Boolean): Maybe<Either<BaseError, UserMetadata>> =
+        cache.get()
+            .firstElement()
+            .flatMapRightWithEither {
+                it.dataFlowable
+                    .firstElement()
+                    .flatMapRightWithEither { user ->
+                        if (user.habitId.isNullOrBlank())
+                            Maybe.just(user.toDomain().right())
+                        else
+                            userService.clearHabit(user.userId, user.habitId!!, shouldAddAsEndTier)
+                                .mapRight { userResponse ->
+                                    val entity = userResponse.toUserEntity()
+                                    userMetadataDatabase.put(entity)
+                                    entity.toDomain()
+                                }
+                    }
+            }
 }
 
 private fun UserMetadataResponse.toUserEntity() = UserEntity(
@@ -103,7 +123,7 @@ private fun UserMetadataResponse.toUserEntity() = UserEntity(
     habitId = habitId,
     milestoneId = milestoneId,
     goalId = goalId,
-    extraHabits = extraHabitsIds
+    extraHabits = topTierHabitsIds
 )
 
 private fun UserEntity.toDomain() = UserMetadata(

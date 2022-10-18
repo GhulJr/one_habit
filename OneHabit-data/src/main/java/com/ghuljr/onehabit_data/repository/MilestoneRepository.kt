@@ -58,7 +58,7 @@ class MilestoneRepository @Inject constructor(
         )
     }
 
-    val todayMilestoneObservable: Observable<Either<BaseError, Milestone>> = userMetadataRepository.currentUser
+    val currentMilestoneObservable: Observable<Either<BaseError, Milestone>> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
             milestoneCache[user.milestoneId ?: ""].switchMapRightWithEither { it.dataFlowable }
                 .mapRight { it.toDomain() }

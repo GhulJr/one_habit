@@ -1,7 +1,6 @@
 package com.ghuljr.onehabit_tools_android.network.service
 
-import arrow.core.Either
-import arrow.core.right
+import arrow.core.*
 import com.ghuljr.onehabit_data.network.model.UserMetadataResponse
 import com.ghuljr.onehabit_data.network.service.UserService
 import com.ghuljr.onehabit_error.BaseError
@@ -28,6 +27,8 @@ class UserFirebaseService @Inject constructor(
 
     private val userDatabase = Firebase.database.getReference("user")
     private val milestoneDatabase = Firebase.database.getReference("milestone")
+    private val milestoneOfHabitDatabase = Firebase.database.getReference("milestone_of_habit")
+    private val topTierHabitsDatabase = Firebase.database.getReference("top_tier_habits")
 
     override fun getUserMetadata(userId: String): Maybe<Either<BaseError, UserMetadataResponse>> =
         userDatabase.child(userId)
@@ -35,9 +36,10 @@ class UserFirebaseService @Inject constructor(
             .toSingle()
             .toRx3()
             .toMaybe()
-            .map {
-                it.getValue(ParsableUserMetadataResponse::class.java)!!
-                    .toUserMetadataResponse(userId)
+            .zipWith(getTopTierHabits(userId)) { userSnapshot, topTierHabitsIds ->  userSnapshot to topTierHabitsIds }
+            .map { (snapshot, topTierHabitIds) ->
+                snapshot.getValue(ParsableUserMetadataResponse::class.java)!!
+                    .toUserMetadataResponse(userId, topTierHabitIds)
             }
             .leftOnThrow()
             .subscribeOn(networkScheduler)
@@ -85,18 +87,92 @@ class UserFirebaseService @Inject constructor(
     override fun setCurrentHabit(
         userId: String,
         habitId: String
-    ): Maybe<Either<BaseError, UserMetadataResponse>> = userDatabase.child(userId)
-        .updateChildren(
-            mapOf(
-                "habit" to habitId,
-                "goal" to null,
-                "milestone" to null
-            )
-        )
-        .asUnitSingle()
-        .leftOnThrow()
-        .toMaybe()
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = handleHabit(userId, habitId)
         .flatMapRightWithEither { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+
+    override fun clearHabit(
+        userId: String,
+        habitId: String,
+        addAsTopTier: Boolean
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = handleHabit(userId, null)
+        .flatMapRightWithEither { if(addAsTopTier) addTopTierHabit(userId, habitId) else removeTopTierHabit(userId, habitId) }
+        .subscribeOn(networkScheduler)
+
+    override fun addTopTierHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = topTierHabitsDatabase
+        .child(userId)
+        .child(habitId)
+        .setValue(true)
+        .asUnitSingle()
+        .toMaybe()
+        .flatMap { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+    override fun removeTopTierHabit(
+        userId: String,
+        habitId: String
+    ): Maybe<Either<BaseError, UserMetadataResponse>> = topTierHabitsDatabase
+        .child(userId)
+        .child(habitId)
+        .removeValue()
+        .asUnitSingle()
+        .toMaybe()
+        .flatMap { getUserMetadata(userId) }
+        .subscribeOn(networkScheduler)
+
+    private fun handleHabit(userId: String, habitId: String?) =
+        if (!habitId.isNullOrBlank()) {
+            milestoneOfHabitDatabase
+                .child(userId)
+                .child(habitId)
+                .get()
+                .toSingle()
+                .toRx3()
+                .toMaybe()
+                .map { it.children.map { it.key!! } }
+                .toObservable()
+                .flatMapIterable { it }
+                .concatMapSingle { milestoneId ->
+                    milestoneDatabase
+                        .child(userId)
+                        .child(milestoneId)
+                        .child("resolved_at")
+                        .get()
+                        .toSingle()
+                        .toRx3()
+                        .map { if (it.value == null) milestoneId.some() else none<String>() }
+                }
+                .toList()
+                .toMaybe()
+                .map { it.firstOrNull { it.isDefined() }?.orNull().toOption() }
+        } else {
+            Maybe.just(none())
+        }
+            .flatMap { milestoneId ->
+                userDatabase.child(userId)
+                    .updateChildren(
+                        mapOf(
+                            "habit" to habitId,
+                            "goal" to null,
+                            "milestone" to milestoneId.orNull()
+                        )
+                    )
+                    .asUnitSingle()
+                    .leftOnThrow()
+                    .toMaybe()
+            }
+
+    private fun getTopTierHabits(userId: String) = milestoneOfHabitDatabase
+        .child(userId)
+        .get()
+        .toSingle()
+        .toRx3()
+        .toMaybe()
+        .map { it.children.map { it.key!! } }
         .subscribeOn(networkScheduler)
 }
 
@@ -105,14 +181,13 @@ private class ParsableUserMetadataResponse(
     @get:PropertyName("habit") @set:PropertyName("habit") var habit: String? = null,
     @get:PropertyName("milestone") @set:PropertyName("milestone") var milestone: String? = null,
     @get:PropertyName("goal") @set:PropertyName("goal") var goal: String? = null,
-    @get:PropertyName("extra_habits") @set:PropertyName("extra_habits") var extraHabits: List<String>? = null
 ) {
 
-    fun toUserMetadataResponse(userId: String) = UserMetadataResponse(
+    fun toUserMetadataResponse(userId: String, extraHabits: List<String>) = UserMetadataResponse(
         userId = userId,
         habitId = habit,
         milestoneId = milestone,
         goalId = goal,
-        extraHabitsIds = extraHabits
+        topTierHabitsIds = extraHabits.ifEmpty { null }
     )
 }

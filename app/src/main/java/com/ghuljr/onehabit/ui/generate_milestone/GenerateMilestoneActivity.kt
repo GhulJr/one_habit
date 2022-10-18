@@ -14,7 +14,6 @@ import com.ghuljr.onehabit_presenter.generate_milestone.GenerateMilestoneView
 
 class GenerateMilestoneActivity : BaseActivity<ActivityGenerateMilestoneBinding, GenerateMilestoneView, GenerateMilestonePresenter>(), GenerateMilestoneView {
 
-
     private val navController by lazy { (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment).navController }
 
 

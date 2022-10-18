@@ -97,7 +97,7 @@ class AddActionPresenter @Inject constructor(
                     )
                         .toObservable()
                         .mapLeft { it as BaseEvent }
-                        .startWithItem(LoadingEvent.left())
+                        .startWithLoading()
                 }
                 .observeOn(uiScheduler)
                 .subscribe {

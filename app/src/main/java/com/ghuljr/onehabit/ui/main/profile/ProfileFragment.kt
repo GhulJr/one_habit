@@ -38,6 +38,7 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileView, Profil
             changeName.setOnClickListener { startActivity(ChangeDisplayNameActivity.intent(requireContext())) }
             changeEmail.setOnClickListener { startActivity(ChangeEmailActivity.intent(requireContext())) }
             changePassword.setOnClickListener { startActivity(ChangePasswordActivity.intent(requireContext())) }
+            logout.setOnClickListener { presenter.logout() }
         }
     }
 

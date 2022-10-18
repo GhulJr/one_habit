@@ -27,7 +27,7 @@ allprojects {
         rxbinding_version = "4.0.0"
         rxjava3retrofit_version = "3.0.0"
         rxpermissions_version = "0.12"
-        work_version = "2.5.0"
+        work_version = "2.7.1"
         retrofit_version = "2.9.0"
         jackson_version = "2.12.4"
         picasso_version = "2.71828"
