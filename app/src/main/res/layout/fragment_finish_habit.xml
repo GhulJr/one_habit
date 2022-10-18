@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingStart="@dimen/default_margin"
     android:paddingEnd="@dimen/default_margin"
@@ -37,5 +38,18 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/default_button_height"
         android:text="@string/finish" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indeterminateAnimationType="disjoint"
+        app:indicatorColor="@color/primary_black"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        app:trackCornerRadius="@dimen/default_corner_radius"
+        app:trackThickness="@dimen/default_stroke_width" />
 
 </LinearLayout>
