@@ -107,7 +107,7 @@ class ActionInfoPresenter @Inject constructor(
 
     fun displayAction(actionId: String) = actionInfoSubject.onNext(actionId)
 
-    private fun Int.calculateCurrentRepeat(isWeekly: Boolean, totalRepeats: Int) = if (isWeekly) this else min(this + 1, totalRepeats)
+    private fun Int.calculateCurrentRepeat(isWeekly: Boolean, totalRepeats: Int) = if (isWeekly) this else this + 1
 
     companion object {
         private const val TIME_FORMAT = "HH:mm"

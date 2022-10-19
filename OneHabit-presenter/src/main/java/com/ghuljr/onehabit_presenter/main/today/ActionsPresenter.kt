@@ -16,10 +16,7 @@ import com.ghuljr.onehabit_presenter.base.BasePresenter
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.FragmentScope
 import com.ghuljr.onehabit_tools.di.UiScheduler
-import com.ghuljr.onehabit_tools.extension.mapLeft
-import com.ghuljr.onehabit_tools.extension.mapRight
-import com.ghuljr.onehabit_tools.extension.startWithLoading
-import com.ghuljr.onehabit_tools.extension.timeToString
+import com.ghuljr.onehabit_tools.extension.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -45,69 +42,82 @@ class ActionsPresenter @Inject constructor(
     private val addCustomActionSubject = PublishSubject.create<Unit>()
     private val initSubject = BehaviorSubject.create<Option<String>>()
 
-    override fun subscribeToView(view: ActionsView): Disposable = CompositeDisposable(
-        initSubject
-            .take(1)
-            .switchMap {
-                actionsObservable(
+    override fun subscribeToView(view: ActionsView): Disposable {
+        val actionsObservable =
+            initSubject
+                .take(1)
+                .switchMap {
                     it.fold(
                         ifSome = { actionsRepository.actionsByGoalId(it) },
                         ifEmpty = { actionsRepository.todayActionsObservable }
                     )
-                )
-            }
-            .subscribe {
-                view.handleLoading(it.swap().orNull() is LoadingEvent)
-                it.fold(
-                    ifRight = { items ->
-                        view.submitItems(items)
-                        view.handleItemsError(null)
-                    },
-                    ifLeft = { event ->
-                        if (event is BaseError)
-                            view.handleItemsError(event)
-                        else
+                }
+                .replay(1)
+                .refCount()
+
+        return CompositeDisposable(
+            actionsObservable
+                .observeOn(uiScheduler)
+                .onlyRight()
+                .subscribe { actions ->
+                    actions.forEach { view.setNotification(it.id, it.reminders.orEmpty()) }
+                },
+            actionsObservable
+                .compose { actionsObservable(it) }
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.handleLoading(it.swap().orNull() is LoadingEvent)
+                    it.fold(
+                        ifRight = { items ->
+                            view.submitItems(items)
                             view.handleItemsError(null)
-                    }
-                )
-                view.handleLoading(it.swap().orNull() is LoadingEvent)
-            },
-        selectItemSubject
-            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-            .observeOn(uiScheduler)
-            .subscribe { actionId -> view.openDetails(actionId) },
-        refreshSubject
-            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-            .switchMap {
-                actionsRepository.refreshTodayActions()
-                    .toObservable()
-                    .mapLeft { it as BaseEvent }
-                    .startWithLoading()
-            }
-            .observeOn(uiScheduler)
-            .subscribe {
-                view.handleLoading(it.swap().orNull() is LoadingEvent)
-                it.fold(
-                    ifRight = { view.handleItemsError(null) },
-                    ifLeft = { event ->
-                        if (event is BaseError)
-                            view.handleItemsError(event)
-                        else
-                            view.handleItemsError(null)
-                    }
-                )
-            },
-        addCustomActionSubject
-            .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
-            .switchMapMaybe { userMetadataRepository.currentUser.firstElement() }
-            .observeOn(uiScheduler)
-            .subscribe {
-                it.fold(
-                    ifRight = { user -> view.openCreateCustomAction(user.goalId!!) },
-                    ifLeft = { error -> view.handleItemsError(error) }
-                )
-            },
-    )
+                        },
+                        ifLeft = { event ->
+                            if (event is BaseError)
+                                view.handleItemsError(event)
+                            else
+                                view.handleItemsError(null)
+                        }
+                    )
+                    view.handleLoading(it.swap().orNull() is LoadingEvent)
+                },
+            selectItemSubject
+                .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+                .observeOn(uiScheduler)
+                .subscribe { actionId -> view.openDetails(actionId) },
+            refreshSubject
+                .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+                .switchMap {
+                    actionsRepository.refreshTodayActions()
+                        .toObservable()
+                        .mapLeft { it as BaseEvent }
+                        .startWithLoading()
+                }
+                .observeOn(uiScheduler)
+                .subscribe {
+                    view.handleLoading(it.swap().orNull() is LoadingEvent)
+                    it.fold(
+                        ifRight = { view.handleItemsError(null) },
+                        ifLeft = { event ->
+                            if (event is BaseError)
+                                view.handleItemsError(event)
+                            else
+                                view.handleItemsError(null)
+                        }
+                    )
+                },
+            addCustomActionSubject
+                .throttleFirst(500L, TimeUnit.MILLISECONDS, computationScheduler)
+                .switchMapMaybe { userMetadataRepository.currentUser.firstElement() }
+                .observeOn(uiScheduler)
+                .subscribe {
+                    it.fold(
+                        ifRight = { user -> view.openCreateCustomAction(user.goalId!!) },
+                        ifLeft = { error -> view.handleItemsError(error) }
+                    )
+                },
+        )
+    }
 
     private fun actionsObservable(actionsSourceObservable: Observable<Either<BaseError, List<Action>>>): Observable<Either<BaseEvent, List<TodayItem>>> =
         Observable.combineLatest(

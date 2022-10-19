@@ -20,6 +20,7 @@ import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlin.math.abs
+import kotlin.math.min
 
 // TODO: it might be problematic at some point, when state is restoring - better check
 class ActionInfoBottomSheetDialog(
@@ -84,7 +85,7 @@ class ActionInfoBottomSheetDialog(
                         ""
                     else
                         when (item.type) {
-                            ActionType.DAILY -> getString(R.string.today_quantity, item.quantity?.first.toString(), item.quantity?.second.toString())
+                            ActionType.DAILY -> getString(R.string.today_quantity, min(item.quantity?.first ?: 0, item.quantity?.second ?: 0).toString(), item.quantity?.second.toString())
                             ActionType.WEEKLY -> getString(
                                 if (item.exceeded) R.string.today_quantity_exceeded
                                 else R.string.today_quantity_remaining,
@@ -96,7 +97,7 @@ class ActionInfoBottomSheetDialog(
             nextTimes.apply {
                 val stringBuilder = SpannableStringBuilder()
                 item.reminders?.forEachIndexed { index, time ->
-                    if (index + 1 <= (item.quantity?.first ?: Int.MIN_VALUE))
+                    if (index + 1 < (item.quantity?.first ?: Int.MIN_VALUE))
                         stringBuilder.append("-$time-", StrikethroughSpan(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     else
                         stringBuilder.append("-$time-")

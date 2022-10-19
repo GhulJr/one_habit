@@ -49,8 +49,8 @@ class AddActionPresenter @Inject constructor(
             .map { it.getOrElse { listOf<Long>() to 1 } }
             .switchMap { (reminders, maxRepeats) ->
                 addRemoveSubject
-                    .scan(reminders) { acc, (time, removeOrAdd) ->
-                        if (removeOrAdd)
+                    .scan(reminders) { acc, (time, add) ->
+                        if (add)
                             acc.plus(time)
                         else
                             acc.filterNot { it == time }
