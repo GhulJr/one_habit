@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ghuljr.onehabit">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -79,11 +81,7 @@
 
         <receiver
             android:name=".ui.notifications.NotificationsBroadcastReceiver"
-            android:exported="false"
-            android:process=":remote">
-            <intent-filter>
-                <data android:scheme="timer:" />
-            </intent-filter>
+            android:exported="false">
         </receiver>
     </application>
     <!--TODO: https://stackoverflow.com/questions/6649402/alarm-manager-scheduling-multiple-non-repeating-events-->

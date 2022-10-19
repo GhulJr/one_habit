@@ -23,17 +23,16 @@ import com.ghuljr.onehabit.ui.notifications.NotificationsBroadcastReceiver
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.main.MainStep
-import com.ghuljr.onehabit_presenter.main.today.TodayItem
 import com.ghuljr.onehabit_presenter.main.today.ActionsPresenter
 import com.ghuljr.onehabit_presenter.main.today.ActionsView
+import com.ghuljr.onehabit_presenter.main.today.TodayItem
 import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.tool.ItemDivider
 import com.google.android.material.snackbar.Snackbar
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.*
 import javax.inject.Inject
+
 
 class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsPresenter>(),
     ActionsView {
@@ -56,8 +55,6 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TODAY)
 
         alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager?
-        alarmManager?.setTimeZone("GMT")
-
 
         presenter.init(arguments?.getString(EXTRA_GOAL_ID).toOption())
 
@@ -128,22 +125,22 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
                 context,
                 time.toInt(),
                 alarmIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
-            val localTime = LocalDateTime.now(ZoneId.of("GMT"))
-            val rtcTime = Calendar.getInstance(TimeZone.getTimeZone("GMT")).timeInMillis
-            val notificationTime = localTime.run { rtcTime - toLocalTime().toSecondOfDay() * 1000 } + time
+            val calendar = Calendar.getInstance()
+            val utcTime = calendar.timeInMillis
+            val notificationTime =  utcTime - (calendar[Calendar.HOUR_OF_DAY] * 3600 + calendar[Calendar.MINUTE] * 60 + calendar[Calendar.SECOND]) * 1000 + time
 
-            if (notificationTime > rtcTime)
+            println("NotificationTest - ${notificationTime - utcTime}")
 
+            if (notificationTime > utcTime)
                 alarmManager?.set(
                     AlarmManager.RTC_WAKEUP,
                     notificationTime,
                     pendingIntent
                 )
         }
-
     }
 
     companion object {
