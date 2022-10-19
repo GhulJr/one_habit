@@ -9,4 +9,5 @@ interface ActionsView : BaseView<ActionsPresenter> {
     fun handleItemsError(error: BaseError?)
     fun handleLoading(loading: Boolean)
     fun openCreateCustomAction(goalId: String)
+    fun setNotification(id: String, notifications: List<Long>)
 }

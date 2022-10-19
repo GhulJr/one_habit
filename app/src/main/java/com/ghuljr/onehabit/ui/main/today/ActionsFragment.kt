@@ -1,5 +1,10 @@
 package com.ghuljr.onehabit.ui.main.today
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +19,7 @@ import com.ghuljr.onehabit.ui.base.BaseFragment
 import com.ghuljr.onehabit.ui.main.MainActivity
 import com.ghuljr.onehabit.ui.main.today.info.ActionInfoBottomSheetDialog
 import com.ghuljr.onehabit.ui.main.today.list.*
+import com.ghuljr.onehabit.ui.notifications.NotificationsBroadcastReceiver
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error_android.event_manager.SnackbarEventManager
 import com.ghuljr.onehabit_presenter.main.MainStep
@@ -24,11 +30,18 @@ import com.ghuljr.onehabit_presenter.main.today.info.ActionInfoPresenter
 import com.ghuljr.onehabit_tools_android.base.list.ItemListAdapter
 import com.ghuljr.onehabit_tools_android.tool.ItemDivider
 import com.google.android.material.snackbar.Snackbar
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.*
 import javax.inject.Inject
 
-class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsPresenter>(), ActionsView {
+class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsPresenter>(),
+    ActionsView {
 
     @Inject lateinit var actionInfoPresenter: ActionInfoPresenter
+
+    private var alarmManager: AlarmManager? = null
+
 
     private val todayAdapter = ItemListAdapter(
         TodayActionViewHolderManager(),
@@ -41,6 +54,10 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as? MainActivity)?.setCurrentStep(MainStep.TODAY)
+
+        alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager?
+        alarmManager?.setTimeZone("GMT")
+
 
         presenter.init(arguments?.getString(EXTRA_GOAL_ID).toOption())
 
@@ -57,6 +74,11 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
             swipeRefresh.setOnRefreshListener { presenter.refresh() }
             errorWidget.setOnRetryClickListener { presenter.refresh() }
         }
+    }
+
+    override fun onDestroyView() {
+        alarmManager = null
+        super.onDestroyView()
     }
 
     override fun bindView(
@@ -95,6 +117,33 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
 
     override fun openCreateCustomAction(goalId: String) {
         startActivity(AddActionActivity.intent(requireContext(), goalId))
+    }
+
+    override fun setNotification(id: String, notifications: List<Long>) {
+        notifications.forEach { time ->
+            val alarmIntent = Intent(requireContext(), NotificationsBroadcastReceiver::class.java)
+                .apply { data = Uri.parse("timer:$time") }
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                time.toInt(),
+                alarmIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+            val localTime = LocalDateTime.now(ZoneId.of("GMT"))
+            val rtcTime = Calendar.getInstance(TimeZone.getTimeZone("GMT")).timeInMillis
+            val notificationTime = localTime.run { rtcTime - toLocalTime().toSecondOfDay() * 1000 } + time
+
+            if (notificationTime > rtcTime)
+
+                alarmManager?.set(
+                    AlarmManager.RTC_WAKEUP,
+                    notificationTime,
+                    pendingIntent
+                )
+        }
+
     }
 
     companion object {
