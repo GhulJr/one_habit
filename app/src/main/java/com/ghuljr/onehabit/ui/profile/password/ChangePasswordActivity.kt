@@ -66,7 +66,6 @@ class ChangePasswordActivity :
     }
 
     companion object {
-
         fun intent(from: Context) = Intent(from, ChangePasswordActivity::class.java)
     }
 }

@@ -175,71 +175,8 @@
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginTop="@dimen/default_margin_extra_large"
                 android:layout_marginEnd="@dimen/default_margin"
-                android:text="@string/notifications"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/OneHabit.Profile.SettingsItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_small"
-                android:drawableRight="@drawable/ic_notifications_not_read"
-                android:text="@string/unread_notifications" />
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"
-                android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/default_margin" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/OneHabit.Profile.SettingsItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_mute"
-                android:text="@string/enable_notifications" />
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"
-                android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/default_margin" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginTop="@dimen/default_margin_extra_large"
-                android:layout_marginEnd="@dimen/default_margin"
                 android:text="@string/settings"
                 android:textAppearance="@style/OneHabit.TextAppearance.Primary.Header" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/OneHabit.Profile.SettingsItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_small"
-                android:drawableRight="@drawable/ic_about_app"
-                android:text="@string/about_the_app" />
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"
-                android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/default_margin" />
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/OneHabit.Profile.SettingsItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_help"
-                android:text="@string/help" />
-
-            <com.ghuljr.onehabit_tools_android.widget.TextDivider
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/text_divider_underline"
-                android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/default_margin" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/logout"
@@ -257,13 +194,6 @@
                 android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/OneHabit.TextAppearance.Primary.Small"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="@string/app_version_1_s" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

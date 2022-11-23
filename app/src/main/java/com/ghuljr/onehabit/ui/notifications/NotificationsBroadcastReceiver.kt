@@ -15,8 +15,8 @@ import java.util.Calendar
 
 class NotificationsBroadcastReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context?, p1: Intent?) {
-        p1?.let { handleAlarmData(context, it) }
+    override fun onReceive(context: Context?, intent: Intent?) {
+        intent?.let { handleAlarmData(context, it) }
     }
 
     private fun handleAlarmData(context: Context?, intent: Intent) {

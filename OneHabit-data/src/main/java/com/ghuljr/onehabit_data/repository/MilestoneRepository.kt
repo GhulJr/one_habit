@@ -1,6 +1,7 @@
 package com.ghuljr.onehabit_data.repository
 
 import arrow.core.Either
+import arrow.core.left
 import com.ghuljr.onehabit_data.cache.memory.MemoryCache
 import com.ghuljr.onehabit_data.cache.synchronisation.DataSource
 import com.ghuljr.onehabit_data.domain.Habit
@@ -14,6 +15,7 @@ import com.ghuljr.onehabit_data.storage.model.MilestoneEntity
 import com.ghuljr.onehabit_data.storage.persistence.MilestoneDatabase
 import com.ghuljr.onehabit_error.BaseError
 import com.ghuljr.onehabit_error.LoggedOutError
+import com.ghuljr.onehabit_error.NoDataError
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
 import com.ghuljr.onehabit_tools.di.NetworkScheduler
 import com.ghuljr.onehabit_tools.extension.flatMapRightWithEither
@@ -60,9 +62,12 @@ class MilestoneRepository @Inject constructor(
 
     val currentMilestoneObservable: Observable<Either<BaseError, Milestone>> = userMetadataRepository.currentUser
         .switchMapRightWithEither { user ->
-            milestoneCache[user.milestoneId ?: ""].switchMapRightWithEither { it.dataFlowable }
-                .mapRight { it.toDomain() }
-                .toObservable()
+            if (user.milestoneId == null)
+                Observable.just(NoDataError.left())
+            else
+                milestoneCache[user.milestoneId].switchMapRightWithEither { it.dataFlowable }
+                    .mapRight { it.toDomain() }
+                    .toObservable()
         }
         .replay(1)
         .refCount()

@@ -50,7 +50,6 @@ class MilestoneIntroPresenter @Inject constructor(
                     .firstElement()
                     .toObservable()
                     .mapLeft { it as BaseEvent }
-                    .startWithLoading()
             }
             .observeOn(uiScheduler)
             .subscribe {

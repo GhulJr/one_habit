@@ -1,7 +1,6 @@
 package com.ghuljr.onehabit.ui.base
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
 import com.ghuljr.onehabit_presenter.base.BasePresenter

@@ -132,8 +132,6 @@ class ActionsFragment : BaseFragment<FragmentTodayBinding, ActionsView, ActionsP
             val utcTime = calendar.timeInMillis
             val notificationTime =  utcTime - (calendar[Calendar.HOUR_OF_DAY] * 3600 + calendar[Calendar.MINUTE] * 60 + calendar[Calendar.SECOND]) * 1000 + time
 
-            println("NotificationTest - ${notificationTime - utcTime}")
-
             if (notificationTime > utcTime)
                 alarmManager?.set(
                     AlarmManager.RTC_WAKEUP,
