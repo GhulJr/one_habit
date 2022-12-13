@@ -68,8 +68,6 @@ class HabitFirebaseService @Inject constructor(
             .leftOnThrow()
             .subscribeOn(networkScheduler)
     }
-
-
 }
 
 @IgnoreExtraProperties

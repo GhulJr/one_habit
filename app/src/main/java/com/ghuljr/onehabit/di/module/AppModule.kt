@@ -1,6 +1,5 @@
 package com.ghuljr.onehabit.di.module
 
-import android.app.Application
 import android.content.Context
 import com.ghuljr.onehabit.App
 import com.ghuljr.onehabit_tools.di.ComputationScheduler
